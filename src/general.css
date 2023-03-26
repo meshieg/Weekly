@@ -2,9 +2,7 @@
   padding: 0.5rem 1rem;
   border-radius: 4px;
   outline: none;
-  border-color: var(--primary-color);
-  border-style: solid;
-  border-width: thin;
+  border: thin solid var(--primary-color);
   padding: 0.5rem 2rem 0.5rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -46,26 +44,3 @@
   filter: none;
   cursor: not-allowed;
 }
-
-
-/* .input {
-  border-radius: 15px;
-  outline: none;
-  border: none;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-}
-
-.input:focus {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-.bg-primary {
-  background: var(--primary-bg-color);
-}
-
-.bg-secondary {
-  background-color: var(--secondary-bg-color);
-} */
