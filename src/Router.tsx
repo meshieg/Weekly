@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AddTaskPage from "./pages/AddTask/AdddTaskPage";
+import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 
 type RouteType = {
