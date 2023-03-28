@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AddTaskPage from "./pages/AddTask/AdddTaskPage";
 import Home from "./pages/Home/Home";
 
 type RouteType = {
@@ -11,7 +12,11 @@ export const routes: RouteType[] = [
   {
     path: "/",
     element: <Home />,
-  }
+  },
+  {
+    path: "/addTask",
+    element: <AddTaskPage />,
+  },
 ];
 
 const Router = () => {
@@ -19,11 +24,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         {routes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={route.element}
-          />
+          <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Routes>
     </BrowserRouter>
