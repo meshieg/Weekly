@@ -1,5 +1,5 @@
 interface IOption {
-    id: string;
+    id: number;
     label: string;
 }
 interface IField {

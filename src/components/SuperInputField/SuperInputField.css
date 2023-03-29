@@ -1,4 +1,4 @@
-/* .checkbox {
+.checkbox {
   width: 100%;
   border-radius: 15px;
   outline: none;
@@ -18,4 +18,4 @@
 
 .selected {
   border: 3px solid var(--primary-bg-color);
-} */
+}

@@ -6,6 +6,7 @@ import AddTag from "../../components/AddTag/AddTag";
 import { fieldsTypes } from "../../utils/constants";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { taskFields } from "./AddTaskForm";
+import { TaskService } from "../../services/task.service";
 
 // type inputFields = {
 //   [id in keyof ITaskEntity]: IField;
@@ -15,9 +16,9 @@ const AddTaskPage = () => {
   const initialValues: ITaskEntity = {
     title: "",
     location: "",
-    destDate: new Date(),
-    time: "",
-    desc: "",
+    estTime: 1,
+    dueDate: new Date(),
+    description: "",
     priority: 1,
     tag: { name: "", color: "#8a64d6" },
   };
@@ -36,6 +37,9 @@ const AddTaskPage = () => {
   const saveTask = (event: any) => {
     event.preventDefault();
     console.log(newTask);
+    TaskService.saveTask(newTask)
+      .then(() => console.log("Task saved successfully"))
+      .catch((error) => console.log(error));
   };
 
   const cancelTask = (event: any) => {
@@ -54,18 +58,15 @@ const AddTaskPage = () => {
               <SuperInputField
                 key={fieldKey}
                 id={fieldKey}
+                label={taskFields[fieldKey]?.label || ""}
+                // label="test"
 
-                // label={taskFields[fieldKey].label}
-                label="test"
+                type={taskFields[fieldKey]?.type}
+                // type={fieldsTypes.TextField}
 
-                // type={taskFields[fieldKey].type}
-                type={fieldsTypes.TextField}
-
-                // options={taskFields[fieldKey].options}
-
+                options={taskFields[fieldKey]?.options}
                 value={newTask[fieldKey]}
                 onChange={setValues}
-
                 // required={taskFields[fieldKey].required}
                 required={true}
               />
@@ -83,15 +84,13 @@ const AddTaskPage = () => {
           min="1"
           max="10"
         ></input> */}
-        
+
         <div className="add_task__buttons">
-          <button
-            className="btn btn__primary"
-            type="submit">
-          שמור
-          </button>     
+          <button className="btn btn__primary" type="submit">
+            שמור
+          </button>
           <button className="btn btn__secondary" type="reset">
-          ביטול
+            ביטול
           </button>
         </div>
       </form>

@@ -21,8 +21,7 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "indent": [
-      "error",
-      2
+      "off"
     ],
     "quotes": [
       "error",
@@ -30,8 +29,7 @@
     ],
     "semi": "off",
     "@typescript-eslint/semi": [
-      "error",
-      "always"
+      "error"
     ]
   }
 }
