@@ -21,3 +21,17 @@ export interface ITaskEntity {
 export type TTypePriority = {
   [key in Priority] : string
 }
+
+export type IScheduleEntity = {
+  id: number;
+  title: string;
+  startTime: Date;
+  endTime: Date;
+  tagId?: number;
+}
+
+export type AppointementModel = {
+  title: string;
+  startDate: Date;
+  endDate: Date;
+}

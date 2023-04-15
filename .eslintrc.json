@@ -19,6 +19,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "indent": [
       "off"
@@ -29,7 +30,7 @@
     ],
     "semi": "off",
     "@typescript-eslint/semi": [
-      "error"
+      "off"
     ]
   }
 }

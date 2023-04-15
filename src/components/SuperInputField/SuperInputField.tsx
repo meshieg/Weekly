@@ -93,7 +93,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
     case fieldsTypes.DatePicker:
       return (
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="he_IL">
-          <DesktopDatePicker
+          {/* <DesktopDatePicker
             key={props.id}
             label={props.label}
             value={props.value ? moment(props.value).utcOffset(0, true) : null}
@@ -109,7 +109,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
             //     required={props.required}
             //   />
             // )}
-          />
+          /> */}
         </LocalizationProvider>
       );
 
