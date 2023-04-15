@@ -19,7 +19,7 @@ const WeeklySchedule = () => {
       new Date("2023-04-09 00:00:00"),
       new Date("2023-04-10 00:00:00")
     ).then((data) => {
-      const dataDisplay = data.map((scheduleEntity) => {
+      const dataDisplay = data?.map((scheduleEntity) => {
         return {
           title: scheduleEntity.title,
           startDate: scheduleEntity.startTime,
