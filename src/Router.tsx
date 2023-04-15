@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddTaskPage from "./pages/AddTask/AdddTaskPage";
+import AddedTasksGroupPage from "./pages/AddedTasksGroup/AddedTasksGroupPage";
 import Home from "./pages/Home/Home";
 
 type RouteType = {
@@ -17,6 +18,10 @@ export const routes: RouteType[] = [
     path: "/addTask",
     element: <AddTaskPage />,
   },
+  {
+    path: "addedTasks",
+    element: <AddedTasksGroupPage />
+  }
 ];
 
 const Router = () => {

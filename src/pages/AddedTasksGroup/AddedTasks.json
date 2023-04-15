@@ -1,0 +1,16 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "weekly",
+      "tagColor": "white",
+      "date": "15.04.2023"
+    },
+    {
+      "id": "2",
+      "title": "seminar",
+      "tagColor": "black",
+      "date": "new Date()"
+    }
+  ]
+}

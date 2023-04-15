@@ -98,7 +98,7 @@ const AddTaskPage = () => {
         min="1"
         max="10"
       ></input>
-      <AddTag color={newTask.tag.color ?? "#8a64d6"} />
+      {/* <AddTag color={newTask.tag.color ?? "#8a64d6"} /> */}
       <button
         onClick={onSave}
         className="btn btn__primary"
