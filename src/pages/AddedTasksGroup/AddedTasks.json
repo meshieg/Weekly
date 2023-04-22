@@ -10,7 +10,13 @@
       "id": "2",
       "title": "seminar",
       "tagColor": "black",
-      "date": "new Date()"
+      "date": "01.05.2027"
+    },
+    {
+      "id": "3",
+      "title": "tasks separation",
+      "tagColor": "red",
+      "date": "30.04.2023"
     }
   ]
 }
