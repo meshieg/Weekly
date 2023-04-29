@@ -1,0 +1,14 @@
+.my-tasks__done {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  margin-top: 1.5rem;
+}
+
+.my-tasks__done:hover {
+  cursor: pointer;
+}
+
+.my-tasks {
+  margin: 0 1rem;
+}

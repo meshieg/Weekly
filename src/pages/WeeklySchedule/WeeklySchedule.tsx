@@ -16,8 +16,8 @@ const WeeklySchedule = () => {
 
   useEffect(() => {
     ScheduleService.getSchedule(
-      new Date("2023-04-09 00:00:00"),
-      new Date("2023-04-10 00:00:00")
+      new Date("2023-04-16 00:00:00"),
+      new Date("2023-04-22 00:00:00")
     ).then((data) => {
       const dataDisplay = data?.map((scheduleEntity) => {
         return {
@@ -34,12 +34,12 @@ const WeeklySchedule = () => {
     <Paper>
       <Scheduler data={scheduleData} height={660}>
         <ViewState
-          defaultCurrentDate="2023-04-10"
+          defaultCurrentDate="2023-04-19"
           defaultCurrentViewName="Week"
         />
 
         <DayView startDayHour={9} endDayHour={18} />
-        <WeekView startDayHour={10} endDayHour={19} />
+        <WeekView startDayHour={9} endDayHour={18} />
 
         <Toolbar />
         <Appointments />
