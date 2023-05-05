@@ -1,15 +1,19 @@
-export interface ITagEntity {
-  id?: string;
-  name: string;
-  color: string;
+import { Priority } from "./constants";
+
+export type TTypePriority = {
+  [key in Priority]: string
 }
 
-export interface ITaskEntity {
+export type IScheduleEntity = {
+  id: number;
   title: string;
-  location?: string;
-  destDate: Date;
-  time: string;
-  desc?: string;
-  priority?: number;
-  tag?: ITagEntity;
+  startTime: Date;
+  endTime: Date;
+  tagId?: number;
+}
+
+export type AppointementModel = {
+  title: string;
+  startDate: Date;
+  endDate: Date;
 }
