@@ -29,16 +29,14 @@ export const routes: RouteType[] = [
   },
 ];
 
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {routes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </BrowserRouter>
-  );
-};
-
-export default Router;
+// const Router = ({children: ReactElement}) => {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         {routes.map((route) => (
+//           <Route key={route.path} path={route.path} element={route.element} />
+//         ))}
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// };
