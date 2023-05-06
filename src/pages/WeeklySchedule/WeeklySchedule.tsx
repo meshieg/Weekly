@@ -10,11 +10,16 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { AppointementModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
+import useToolbar from "../../customHooks/useToolbar";
 
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointementModel[]>();
 
+  const { hideToolbar } = useToolbar();
+
   useEffect(() => {
+    hideToolbar();
+
     ScheduleService.getSchedule(
       new Date("2023-04-16 00:00:00"),
       new Date("2023-04-22 00:00:00")
