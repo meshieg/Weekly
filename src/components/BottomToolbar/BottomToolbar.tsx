@@ -4,6 +4,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EventIcon from "@mui/icons-material/Event";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import { useNavigate } from "react-router-dom";
+import useToolbar from "../../customHooks/useToolbar";
 
 const actions = [
   {
@@ -26,8 +27,10 @@ const actions = [
 const BottomToolbar = () => {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  const { clearToolbar } = useToolbar();
 
   const onNavigate = useCallback((event: any, newValue: number) => {
+    clearToolbar();
     setValue(newValue);
     navigate(actions[newValue].to);
   }, []);
