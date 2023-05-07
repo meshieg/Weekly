@@ -7,20 +7,17 @@ interface IProps {
 
 interface IToolbar {
   title: string;
-  show: boolean;
   backButton: boolean;
 }
 
 const initialState: IToolbar = {
   title: "Weekly",
-  show: true,
   backButton: false,
 };
 
 const ToolbarContext = createContext({
   toolbar: initialState,
   setToolbar: (title: string, backButton?: boolean) => {},
-  hideToolbar: () => {},
   clearToolbar: () => {},
 });
 
@@ -30,15 +27,7 @@ export const ToolbarProvider: React.FC<IProps> = ({ children }) => {
   const setToolbar = (title: string, backButton?: boolean) => {
     setToolbarState({
       title,
-      show: true,
       backButton: backButton != undefined ? backButton : false,
-    });
-  };
-
-  const hideToolbar = () => {
-    setToolbarState({
-      ...initialState,
-      show: false,
     });
   };
 
@@ -53,7 +42,6 @@ export const ToolbarProvider: React.FC<IProps> = ({ children }) => {
       value={{
         toolbar: toolbarState,
         setToolbar,
-        hideToolbar,
         clearToolbar,
       }}
     >

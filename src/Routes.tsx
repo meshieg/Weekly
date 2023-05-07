@@ -8,35 +8,32 @@ import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 type RouteType = {
   path: string;
   element: ReactElement;
+  showBottomToolbar?: boolean;
+  showToolbar?: boolean;
 };
 
 export const routes: RouteType[] = [
   {
     path: "/",
     element: <Home />,
+    showBottomToolbar: true,
+    showToolbar: true,
   },
   {
     path: "/addTask",
     element: <AddTaskPage />,
+    showToolbar: true,
   },
   {
     path: "/week",
     element: <WeeklySchedule />,
+    showBottomToolbar: true,
+    showToolbar: false,
   },
   {
     path: "/myTasks",
     element: <MyTasks />,
+    showBottomToolbar: true,
+    showToolbar: true,
   },
 ];
-
-// const Router = ({children: ReactElement}) => {
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         {routes.map((route) => (
-//           <Route key={route.path} path={route.path} element={route.element} />
-//         ))}
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// };
