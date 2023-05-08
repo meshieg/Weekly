@@ -9,3 +9,22 @@ interface IField {
     required?: boolean = false;
     placeholder?: string;
 }
+
+interface ITag {
+    id?: number;
+    name: string;
+    color: string;
+}
+
+interface ITask {
+    id: number;
+    title: string;
+    location?: string;
+    estTime: number;
+    dueDate: Date;
+    description?: string;
+    priority?: number;
+    tag?: ITag;
+    assignment?: Date;
+    isDone?: boolean;
+}

@@ -1,7 +1,5 @@
-import { ITaskEntity } from "../../utils/types";
-
 interface IProps {
-  task: ITaskEntity;
+  task: ITask;
 }
 
 const Task: React.FC<IProps> = (props) => {

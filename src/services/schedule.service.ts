@@ -1,17 +1,21 @@
 import axios from "axios";
-import { ITaskEntity } from "../utils/types";
+import { IScheduleEntity } from "../utils/types";
 
-const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule`;
+const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule/week`;
 
 export class ScheduleService {
-    static getSchedule = async (): Promise<ITaskEntity[]> => {
+    static getSchedule = async (minDate: Date, maxDate: Date): Promise<IScheduleEntity[]> => {
         const url = schedulePrefix;
-        return await axios.get(url)
+        return await axios.get(url, {
+            params: {
+                minDate, maxDate
+            }
+        })
             .then(res => {
-                return res.data.map((task: ITaskEntity) => {
+                return res.data.map((scheduleEntity: IScheduleEntity) => {
                     return {
-                        ...task
-                    } as ITaskEntity;
+                        ...scheduleEntity
+                    } as IScheduleEntity;
                 })
             })
             .catch((err) => {

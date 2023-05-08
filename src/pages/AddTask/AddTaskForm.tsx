@@ -1,8 +1,18 @@
-import { ITaskEntity } from "../../utils/types";
+// import { ITaskEntity } from "../../utils/types";
 import { fieldsTypes, Priority, PriorityLabels } from "../../utils/constants";
 
+export interface IInputs {
+  title: string;
+  location: string;
+  estTime: number;
+  dueDate: Date;
+  description: string;
+  priority: number;
+  // tag: ITag;
+}
+
 type inputFields = {
-  [id in keyof ITaskEntity]: IField;
+  [id in keyof IInputs]: IField;
 };
 
 export const taskFields: inputFields = {
@@ -15,14 +25,8 @@ export const taskFields: inputFields = {
   location: {
     label: "Location",
     type: fieldsTypes.TextField,
-    required: false,
-    placeholder: "מיקום",
-  },
-  dueDate: {
-    label: "Due Date",
-    type: fieldsTypes.DatePicker,
     required: true,
-    placeholder: "תאריך יעד",
+    placeholder: "מיקום",
   },
   estTime: {
     label: "Estimated Time",
@@ -30,10 +34,16 @@ export const taskFields: inputFields = {
     required: true,
     placeholder: "זמן משוער",
   },
+  dueDate: {
+    label: "Due Date",
+    type: fieldsTypes.DatePicker,
+    required: true,
+    placeholder: "תאריך יעד",
+  },
   description: {
     label: "Description",
     type: fieldsTypes.TextField,
-    required: false,
+    required: true,
     placeholder: "תיאור",
   },
   priority: {
@@ -44,7 +54,7 @@ export const taskFields: inputFields = {
       { id: Priority.MEDIUM, label: PriorityLabels[Priority.MEDIUM] },
       { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }, // TODO: Change to number field 1-10
     ],
-    required: false,
+    required: true,
     placeholder: "עדיפות",
   },
 };
