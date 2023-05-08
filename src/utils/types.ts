@@ -19,5 +19,5 @@ export interface ITaskEntity {
 }
 
 export type TTypePriority = {
-  [key in Priority] : string
-}
+  [key in Priority]: string;
+};

@@ -99,7 +99,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
             value={props.value ? moment(props.value).utcOffset(0, true) : null}
             // inputFormat="DD/MM/YYYY"
             onChange={handleInputChanged}
-            disableFuture={true}
+            disablePast={true}
             // renderInput={(params: any) => (
             //   <TextField
             //     {...params}
@@ -135,6 +135,8 @@ const SuperInputField: React.FC<IProps> = (props) => {
           // sx={styles.field}
           required={props.required}
           placeholder={props.placeholder}
+          multiline={props.label === "Description" ? true : false}
+          maxRows={props.label === "Description" ? 6 : 1}
         />
       );
   }

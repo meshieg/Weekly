@@ -10,31 +10,31 @@ export const taskFields: inputFields = {
     label: "Title",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "כותרת משימה"
+    placeholder: "כותרת משימה",
   },
   location: {
     label: "Location",
     type: fieldsTypes.TextField,
-    required: true,
-    placeholder: "מיקום"
-  },
-  estTime: {
-    label: "Estimated Time",
-    type: fieldsTypes.TextField,
-    required: true,
-    placeholder: "זמן משוער"
+    required: false,
+    placeholder: "מיקום",
   },
   dueDate: {
     label: "Due Date",
     type: fieldsTypes.DatePicker,
     required: true,
-    placeholder: "תאריך יעד"
+    placeholder: "תאריך יעד",
+  },
+  estTime: {
+    label: "Estimated Time",
+    type: fieldsTypes.TextField,
+    required: true,
+    placeholder: "זמן משוער",
   },
   description: {
     label: "Description",
     type: fieldsTypes.TextField,
-    required: true,
-    placeholder: "תיאור"
+    required: false,
+    placeholder: "תיאור",
   },
   priority: {
     label: "Priority",
@@ -42,9 +42,9 @@ export const taskFields: inputFields = {
     options: [
       { id: Priority.HIGH, label: PriorityLabels[Priority.HIGH] },
       { id: Priority.MEDIUM, label: PriorityLabels[Priority.MEDIUM] },
-      { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }     // TODO: Change to number field 1-10
+      { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }, // TODO: Change to number field 1-10
     ],
-    required: true,
-    placeholder: "עדיפות"
-  }
+    required: false,
+    placeholder: "עדיפות",
+  },
 };

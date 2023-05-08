@@ -7,6 +7,7 @@ import { fieldsTypes } from "../../utils/constants";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
+import Colorful from "@uiw/react-color-colorful";
 
 // type inputFields = {
 //   [id in keyof ITaskEntity]: IField;
@@ -34,12 +35,16 @@ const AddTaskPage = () => {
     });
   };
 
+  const setTagColor = (color: any) => {
+    console.log("new color: " + color);
+  };
+
   const saveTask = (event: any) => {
     event.preventDefault();
     console.log(newTask);
-    TaskService.saveTask(newTask)
-      .then(() => console.log("Task saved successfully"))
-      .catch((error) => console.log(error));
+    // TaskService.saveTask(newTask)
+    //   .then(() => console.log("Task saved successfully"))
+    //   .catch((error) => console.log(error));
   };
 
   const cancelTask = (event: any) => {
@@ -59,22 +64,23 @@ const AddTaskPage = () => {
                 key={fieldKey}
                 id={fieldKey}
                 label={taskFields[fieldKey]?.label || ""}
-                // label="test"
-
                 type={taskFields[fieldKey]?.type}
-                // type={fieldsTypes.TextField}
-
                 options={taskFields[fieldKey]?.options}
                 value={newTask[fieldKey]}
                 onChange={setValues}
-                // required={taskFields[fieldKey].required}
-                required={true}
+                required={taskFields[fieldKey]?.required}
               />
             );
           })}
         </div>
 
-        {/* <AddTag color={newTask.tag.color ?? "#8a64d6"} /> */}
+        <div className="colorPickerContainer">
+          <Colorful
+            color={newTask.tag ? newTask.tag.color : "#8a64d6"}
+            disableAlpha={true}
+            onChange={setTagColor}
+          />
+        </div>
 
         {/* <input
           type="number"
@@ -85,12 +91,12 @@ const AddTaskPage = () => {
           max="10"
         ></input> */}
 
-        <div className="add_task__buttons">
+        <div className="add_task_buttons">
           <button className="btn btn__primary" type="submit">
-            שמור
+            SAVE
           </button>
           <button className="btn btn__secondary" type="reset">
-            ביטול
+            CANCEL
           </button>
         </div>
       </form>
