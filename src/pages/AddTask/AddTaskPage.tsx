@@ -7,12 +7,14 @@ import { fieldsTypes } from "../../utils/constants";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
+import { useNavigate } from 'react-router-dom';
 
 // type inputFields = {
 //   [id in keyof ITask]: IField;
 // };
 
 const AddTaskPage = () => {
+  const navigate = useNavigate();
   const initialValues: IInputs = {
     title: "",
     location: "",
@@ -41,7 +43,7 @@ const AddTaskPage = () => {
       id: 0,
       title: inputValues.title,
       location: inputValues.location,
-      estTime: inputValues.estTime,
+      destTime: inputValues.estTime,
       dueDate: inputValues.dueDate,
       description: inputValues.description,
       priority: inputValues.priority,
@@ -49,9 +51,12 @@ const AddTaskPage = () => {
     };
 
     console.log(newTask);
-    TaskService.saveTask(newTask)
-      .then(() => console.log("Task saved successfully"))
-      .catch((error) => console.log(error));
+    // TaskService.saveTask(newTask)
+    //   .then(() => console.log("Task saved successfully"))
+    //   .catch((error) => console.log(error));
+    navigate(
+      '/newtasks', 
+      { state: newTask });
   };
 
   const cancelTask = (event: any) => {

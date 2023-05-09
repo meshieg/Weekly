@@ -1,0 +1,9 @@
+.added-tasks__action-btn {
+  width: 40%;
+}
+
+.added-tasks__actions {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 2rem;
+}

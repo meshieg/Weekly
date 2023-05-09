@@ -20,7 +20,7 @@ interface ITask {
     id: number;
     title: string;
     location?: string;
-    estTime: number;
+    destTime: number;
     dueDate: Date;
     description?: string;
     priority?: number;

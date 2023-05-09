@@ -7,7 +7,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
-  font-family: Heebo;
+  font-family: 'Heebo', Verdana, 'sana-serif';
 }
 
 .btn__primary {

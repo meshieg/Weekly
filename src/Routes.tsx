@@ -4,6 +4,7 @@ import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
+import NewTasksListPage from "./pages/NewTasksList/NewTasksListPage";
 
 type RouteType = {
   path: string;
@@ -34,6 +35,12 @@ export const routes: RouteType[] = [
     path: "/myTasks",
     element: <MyTasks />,
     showBottomToolbar: true,
+    showToolbar: true,
+  },
+  {
+    path: "/newTasks",
+    element: <NewTasksListPage />,
+    showBottomToolbar: false,
     showToolbar: true,
   },
 ];

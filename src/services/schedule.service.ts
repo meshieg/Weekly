@@ -22,4 +22,21 @@ export class ScheduleService {
                 console.log(err);
             });
     }
+
+    static generateSchedule = async (tasks: IScheduleEntity[]): Promise<IScheduleEntity[] | void> => {
+        const url = schedulePrefix;
+        return axios.post(url, {tasks})
+        .then(res => {
+            console.log("Schedule generated successfully");
+            console.log(res.data);
+            // return res.data.map((scheduleEntity: IScheduleEntity) => {
+            //     return {
+            //         ...scheduleEntity
+            //     } as IScheduleEntity;
+            // })
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
 }
