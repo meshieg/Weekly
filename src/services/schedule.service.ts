@@ -23,7 +23,7 @@ export class ScheduleService {
             });
     }
 
-    static generateSchedule = async (tasks: IScheduleEntity[]): Promise<IScheduleEntity[] | void> => {
+    static generateSchedule = async (tasks: ITask[]): Promise<IScheduleEntity[] | void> => {
         const url = schedulePrefix;
         return axios.post(url, {tasks})
         .then(res => {

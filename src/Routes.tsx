@@ -21,7 +21,7 @@ export const routes: RouteType[] = [
     showToolbar: true,
   },
   {
-    path: "/addTask",
+    path: "/add-task",
     element: <AddTaskPage />,
     showToolbar: true,
   },
@@ -32,13 +32,13 @@ export const routes: RouteType[] = [
     showToolbar: false,
   },
   {
-    path: "/myTasks",
+    path: "/my-tasks",
     element: <MyTasks />,
     showBottomToolbar: true,
     showToolbar: true,
   },
   {
-    path: "/newTasks",
+    path: "/new-tasks",
     element: <NewTasksListPage />,
     showBottomToolbar: false,
     showToolbar: true,

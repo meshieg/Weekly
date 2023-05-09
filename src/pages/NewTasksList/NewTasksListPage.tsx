@@ -1,46 +1,27 @@
 import "./NewTasksListPage.css";
 import NewTasksList from "../../components/NewTasksList/NewTasksList";
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useNewTasksContext } from "../../contexts/NewTasksStore/NewTasksContext";
+import { ScheduleService } from "../../services/schedule.service";
 
-let id = 1;     // TODO: Replace with a better method?
+// let id = 1;     // TODO: Replace with a better method?
 
 const NewTasksListPage = (
 ) => {
-  // const [currTask, setCurrTask] = useState<ITask>(useLocation().state);
-  const currTask: ITask = useLocation().state;
-  const [newTasks, setNewTasks] = useState<ITask[]>([]);
+  const { newTasks, removeTask, refreshTasks } = useNewTasksContext();
 
-  useEffect(() => {
-    setNewTasks(prevArray => [...prevArray, currTask]);
-    id = id + 1;
-  }, [currTask]);
-
-  // const addTask = () => {
-  //   // const newTask: ITask = {
-  //   //   id: id,
-  //   //   title: id.toLocaleString(),
-  //   //   destTime: 34,
-  //   //   dueDate: new Date()
-  //   // }
-
-  //   // setCurrTask(newTask);
-  //   setNewTasks(prevArray => [...prevArray, newTask]);
-  //   id = id + 1;
-  // }
-
-  const deleteTask = (taskId: number) => {
-    const tasksCopy = newTasks.filter(task => task.id !== taskId);
-    setNewTasks(tasksCopy);
-  };
+  // const removeTask = (taskId: number) => {
+  //   const tasksCopy = newTasks.filter(task => task.id !== taskId);
+  //   setNewTasks(tasksCopy);
+  // };
 
   const scheduleTasks = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-
-
-    // console.log(tasks);
-    // TaskService.saveTask(newTask)
+    console.log(newTasks);
+    console.log("generated!");
+    refreshTasks();
+    // ScheduleService.generateSchedule(newTasks)
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
   };
@@ -55,8 +36,8 @@ const NewTasksListPage = (
           Cancel
         </button>
       </div>
-      <NewTasksList tasks={newTasks} deleteTask={deleteTask} />
-      <Link to='/addTask'>
+      <NewTasksList tasks={newTasks} removeTask={removeTask} />
+      <Link to='/add-task'>
         <button>Add</button>
       </Link>
     </>

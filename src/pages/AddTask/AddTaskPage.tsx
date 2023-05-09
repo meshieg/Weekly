@@ -8,23 +8,26 @@ import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
 import { useNavigate } from 'react-router-dom';
+import { useNewTasksContext } from "../../contexts/NewTasksStore/NewTasksContext";
+import { v4 as uuid } from 'uuid';
 
 // type inputFields = {
 //   [id in keyof ITask]: IField;
 // };
 
 const AddTaskPage = () => {
-  const navigate = useNavigate();
   const initialValues: IInputs = {
     title: "",
     location: "",
-    estTime: 1,
+    destTime: 1,
     dueDate: new Date(),
     description: "",
     priority: 1,
     // tag: { name: "", color: "#8a64d6" },
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+  const navigate = useNavigate();
+  const { addTask } = useNewTasksContext();
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
@@ -40,10 +43,10 @@ const AddTaskPage = () => {
     event.preventDefault();
 
     const newTask: ITask = {
-      id: 0,
+      id: 0, //uuid().slice(0,8),
       title: inputValues.title,
       location: inputValues.location,
-      destTime: inputValues.estTime,
+      destTime: inputValues.destTime,
       dueDate: inputValues.dueDate,
       description: inputValues.description,
       priority: inputValues.priority,
@@ -54,9 +57,9 @@ const AddTaskPage = () => {
     // TaskService.saveTask(newTask)
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
-    navigate(
-      '/newtasks', 
-      { state: newTask });
+
+    addTask(newTask);
+    navigate('/new-tasks');
   };
 
   const cancelTask = (event: any) => {
@@ -114,4 +117,5 @@ const AddTaskPage = () => {
     </div>
   );
 };
+
 export default AddTaskPage;

@@ -5,30 +5,33 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Toolbar from "./components/Toolbar/Toolbar";
 import { ToolbarProvider } from "./contexts/ToolbarContext";
+import { NewTasksProvider } from "./contexts/NewTasksStore/NewTasksProvider";
 
 function App() {
   return (
     <div className="app">
       <ToolbarProvider>
-        <BrowserRouter>
-          {/* <div className="app__header"> */}
-          {/* </div> */}
-          <Toolbar />
-          <div className="app__content">
-            <Routes>
-              {routes.map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={route.element}
-                />
-              ))}
-            </Routes>
-          </div>
-          <div className="app__bottom">
-            <BottomToolbar />
-          </div>
-        </BrowserRouter>
+        <NewTasksProvider>
+          <BrowserRouter>
+            {/* <div className="app__header"> */}
+            {/* </div> */}
+            <Toolbar />
+            <div className="app__content">
+              <Routes>
+                {routes.map((route) => (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    element={route.element}
+                  />
+                ))}
+              </Routes>
+            </div>
+            <div className="app__bottom">
+              <BottomToolbar />
+            </div>
+          </BrowserRouter>
+        </NewTasksProvider>
       </ToolbarProvider>
     </div>
   );

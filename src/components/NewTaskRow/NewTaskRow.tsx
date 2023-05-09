@@ -1,19 +1,25 @@
+import Tag from "../Tag/Tag";
 import "./NewTaskRow.css";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 interface INewTaskRowProps {
   task: ITask;
-  onDeleteTask: (taskId: number) => void;
+  onRemoveTask: (taskId: number) => void;
 }
 
-const NewTaskRow = ({ task, onDeleteTask }: INewTaskRowProps) => {
+const NewTaskRow = ({ task, onRemoveTask }: INewTaskRowProps) => {
   return (
-    <div className="task-row__row">
-      <div>
-        <h3>{task.title}</h3>
-        <div>{task.dueDate.toDateString()}</div>
+    <div className="task-row">
+      {/* <div className="task-row__tag"> */}
+        <Tag width="2rem" color={task.tag?.color} />
+      {/* </div> */}
+      <div className="task-row__details">
+        <div>
+          <h3>{task.title}</h3>
+          <div>{task.dueDate.toLocaleDateString()}</div>
+        </div>
+        <DeleteOutlinedIcon onClick={() => onRemoveTask(task.id)} />
       </div>
-      <DeleteOutlinedIcon onClick={() => onDeleteTask(task.id)} />
     </div>
   );
 };
