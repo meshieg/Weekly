@@ -1,0 +1,9 @@
+.action-btn {
+    width: 40%;
+}
+  
+.buttons_panel {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 2rem;
+}

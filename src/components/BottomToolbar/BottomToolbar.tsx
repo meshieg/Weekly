@@ -21,7 +21,7 @@ const actions = [
   {
     label: "My Tasks",
     icon: <FormatListNumberedIcon />,
-    to: "/my-asks",
+    to: "/my-tasks",
   },
 ];
 

@@ -45,7 +45,7 @@ const TaskRow: React.FC<ITaskRowProps> = (props) => {
             <TodayOutlinedIcon
               sx={{ width: "1.3rem", marginRight: "0.2rem" }}
             />{" "}
-            {props.date?.toLocaleDateString()}
+            {props.date?.toLocaleDateString("en-GB")}
           </span>
         </div>
       </div>

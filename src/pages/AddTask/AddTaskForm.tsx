@@ -4,7 +4,7 @@ import { fieldsTypes, Priority, PriorityLabels } from "../../utils/constants";
 export interface IInputs {
   title: string;
   location: string;
-  destTime: number;
+  estTime: number;
   dueDate: Date;
   description: string;
   priority: number;
@@ -28,7 +28,7 @@ export const taskFields: inputFields = {
     required: true,
     placeholder: "מיקום",
   },
-  destTime: {
+  estTime: {
     label: "Estimated Time",
     type: fieldsTypes.TextField,
     required: true,

@@ -1,9 +1,11 @@
 .task-row {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
-  /* margin: 0 2rem 1rem 2rem; */
+  background-color: white;
+  border-radius: 10px;
+  justify-content: space-between;
+  padding: 0.7rem 0.5rem;
   margin: 1rem 1rem;
 }
 
@@ -14,4 +16,13 @@
   align-items: center;
   margin: 0 0 0 1rem;
   width: 100%
+}
+
+.task-row__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-row__title {
+  margin-bottom: 0.5rem;
 }

@@ -19,7 +19,7 @@ const AddTaskPage = () => {
   const initialValues: IInputs = {
     title: "",
     location: "",
-    destTime: 1,
+    estTime: 1,
     dueDate: new Date(),
     description: "",
     priority: 1,
@@ -46,7 +46,7 @@ const AddTaskPage = () => {
       id: 0, //uuid().slice(0,8),
       title: inputValues.title,
       location: inputValues.location,
-      destTime: inputValues.destTime,
+      estTime: inputValues.estTime,
       dueDate: inputValues.dueDate,
       description: inputValues.description,
       priority: inputValues.priority,

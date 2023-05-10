@@ -3,20 +3,15 @@ import NewTasksList from "../../components/NewTasksList/NewTasksList";
 import { Link } from "react-router-dom";
 import { useNewTasksContext } from "../../contexts/NewTasksStore/NewTasksContext";
 import { ScheduleService } from "../../services/schedule.service";
-
-// let id = 1;     // TODO: Replace with a better method?
+import ActionButtons from "../../assets/ActionButtons/ActionButtons";
 
 const NewTasksListPage = (
 ) => {
   const { newTasks, removeTask, refreshTasks } = useNewTasksContext();
 
-  // const removeTask = (taskId: number) => {
-  //   const tasksCopy = newTasks.filter(task => task.id !== taskId);
-  //   setNewTasks(tasksCopy);
-  // };
-
-  const scheduleTasks = (event: React.SyntheticEvent) => {
-    event.preventDefault();
+  const scheduleTasks = () => {
+  // (event: React.SyntheticEvent) => {
+  //   event.preventDefault();
 
     console.log(newTasks);
     console.log("generated!");
@@ -28,17 +23,21 @@ const NewTasksListPage = (
 
   return (
     <>
-      <div className="added-tasks__actions">
-        <button className="btn btn__primary added-tasks__action-btn" onClick={scheduleTasks}>
-          Schedule!
-        </button>
-        <button className="btn btn__secondary added-tasks__action-btn">
-          Cancel
-        </button>
-      </div>
-      <NewTasksList tasks={newTasks} removeTask={removeTask} />
+      {newTasks.length === 0 ? (
+      <h3 className="new-tasks__message">
+        {`You have no new tasks to save :/ \n
+        But you can always add new tasks :)`}
+      </h3>
+      ) : (<>
+        <ActionButtons 
+          primaryText="Schedule!"
+          primaryAction={scheduleTasks}
+          secondaryText="Cancel"
+          secondaryAction={() => console.log("cancel")}/>
+        <NewTasksList tasks={newTasks} removeTask={removeTask} />
+      </>)}
       <Link to='/add-task'>
-        <button>Add</button>
+          <button>Add</button>
       </Link>
     </>
   );
