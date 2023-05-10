@@ -28,3 +28,13 @@ interface ITask {
     assignment?: Date;
     isDone?: boolean;
 }
+
+interface IEvent {
+    id: number;
+    title: string;
+    location?: string;
+    description?: string;
+    startTime: Date;
+    endTime: Date;
+    tag?: ITag;
+}

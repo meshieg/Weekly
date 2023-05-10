@@ -5,13 +5,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Toolbar from "./components/Toolbar/Toolbar";
 import { ToolbarProvider } from "./contexts/ToolbarContext";
-import { NewTasksProvider } from "./contexts/NewTasksStore/NewTasksProvider";
+import { NewItemsProvider } from "./contexts/NewItemsStore/NewItemsProvider";
 
 function App() {
   return (
     <div className="app">
       <ToolbarProvider>
-        <NewTasksProvider>
+        <NewItemsProvider>
           <BrowserRouter>
             {/* <div className="app__header"> */}
             {/* </div> */}
@@ -31,7 +31,7 @@ function App() {
               <BottomToolbar />
             </div>
           </BrowserRouter>
-        </NewTasksProvider>
+        </NewItemsProvider>
       </ToolbarProvider>
     </div>
   );

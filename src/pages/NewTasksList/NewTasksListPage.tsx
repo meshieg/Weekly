@@ -1,24 +1,28 @@
 import "./NewTasksListPage.css";
+import { useEffect } from 'react';
 import NewTasksList from "../../components/NewTasksList/NewTasksList";
 import { Link } from "react-router-dom";
-import { useNewTasksContext } from "../../contexts/NewTasksStore/NewTasksContext";
+import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { ScheduleService } from "../../services/schedule.service";
 import ActionButtons from "../../assets/ActionButtons/ActionButtons";
+import useToolbar from "../../customHooks/useToolbar";
 
 const NewTasksListPage = (
 ) => {
-  const { newTasks, removeTask, refreshTasks } = useNewTasksContext();
+  const { newTasks, removeItem, refreshItems } = useNewItemsContext();
+  const { setToolbar } = useToolbar();
+
+  useEffect(() => {
+    setToolbar("My New Added Tasks");
+  }, []);
 
   const scheduleTasks = () => {
-  // (event: React.SyntheticEvent) => {
-  //   event.preventDefault();
+  // ScheduleService.generateSchedule(newTasks)
+  //     .then(() => console.log("Task saved successfully"))
+  //     .catch((error) => console.log(error));
 
-    console.log(newTasks);
-    console.log("generated!");
-    refreshTasks();
-    // ScheduleService.generateSchedule(newTasks)
-    //   .then(() => console.log("Task saved successfully"))
-    //   .catch((error) => console.log(error));
+    refreshItems();
+    
   };
 
   return (
@@ -28,16 +32,17 @@ const NewTasksListPage = (
         {`You have no new tasks to save :/ \n
         But you can always add new tasks :)`}
       </h3>
-      ) : (<>
+      ) : (
+      <>
         <ActionButtons 
           primaryText="Schedule!"
           primaryAction={scheduleTasks}
           secondaryText="Cancel"
           secondaryAction={() => console.log("cancel")}/>
-        <NewTasksList tasks={newTasks} removeTask={removeTask} />
+        <NewTasksList tasks={newTasks} removeTask={removeItem} />
       </>)}
       <Link to='/add-task'>
-          <button>Add</button>
+        <button>Add</button>
       </Link>
     </>
   );

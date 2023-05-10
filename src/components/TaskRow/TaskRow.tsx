@@ -3,7 +3,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import React from "react";
-
 import "./TaskRow.css";
 import Tag from "../Tag/Tag";
 

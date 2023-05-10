@@ -8,7 +8,7 @@ import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
 import { useNavigate } from 'react-router-dom';
-import { useNewTasksContext } from "../../contexts/NewTasksStore/NewTasksContext";
+import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { v4 as uuid } from 'uuid';
 
 // type inputFields = {
@@ -27,7 +27,7 @@ const AddTaskPage = () => {
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const navigate = useNavigate();
-  const { addTask } = useNewTasksContext();
+  const { addTask } = useNewItemsContext();
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
