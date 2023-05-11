@@ -6,6 +6,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import "./MyTasks.css";
+import useToolbar from "../../customHooks/useToolbar";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
@@ -13,7 +14,11 @@ const MyTasks: React.FC = () => {
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
   const [openDone, setOpenDone] = useState<boolean>(true);
 
+  const { setToolbar } = useToolbar();
+
   useEffect(() => {
+    setToolbar("My Tasks", true);
+
     TaskService.getAllTasks()
       .then((tasks: ITask[]) => {
         setAllTasks(tasks);

@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EventIcon from "@mui/icons-material/Event";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import { useNavigate } from "react-router-dom";
+import { matchRoutes, useLocation, useNavigate } from "react-router-dom";
+import useToolbar from "../../customHooks/useToolbar";
+import { routes } from "../../Routes";
 
 const actions = [
   {
@@ -26,11 +28,33 @@ const actions = [
 const BottomToolbar = () => {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  const { clearToolbar } = useToolbar();
+  const [show, setShow] = useState(false);
+  const location = useLocation();
 
-  const onNavigate = useCallback((event: any, newValue: number) => {
-    setValue(newValue);
-    navigate(actions[newValue].to);
-  }, []);
+  const onNavigate = useCallback(
+    (event: any, newValue: number) => {
+      clearToolbar();
+      setValue(newValue);
+      navigate(actions[newValue].to);
+    },
+    [navigate, clearToolbar]
+  );
+
+  useEffect(() => {
+    const actionIndex = actions.findIndex(
+      (action) => action.to === location.pathname
+    );
+
+    const route = routes.find((route) => route.path === location.pathname);
+    setShow(
+      route?.showBottomToolbar !== undefined ? route?.showBottomToolbar : false
+    );
+
+    setValue((prev) => (actionIndex >= 0 ? actionIndex : prev));
+  }, [location.pathname]);
+
+  if (!show) return <></>;
 
   return (
     <div>

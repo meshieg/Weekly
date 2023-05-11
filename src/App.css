@@ -10,8 +10,9 @@
 }
 
 .app__content {
-  flex: 8 1;
+  flex: 1;
   overflow-y: auto;
+  /* margin-top: 1vh; */
 }
 
 .app__bottom {
