@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NewItemsContext } from "./NewItemsContext";
+import { instanceOfTask } from "../../utils/typeChecks";
 
 interface IProps {
   children: React.ReactNode;
@@ -10,31 +11,26 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
     const [newEvents, setNewEvents] = useState<IEvent[]>([]);
     const [id, setId] = useState<number>(0);
   
-    // TODO: Distinct between task and event in the same function rather than different ones...
-  //   const addItem = (newItem: ITask | IEvent, itemType: string) => {
-  //     newItem.id = id;
-  //     setNewTasks(prevArray => [...prevArray, newItem]);
-  //     setId(id+1);
-  // }
+    const addItem = (newItem: ITask | IEvent) => {
+      newItem.id = id;
 
-    const addTask = (newTask: ITask) => {
-    newTask.id = id;
-    setNewTasks(prevArray => [...prevArray, newTask]);
-    setId(id+1);
-  }
+      instanceOfTask(newItem) ? setNewTasks(prevArray => [...prevArray, newItem])
+        : setNewEvents(prevArray => [...prevArray, newItem]);
 
-  const addEvent = (newEvent: IEvent) => {
-    newEvent.id = id;
-    setNewEvents(prevArray => [...prevArray, newEvent])
+      setId(id+1);
   }
   
   const removeItem = (itemId: number) => {
     const tasksCopy = newTasks.filter(task => task.id !== itemId);
+    const eventsCopy = newEvents.filter(event => event.id !== itemId);
+
     setNewTasks(tasksCopy);
+    setNewEvents(eventsCopy);
   }
 
   const refreshItems = () => {
     setNewTasks([]);
+    setNewEvents([]);
   }
   
   return (
@@ -42,11 +38,9 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
       value={{
         newTasks,
         newEvents,
-        addTask,
-        addEvent,
+        addItem,
         removeItem,
         refreshItems,
-        // addItem
       }}
     >{children}</NewItemsContext.Provider>
   )};

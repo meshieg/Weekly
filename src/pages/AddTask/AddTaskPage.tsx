@@ -27,7 +27,7 @@ const AddTaskPage = () => {
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const navigate = useNavigate();
-  const { addTask } = useNewItemsContext();
+  const { addItem } = useNewItemsContext();
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
@@ -58,7 +58,7 @@ const AddTaskPage = () => {
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
 
-    addTask(newTask);
+    addItem(newTask);
     navigate('/new-tasks');
   };
 
