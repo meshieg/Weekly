@@ -6,6 +6,7 @@ export enum fieldsTypes {
     Checkbox,
     DatePicker,
     // FileUpload,
+    Password
 }
 
 export enum Priority {

@@ -1,0 +1,25 @@
+.pageContainer {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+.reg_form_btn {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+}

@@ -125,6 +125,20 @@ const SuperInputField: React.FC<IProps> = (props) => {
     //     />
     //   );
 
+    case fieldsTypes.Password:
+      return (
+        <TextField
+          key={props.id}
+          label={props.label}
+          value={props.value}
+          onChange={handleInputChanged}
+          // sx={styles.field}
+          required={props.required}
+          placeholder={props.placeholder}
+          type="password"
+        />
+      );
+
     default:
       return (
         <TextField
