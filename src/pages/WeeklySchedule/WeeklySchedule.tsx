@@ -8,11 +8,11 @@ import {
   Appointments,
   Toolbar,
 } from "@devexpress/dx-react-scheduler-material-ui";
-import { AppointementModel } from "../../utils/types";
+import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
 
 const WeeklySchedule = () => {
-  const [scheduleData, setScheduleData] = useState<AppointementModel[]>();
+  const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
 
   useEffect(() => {
     ScheduleService.getSchedule(

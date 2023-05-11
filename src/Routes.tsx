@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
+import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
 
 type RouteType = {
   path: string;
@@ -20,7 +20,7 @@ export const routes: RouteType[] = [
     showToolbar: true,
   },
   {
-    path: "/addTask",
+    path: "/add-task",
     element: <AddTaskPage />,
     showToolbar: true,
   },
@@ -31,9 +31,15 @@ export const routes: RouteType[] = [
     showToolbar: false,
   },
   {
-    path: "/myTasks",
+    path: "/my-tasks",
     element: <MyTasks />,
     showBottomToolbar: true,
+    showToolbar: true,
+  },
+  {
+    path: "/new-tasks",
+    element: <NewItemsListPage />,
+    showBottomToolbar: false,
     showToolbar: true,
   },
 ];
