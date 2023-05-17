@@ -4,18 +4,19 @@ import { fieldsTypes, Priority, PriorityLabels } from "../../utils/constants";
 export interface IInputs {
   title: string;
   location: string;
-  estTime: number;
-  dueDate: Date;
+  startTime: number;
+  endTime: number;
+  startDate: Date;
+  endDate: Date;
+  allDay: boolean;
   description: string;
-  priority: number;
-  // tag: ITag;
 }
 
 type inputFields = {
   [id in keyof IInputs]: IField;
 };
 
-export const taskFields: inputFields = {
+export const eventFields: inputFields = {
   title: {
     label: "Title",
     type: fieldsTypes.TextField,
@@ -28,17 +29,29 @@ export const taskFields: inputFields = {
     required: true,
     placeholder: "Location",
   },
-  estTime: {
-    label: "Estimated Time",
+  startTime: {
+    label: "Start time",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "Estimated Time",
+    placeholder: "Start time",
   },
-  dueDate: {
-    label: "Due Date",
+  endTime: {
+    label: "End Time",
+    type: fieldsTypes.TextField,
+    required: true,
+    placeholder: "End time",
+  },
+  startDate: {
+    label: "Start Date",
     type: fieldsTypes.DatePicker,
     required: true,
-    placeholder: "Due Date",
+    placeholder: "Start date",
+  },
+  endDate: {
+    label: "End Date",
+    type: fieldsTypes.DatePicker,
+    required: true,
+    placeholder: "End date",
   },
   description: {
     label: "Description",
@@ -46,15 +59,9 @@ export const taskFields: inputFields = {
     required: true,
     placeholder: "Description",
   },
-  priority: {
-    label: "Priority",
-    type: fieldsTypes.Autocomplete,
-    options: [
-      { id: Priority.HIGH, label: PriorityLabels[Priority.HIGH] },
-      { id: Priority.MEDIUM, label: PriorityLabels[Priority.MEDIUM] },
-      { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }, // TODO: Change to number field 1-10
-    ],
+  allDay: {
+    label: "All day",
+    type: fieldsTypes.Checkbox,
     required: true,
-    placeholder: "Priority",
   },
 };

@@ -1,26 +1,26 @@
 import { useState } from "react";
-import "./AddTaskPage.css";
-import AddTag from "../../components/AddTag/AddTag";
+import "./AddEventPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
-import { IInputs, taskFields } from "./AddTaskForm";
-import { TaskService } from "../../services/task.service";
+import { IInputs, eventFields } from "./AddEventForm";
 import Colorful from "@uiw/react-color-colorful";
 
-const AddTaskPage = () => {
-  const initialValues: IInputs = {
+const AddEventPage = () => {
+  const initialValues: IAddEvent = {
     title: "",
     location: "",
-    estTime: 1,
-    dueDate: new Date(),
-    description: "",
-    priority: 1,
+    startTime: 8,
+    endTime: 9,
+    startDate: new Date(),
+    endDate: new Date(),
+    allDay: false,
+    description: "amazing",
     // tag: { name: "", color: "#8a64d6" },
   };
-  const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+  const [inputValues, setInputsValues] = useState<IAddEvent>(initialValues);
   const [tag, setTag] = useState<ITag>({ name: "default", color: "#8a64d6" });
 
   const setValues = (objKey: string, newValue: any) => {
-    const key = objKey as keyof IInputs;
+    const key = objKey as keyof IAddEvent;
     setInputsValues((prev) => {
       return {
         ...prev,
@@ -32,18 +32,21 @@ const AddTaskPage = () => {
   const saveTask = (event: any) => {
     event.preventDefault();
 
-    const newTask: ITask = {
+    const newEvent: IEvent = {
       id: 0,
       title: inputValues.title,
       location: inputValues.location,
-      estTime: inputValues.estTime,
-      dueDate: inputValues.dueDate,
-      description: inputValues.description,
-      priority: inputValues.priority,
+      startTime: inputValues.startTime,
+      endTime: inputValues.endTime,
+      startDate: inputValues.startDate,
+      endDate: inputValues.endDate,
+      allDay: inputValues.allDay,
       tag: tag,
+      description: inputValues.description,
+      isDone: false,
     };
 
-    console.log(newTask);
+    console.log(newEvent);
     // TaskService.saveTask(newTask)
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
@@ -58,19 +61,19 @@ const AddTaskPage = () => {
     <div className="pageContainer">
       <form onSubmit={saveTask} onReset={cancelTask}>
         <div className="add_task__form">
-          {Object.keys(taskFields).map((field) => {
+          {Object.keys(eventFields).map((field) => {
             const fieldKey = field as keyof IInputs;
 
             return (
               <SuperInputField
                 key={fieldKey}
                 id={fieldKey}
-                label={taskFields[fieldKey]?.label || ""}
-                type={taskFields[fieldKey]?.type}
-                options={taskFields[fieldKey]?.options}
+                label={eventFields[fieldKey]?.label || ""}
+                type={eventFields[fieldKey]?.type}
+                options={eventFields[fieldKey]?.options}
                 value={inputValues[fieldKey]}
                 onChange={setValues}
-                required={taskFields[fieldKey]?.required}
+                required={eventFields[fieldKey]?.required}
               />
             );
           })}
@@ -99,4 +102,4 @@ const AddTaskPage = () => {
     </div>
   );
 };
-export default AddTaskPage;
+export default AddEventPage;

@@ -4,6 +4,7 @@ import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
+import AddEventPage from "./pages/AddEvent/AddEventPage";
 
 type RouteType = {
   path: string;
@@ -22,6 +23,11 @@ export const routes: RouteType[] = [
   {
     path: "/addTask",
     element: <AddTaskPage />,
+    showToolbar: true,
+  },
+  {
+    path: "/addEvent",
+    element: <AddEventPage />,
     showToolbar: true,
   },
   {
