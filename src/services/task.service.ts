@@ -9,7 +9,7 @@ export class TaskService {
         return axios
             .post(url, { ...task })
             .then((res) => {
-                console.log("task saved succesfully");
+                console.log("task saved successfully");
                 return (res.data as ITask)
             })
             .catch((err) => {
@@ -41,7 +41,7 @@ export class TaskService {
         return axios
             .put(url)
             .then((res) => {
-                console.log("task updated succesfully");
+                console.log("task updated successfully");
                 return {
                     ...res.data,
                     dueDate: new Date(res.data.dueDate),

@@ -1,12 +1,13 @@
 import { Collapse } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import TasksList from "../../components/TasksList/TasksList";
 import { TaskService } from "../../services/task.service";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 import "./MyTasks.css";
 import useToolbar from "../../customHooks/useToolbar";
+import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
+import { ItemType } from "../../utils/constants";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
@@ -59,16 +60,21 @@ const MyTasks: React.FC = () => {
 
   return (
     <div className="my-tasks">
-      <TasksList
-        tasks={notDoneTasks}
+      <ScheduleItemsList
+        items={notDoneTasks}
+        type={ItemType.TASK}
         onCheckedClick={onTaskCheckedClick}
-        onTaskClick={onTaskClick}
+        onItemClick={onTaskClick}
       />
       <div className="my-tasks__done" onClick={() => setOpenDone(!openDone)}>
         {openDone ? <ExpandLess /> : <ExpandMore />} Done
       </div>
       <Collapse in={openDone} timeout="auto" unmountOnExit>
-        <TasksList tasks={doneTasks} onCheckedClick={onTaskCheckedClick} />
+        <ScheduleItemsList
+          items={doneTasks}
+          type={ItemType.TASK}
+          onCheckedClick={onTaskCheckedClick}
+        />
       </Collapse>
     </div>
   );

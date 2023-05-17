@@ -20,3 +20,8 @@ export const PriorityLabels: TTypePriority = {
     [Priority.MEDIUM]: "medium",
     [Priority.LOW]: "low"
 }
+
+export enum ItemType {
+    TASK = "TASK",
+    EVENT = "EVENT"
+}

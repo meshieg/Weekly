@@ -12,7 +12,7 @@ export type IScheduleEntity = {
   tagId?: number;
 }
 
-export type AppointementModel = {
+export type AppointmentModel = {
   title: string;
   startDate: Date;
   endDate: Date;
