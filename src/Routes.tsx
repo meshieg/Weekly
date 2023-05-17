@@ -3,6 +3,8 @@ import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
+import LogIn from "./pages/LogIn/LogIn";
+import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
 
 type RouteType = {
@@ -35,6 +37,14 @@ export const routes: RouteType[] = [
     element: <MyTasks />,
     showBottomToolbar: true,
     showToolbar: true,
+  },
+  {
+    path: "/logIn",
+    element: <LogIn />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/new-tasks",

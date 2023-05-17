@@ -7,7 +7,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
-  /* font-family: 'Heebo',ssss Verdana, 'sana-serif'; */
 }
 
 .btn__primary {
@@ -43,4 +42,8 @@
   transform: none;
   filter: none;
   cursor: not-allowed;
+}
+
+.btn:active {
+  background: var(--secondary-color);
 }
