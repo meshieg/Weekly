@@ -6,6 +6,7 @@ export enum fieldsTypes {
     Checkbox,
     DatePicker,
     // FileUpload,
+    Password
 }
 
 export enum Priority {
@@ -18,4 +19,9 @@ export const PriorityLabels: TTypePriority = {
     [Priority.HIGH]: "high",
     [Priority.MEDIUM]: "medium",
     [Priority.LOW]: "low"
+}
+
+export enum ItemType {
+    TASK = "TASK",
+    EVENT = "EVENT"
 }

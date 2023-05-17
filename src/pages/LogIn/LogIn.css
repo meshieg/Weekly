@@ -1,0 +1,33 @@
+.pageContainer {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+.login_form_btn {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    margin-top: 5rem;
+}
+
+.text {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: small;
+}

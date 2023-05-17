@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div>
       <h1>Weekly</h1>
-      <Link to="./addTask">
+      <Link to="./add-task">
         <button className="btn btn__primary" style={{ margin: "2rem" }}>
           הוסף משימה
         </button>

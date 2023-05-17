@@ -1,4 +1,4 @@
-.task__item {
+.item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -9,35 +9,34 @@
   justify-content: space-between;
 }
 
-.task__details {
+.item__details {
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
 }
 
-.task__info {
+.item__info {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* width: 90%; */
 }
 
-.task__title {
+.item__title {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
-.task__done .task__title {
+.item__done .item__title {
   text-decoration: line-through;
-  /* color: #00000078; */
 }
 
-.task__date {
+.item__date {
   display: flex;
   align-items: center;
 }
 
-.task__done {
+.item__done {
   @keyframes appear {
     0% {
       opacity: 0;
