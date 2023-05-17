@@ -1,8 +1,8 @@
 import { fieldsTypes } from "../../utils/constants";
 
 export interface IInputs {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,13 +13,13 @@ type inputFields = {
 };
 
 export const registerFields: inputFields = {
-  firstname: {
+  firstName: {
     label: "First name",
     type: fieldsTypes.TextField,
     required: true,
     placeholder: "First name",
   },
-  lastname: {
+  lastName: {
     label: "Last name",
     type: fieldsTypes.TextField,
     required: true,

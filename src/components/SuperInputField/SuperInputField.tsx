@@ -44,6 +44,10 @@ const SuperInputField: React.FC<IProps> = (props) => {
       // case fieldsTypes.FileUpload:
       //   changeValue = event.target.files[0]; //URL.createObjectURL(event.target.files[0]);
       //   break;
+
+      case fieldsTypes.Password:
+        changeValue = event?.target.value;
+        break;
     }
 
     props.onChange(props.id, changeValue);
@@ -130,9 +134,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
         <TextField
           key={props.id}
           label={props.label}
-          value={props.value}
           onChange={handleInputChanged}
-          // sx={styles.field}
           required={props.required}
           placeholder={props.placeholder}
           type="password"

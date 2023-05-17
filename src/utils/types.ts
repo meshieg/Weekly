@@ -17,3 +17,17 @@ export type AppointementModel = {
   startDate: Date;
   endDate: Date;
 }
+
+export type IUser = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
+export type IUserResponse = {
+  token: string;
+  user: IUser;
+}
