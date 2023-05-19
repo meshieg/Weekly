@@ -26,3 +26,6 @@ export enum ItemType {
   TASK = "TASK",
   EVENT = "EVENT",
 }
+
+export const DEFAULT_TAG: ITag = { id: 0, name: "None", color: "" };
+

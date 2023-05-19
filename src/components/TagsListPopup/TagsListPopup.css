@@ -1,0 +1,14 @@
+.tag__row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* padding: 1rem; */
+  margin: 1rem;
+  width: 50vw;
+}
+
+.tag__title {
+  margin-left: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}

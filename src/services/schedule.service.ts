@@ -23,20 +23,20 @@ export class ScheduleService {
             });
     }
 
-    static generateSchedule = async (tasks: ITask[]): Promise<IScheduleEntity[] | void> => {
+    static generateSchedule = async (tasks: ITask[], events: IEvent[]): Promise<IScheduleEntity[] | void> => {
         const url = schedulePrefix;
-        return axios.post(url, {tasks})
-        .then(res => {
-            console.log("Schedule generated successfully");
-            console.log(res.data);
-            // return res.data.map((scheduleEntity: IScheduleEntity) => {
-            //     return {
-            //         ...scheduleEntity
-            //     } as IScheduleEntity;
-            // })
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        return axios.post(url, { tasks, events })
+            .then(res => {
+                console.log("Schedule generated successfully");
+                console.log(res.data);
+                // return res.data.map((scheduleEntity: IScheduleEntity) => {
+                //     return {
+                //         ...scheduleEntity
+                //     } as IScheduleEntity;
+                // })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 }

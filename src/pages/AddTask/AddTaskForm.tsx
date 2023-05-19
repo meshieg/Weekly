@@ -6,7 +6,7 @@ export interface IInputs {
   location: string;
   estTime: number;
   dueDate: Date;
-  dueTime: string;
+  dueTime: Date;
   description: string;
   priority: number;
   // tag: ITag;
@@ -26,7 +26,6 @@ export const taskFields: inputFields = {
   location: {
     label: "Location",
     type: fieldsTypes.TextField,
-    required: true,
     placeholder: "Location",
   },
   estTime: {
@@ -50,8 +49,8 @@ export const taskFields: inputFields = {
   description: {
     label: "Description",
     type: fieldsTypes.TextField,
-    required: true,
     placeholder: "Description",
+    multiline: true,
   },
   priority: {
     label: "Priority",

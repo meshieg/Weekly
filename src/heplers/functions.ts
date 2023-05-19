@@ -6,10 +6,10 @@ import { IUser } from "../utils/types";
  * Should be used in the router.
  * @returns if a user is logged in
  */
-export function isLoggedInUser() {
-    const { token } = useToken();
-    return token;
-}
+// export function isLoggedInUser() {
+//     const { token } = useToken();
+//     return token;
+// }
 
 export function signOut() {
     sessionStorage.removeItem("user");

@@ -1,32 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./AddEventPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, eventFields } from "./AddEventForm";
 import Colorful from "@uiw/react-color-colorful";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { useNavigate } from "react-router-dom";
+import { DEFAULT_TAG } from "../../utils/constants";
+import moment from "moment";
+import Tag from "../../components/Tag/Tag";
+import { TagService } from "../../services/tag.service";
+import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
+import useToolbar from "../../customHooks/useToolbar";
 
 const AddEventPage = () => {
   const initialValues: IInputs = {
     title: "",
     location: "",
-    startTime: new Date(),
-    endTime: new Date(),
-    // startDate: new Date(),
-    // endDate: new Date(),
-    // allDay: false,
+    startTime: new Date(0, 0, 0, 0, 0, 0),
+    endTime: new Date(0, 0, 0, 0, 0, 0),
+    startDate: new Date(),
+    endDate: new Date(),
     description: "",
-    // tag: { name: "", color: "#8a64d6" },
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
-  // const [inputValues, setInputsValues] = useState<IAddEvent>(initialValues);
-  const [tag, setTag] = useState<ITag>({ name: "default", color: "#8a64d6" });
+  const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
   const navigate = useNavigate();
   const { addItem } = useNewItemsContext();
+  const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
+  const [tagsList, setTagsList] = useState<ITag[]>([]);
+  const { setToolbar } = useToolbar();
+
+  useEffect(() => {
+    setToolbar("Add Event", true);
+
+    TagService.getAllTagsByUser()
+      .then((tags: ITag[]) => {
+        setTagsList(tags);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
-    // const key = objKey as keyof IAddEvent;
     setInputsValues((prev) => {
       return {
         ...prev,
@@ -35,44 +52,55 @@ const AddEventPage = () => {
     });
   };
 
-  const saveTask = (event: any) => {
+  const saveEvent = (event: any) => {
     event.preventDefault();
+
+    const startDateTime: string =
+      moment(inputValues.startDate).format("YYYY-MM-DD") +
+      " " +
+      moment(inputValues.startTime).format("HH:mm:ss");
+
+    const endDateTime: string =
+      moment(inputValues.endDate).format("YYYY-MM-DD") +
+      " " +
+      moment(inputValues.endTime).format("HH:mm:ss");
 
     const newEvent: IEvent = {
       id: 0,
       title: inputValues.title,
       location: inputValues.location,
-      startTime: inputValues.startTime,
-      endTime: inputValues.endTime,
-      // startTime: inputValues.startTime,
-      // endTime: inputValues.endTime,
-      // startDate: inputValues.startDate,
-      // endDate: inputValues.endDate,
-      // allDay: inputValues.allDay,
-      tag: tag,
+      startTime: new Date(startDateTime),
+      endTime: new Date(endDateTime),
+      tag: tag.id !== 0 ? tag : undefined,
       description: inputValues.description,
     };
 
-    // console.log(newEvent);
+    console.log(newEvent);
+
     addItem(newEvent);
     setInputsValues(initialValues);
     navigate("/new-tasks");
-
-    // TaskService.saveTask(newTask)
-    //   .then(() => console.log("Task saved successfully"))
-    //   .catch((error) => console.log(error));
   };
 
-  const cancelTask = (event: any) => {
+  const cancelEvent = (event: any) => {
     event.preventDefault();
     setInputsValues(initialValues);
     navigate(-1);
   };
 
+  const onTagClick = () => {
+    setTagsPopupOpen(true);
+  };
+
+  const onSelectTag = (tag: ITag) => {
+    setTag(tag);
+    setTagsPopupOpen(false);
+  };
+
   return (
     <div className="pageContainer">
-      <form onSubmit={saveTask} onReset={cancelTask}>
-        <div className="add_task__form">
+      <form onSubmit={saveEvent} onReset={cancelEvent}>
+        <div className="add_event__form">
           {Object.keys(eventFields).map((field) => {
             const fieldKey = field as keyof IInputs;
 
@@ -86,28 +114,32 @@ const AddEventPage = () => {
                 value={inputValues[fieldKey]}
                 onChange={setValues}
                 required={eventFields[fieldKey]?.required}
+                multiline={eventFields[fieldKey]?.multiline}
               />
             );
           })}
-        </div>
 
-        <div className="colorPickerContainer">
-          <Colorful
+          <Tag
+            width="2.8rem"
+            label={tag.name}
             color={tag.color}
-            onChange={(color) => {
-              console.log(color.hex);
-              setTag((prev) => ({ ...prev, color: color.hex }));
-            }}
-            disableAlpha={true}
+            onClick={onTagClick}
           />
         </div>
 
-        <div className="add_task_buttons">
+        <TagsListPopup
+          open={tagsPopupOpen}
+          onClose={() => setTagsPopupOpen(false)}
+          tags={tagsList}
+          onTagClick={onSelectTag}
+        />
+
+        <div className="add_event_buttons">
           <button className="btn btn__primary" type="submit">
-            SAVE
+            Save
           </button>
           <button className="btn btn__secondary" type="reset">
-            CANCEL
+            Cancel
           </button>
         </div>
       </form>

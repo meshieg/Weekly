@@ -4,15 +4,19 @@ import "./Tag.css";
 interface ITagProps {
   width: string;
   color?: string;
-  onClick?: () => {};
+  label?: string;
+  onClick?: () => void;
 }
 
 const Tag: React.FC<ITagProps> = (props) => {
   return (
-    <div
-      className="tag"
-      style={{ backgroundColor: props.color, width: props.width }}
-    />
+    <div className="tag" style={{ width: props.width }} onClick={props.onClick}>
+      <div
+        className="tag__color"
+        style={{ backgroundColor: props.color, width: props.width }}
+      />
+      {props.label && <span>{props.label}</span>}
+    </div>
   );
 };
 

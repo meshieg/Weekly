@@ -18,7 +18,7 @@ const MyTasks: React.FC = () => {
   const { setToolbar } = useToolbar();
 
   useEffect(() => {
-    setToolbar("My Tasks", true);
+    setToolbar("My Tasks", false);
 
     TaskService.getAllTasks()
       .then((tasks: ITask[]) => {

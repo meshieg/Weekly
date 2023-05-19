@@ -8,10 +8,11 @@ interface IField {
   options?: IOption[];
   required?: boolean = false;
   placeholder?: string;
+  multiline?: boolean;
 }
 
 interface ITag {
-  id?: number;
+  id: number;
   name: string;
   color: string;
 }
@@ -28,31 +29,6 @@ interface ITask {
   assignment?: Date;
   isDone?: boolean;
 }
-
-interface IAddEvent {
-  title: string;
-  location: string;
-  startTime: number;
-  endTime: number;
-  startDate: Date;
-  endDate: Date;
-  allDay: boolean;
-  description: string;
-}
-
-// interface IEvent {
-//   id: number;
-//   title: string;
-//   location?: string;
-//   startTime: number;
-//   endTime: number;
-//   startDate: Date;
-//   endDate: Date;
-//   allDay: boolean;
-//   description?: string;
-//   tag?: ITag;
-//   assignment?: Date;
-// }
 
 interface IEvent {
   id: number;
