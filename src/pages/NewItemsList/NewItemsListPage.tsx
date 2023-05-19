@@ -15,11 +15,11 @@ const NewItemsListPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToolbar("My New Added Tasks and Events");
+    setToolbar("My New Added Tasks and Events", true);
   }, []);
 
   const scheduleItems = () => {
-    ScheduleService.generateSchedule(newTasks)
+    ScheduleService.generateSchedule(newTasks, newEvents)
       .then(() => console.log("Items saved successfully"))
       .catch((error) => console.log(error));
 

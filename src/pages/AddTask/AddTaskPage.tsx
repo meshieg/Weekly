@@ -1,19 +1,19 @@
-import { useState } from "react";
-import moment from "moment";
+import { useEffect, useState } from "react";
 import "./AddTaskPage.css";
-// import { ITask } from "../../utils/types";
 import AddTag from "../../components/AddTag/AddTag";
-import { fieldsTypes } from "../../utils/constants";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
-import { useNavigate } from 'react-router-dom';
+import Colorful from "@uiw/react-color-colorful";
+import { useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
-import { v4 as uuid } from 'uuid';
-
-// type inputFields = {
-//   [id in keyof ITask]: IField;
-// };
+import { v4 as uuid } from "uuid";
+import moment from "moment";
+import Tag from "../../components/Tag/Tag";
+import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
+import { TagService } from "../../services/tag.service";
+import { DEFAULT_TAG } from "../../utils/constants";
+import useToolbar from "../../customHooks/useToolbar";
 
 const AddTaskPage = () => {
   const initialValues: IInputs = {
@@ -21,13 +21,29 @@ const AddTaskPage = () => {
     location: "",
     estTime: 1,
     dueDate: new Date(),
+    dueTime: new Date(0, 0, 0, 0, 0, 0),
     description: "",
     priority: 1,
-    // tag: { name: "", color: "#8a64d6" },
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+  const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
   const navigate = useNavigate();
   const { addItem } = useNewItemsContext();
+  const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
+  const [tagsList, setTagsList] = useState<ITag[]>([]);
+  const { setToolbar } = useToolbar();
+
+  useEffect(() => {
+    setToolbar("Add Task", true);
+
+    TagService.getAllTagsByUser()
+      .then((tags: ITag[]) => {
+        setTagsList(tags);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
@@ -42,75 +58,97 @@ const AddTaskPage = () => {
   const saveTask = (event: any) => {
     event.preventDefault();
 
+    const dateAndTime: string =
+      moment(inputValues.dueDate).format("YYYY-MM-DD") +
+      " " +
+      moment(inputValues.dueTime).format("HH:mm:ss");
+
     const newTask: ITask = {
-      id: 0, //uuid().slice(0,8),
+      id: 0,
       title: inputValues.title,
       location: inputValues.location,
       estTime: inputValues.estTime,
-      dueDate: inputValues.dueDate,
+      dueDate: new Date(dateAndTime),
       description: inputValues.description,
       priority: inputValues.priority,
-      // tag: inputValues.tag,
+      tag: tag.id !== 0 ? tag : undefined,
     };
 
     console.log(newTask);
-    // TaskService.saveTask(newTask)
-    //   .then(() => console.log("Task saved successfully"))
-    //   .catch((error) => console.log(error));
 
     addItem(newTask);
-    navigate('/new-tasks');
+    setInputsValues(initialValues);
+    navigate("/new-tasks");
   };
 
   const cancelTask = (event: any) => {
     event.preventDefault();
     setInputsValues(initialValues);
+    navigate(-1);
+  };
+
+  const onTagClick = () => {
+    setTagsPopupOpen(true);
+  };
+
+  const onSelectTag = (tag: ITag) => {
+    setTag(tag);
+    setTagsPopupOpen(false);
   };
 
   return (
     <div className="pageContainer">
-      <form onSubmit={saveTask} onReset={cancelTask}>
-        <div className="add_task__form">
-          {Object.keys(taskFields).map((field) => {
-            const fieldKey = field as keyof IInputs;
+      <form onSubmit={saveTask} onReset={cancelTask} className="add_task__form">
+        {/* <div className="add_task__form"> */}
+        {Object.keys(taskFields).map((field) => {
+          const fieldKey = field as keyof IInputs;
 
-            return (
-              <SuperInputField
-                key={fieldKey}
-                id={fieldKey}
-                label={taskFields[fieldKey]?.label || ""}
-                // label="test"
+          return (
+            <SuperInputField
+              key={fieldKey}
+              id={fieldKey}
+              label={taskFields[fieldKey]?.label || ""}
+              type={taskFields[fieldKey]?.type}
+              options={taskFields[fieldKey]?.options}
+              value={inputValues[fieldKey]}
+              onChange={setValues}
+              required={taskFields[fieldKey]?.required}
+              multiline={taskFields[fieldKey]?.multiline}
+            />
+          );
+        })}
 
-                type={taskFields[fieldKey]?.type}
-                // type={fieldsTypes.TextField}
+        <Tag
+          width="2.8rem"
+          label={tag.name}
+          color={tag.color}
+          onClick={onTagClick}
+        />
 
-                options={taskFields[fieldKey]?.options}
-                value={inputValues[fieldKey]}
-                onChange={setValues}
-                // required={taskFields[fieldKey].required}
-                required={true}
-              />
-            );
-          })}
-        </div>
+        <TagsListPopup
+          open={tagsPopupOpen}
+          onClose={() => setTagsPopupOpen(false)}
+          tags={tagsList}
+          onTagClick={onSelectTag}
+        />
 
-        {/* <AddTag color={newTask.tag.color ?? "#8a64d6"} /> */}
+        {/* <div className="colorPickerContainer">
+          <Colorful
+            color={tag.color}
+            onChange={(color) => {
+              console.log(color.hex);
+              setTag((prev) => ({ ...prev, color: color.hex }));
+            }}
+            disableAlpha={true}
+          />
+        </div> */}
 
-        {/* <input
-          type="number"
-          value={newTask.priority}
-          onChange={setValues}
-          placeholder="עדיפות"
-          min="1"
-          max="10"
-        ></input> */}
-
-        <div className="add_task__buttons">
+        <div className="add_task_buttons">
           <button className="btn btn__primary" type="submit">
-            שמור
+            Save
           </button>
           <button className="btn btn__secondary" type="reset">
-            ביטול
+            Cancel
           </button>
         </div>
       </form>

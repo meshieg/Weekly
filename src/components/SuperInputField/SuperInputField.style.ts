@@ -3,22 +3,22 @@ const styles = {
     width: "100%",
     marginBottom: "1.3rem",
     "& label.Mui-focused": {
-      color: "var(--primary-bg-color)"
+      color: "var(--primary-color)"
     },
     "& label.Mui-disabled": {
-      color: "var(--primary-bg-color)"
+      color: "var(--primary-color)"
     },
     "& .MuiOutlinedInput-root": {
       paddingRight: "0px",
       borderRadius: "15px",
       "&.Mui-focused fieldset": {
-        borderColor: "var(--primary-bg-color)"
+        borderColor: "var(--primary-color)"
       },
       alignItems: "unset"
     },
     "& .MuiOutlinedInput-input": {
       "&.Mui-disabled": {
-        WebkitTextFillColor: "var(--primary-bg-color)"
+        WebkitTextFillColor: "var(--primary-color)"
       },
     },
     "& .MuiSvgIcon-root": {

@@ -1,8 +1,8 @@
 import { Priority } from "./constants";
 
 export type TTypePriority = {
-  [key in Priority]: string
-}
+  [key in Priority]: string;
+};
 
 export type IScheduleEntity = {
   id: number;
@@ -10,13 +10,13 @@ export type IScheduleEntity = {
   startTime: Date;
   endTime: Date;
   tagId?: number;
-}
+};
 
 export type AppointmentModel = {
   title: string;
   startDate: Date;
   endDate: Date;
-}
+};
 
 export type IUser = {
   id?: number;
@@ -25,9 +25,9 @@ export type IUser = {
   email: string;
   password?: string;
   confirmPassword?: string;
-}
+};
 
 export type IUserResponse = {
   token: string;
   user: IUser;
-}
+};

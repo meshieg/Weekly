@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
-import { Autocomplete, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import styles from "./SuperInputField.style";
 import "./SuperInputField.css";
 import "../../general.css";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { DesktopDatePicker, MobileTimePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { fieldsTypes } from "../../utils/constants";
 import moment from "moment";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 // import "moment-timezone";
 
 interface IProps {
@@ -19,6 +25,7 @@ interface IProps {
   options?: IOption[];
   required?: boolean;
   placeholder?: string;
+  multiline?: boolean;
 }
 
 const SuperInputField: React.FC<IProps> = (props) => {
@@ -38,7 +45,11 @@ const SuperInputField: React.FC<IProps> = (props) => {
         break;
 
       case fieldsTypes.DatePicker:
-        changeValue = moment(event).utcOffset(0, true).format();
+        changeValue = moment(event).format();
+        break;
+
+      case fieldsTypes.TimePicker:
+        changeValue = moment(event).format();
         break;
 
       // case fieldsTypes.FileUpload:
@@ -62,7 +73,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
       return (
         <Autocomplete
           key={props.id}
-          // sx={styles.field}
+          sx={styles.field}
           defaultValue={
             props.options?.find((option) => option.id === props.value) || null
           }
@@ -97,23 +108,23 @@ const SuperInputField: React.FC<IProps> = (props) => {
     case fieldsTypes.DatePicker:
       return (
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="he_IL">
-          {/* <DesktopDatePicker
+          <DesktopDatePicker
             key={props.id}
             label={props.label}
-            value={props.value ? moment(props.value).utcOffset(0, true) : null}
-            // inputFormat="DD/MM/YYYY"
+            value={props.value ? moment(props.value) : null}
+            inputFormat="DD/MM/YYYY"
             onChange={handleInputChanged}
-            disableFuture={true}
-            // renderInput={(params: any) => (
-            //   <TextField
-            //     {...params}
-            //     error={false}
-            //     // sx={styles.field}
-            //     // value={moment(props.value).tz("GMT")}
-            //     required={props.required}
-            //   />
-            // )}
-          /> */}
+            disablePast={true}
+            renderInput={(params: any) => (
+              <TextField
+                {...params}
+                error={false}
+                sx={styles.field}
+                // value={moment(props.value).tz("GMT")}
+                required={props.required}
+              />
+            )}
+          />
         </LocalizationProvider>
       );
 
@@ -138,7 +149,37 @@ const SuperInputField: React.FC<IProps> = (props) => {
           required={props.required}
           placeholder={props.placeholder}
           type="password"
+          sx={styles.field}
         />
+      );
+    case fieldsTypes.TimePicker:
+      return (
+        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="he_IL">
+          <MobileTimePicker
+            key={props.id}
+            label={props.label}
+            value={props.value ? moment(props.value).format() : null}
+            onChange={handleInputChanged}
+            ampm={false}
+            renderInput={(params: any) => (
+              <TextField
+                {...params}
+                error={false}
+                required={props.required}
+                sx={styles.field}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton edge="end">
+                        <AccessTimeIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+        </LocalizationProvider>
       );
 
     default:
@@ -148,9 +189,11 @@ const SuperInputField: React.FC<IProps> = (props) => {
           label={props.label}
           value={props.value}
           onChange={handleInputChanged}
-          // sx={styles.field}
+          sx={styles.field}
           required={props.required}
           placeholder={props.placeholder}
+          multiline={props.multiline}
+          maxRows={props.multiline ? 6 : 1}
         />
       );
   }

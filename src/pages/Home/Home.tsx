@@ -8,7 +8,12 @@ const Home = () => {
       <h1>Weekly</h1>
       <Link to="./add-task">
         <button className="btn btn__primary" style={{ margin: "2rem" }}>
-          הוסף משימה
+          Add task
+        </button>
+      </Link>
+      <Link to="./add-event">
+        <button className="btn btn__primary" style={{ margin: "2rem" }}>
+          Add event
         </button>
       </Link>
     </div>

@@ -3,6 +3,7 @@ import AddTaskPage from "./pages/AddTask/AddTaskPage";
 import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
+import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
@@ -24,6 +25,11 @@ export const routes: RouteType[] = [
   {
     path: "/add-task",
     element: <AddTaskPage />,
+    showToolbar: true,
+  },
+  {
+    path: "/add-event",
+    element: <AddEventPage />,
     showToolbar: true,
   },
   {

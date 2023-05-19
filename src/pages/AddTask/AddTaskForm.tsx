@@ -6,6 +6,7 @@ export interface IInputs {
   location: string;
   estTime: number;
   dueDate: Date;
+  dueTime: Date;
   description: string;
   priority: number;
   // tag: ITag;
@@ -20,31 +21,36 @@ export const taskFields: inputFields = {
     label: "Title",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "כותרת משימה",
+    placeholder: "Title",
   },
   location: {
     label: "Location",
     type: fieldsTypes.TextField,
-    required: true,
-    placeholder: "מיקום",
+    placeholder: "Location",
   },
   estTime: {
     label: "Estimated Time",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "זמן משוער",
+    placeholder: "Estimated Time",
   },
   dueDate: {
     label: "Due Date",
     type: fieldsTypes.DatePicker,
     required: true,
-    placeholder: "תאריך יעד",
+    placeholder: "Due Date",
+  },
+  dueTime: {
+    label: "Due Time",
+    type: fieldsTypes.TimePicker,
+    required: true,
+    placeholder: "Due Time",
   },
   description: {
     label: "Description",
     type: fieldsTypes.TextField,
-    required: true,
-    placeholder: "תיאור",
+    placeholder: "Description",
+    multiline: true,
   },
   priority: {
     label: "Priority",
@@ -55,6 +61,6 @@ export const taskFields: inputFields = {
       { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }, // TODO: Change to number field 1-10
     ],
     required: true,
-    placeholder: "עדיפות",
+    placeholder: "Priority",
   },
 };

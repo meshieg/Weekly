@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { SketchPicker } from "react-color";
 import Colorful from "@uiw/react-color-colorful";
 
 interface ITagProps {
@@ -14,7 +13,6 @@ const AddTag = ({ color, setColor }: ITagProps) => {
 
   return (
     <>
-      {/* <SketchPicker color={colorPicked} onChangeComplete={onChangeColor} /> */}
       <Colorful color={color} disableAlpha={true} onChange={setColor} />
     </>
   );
