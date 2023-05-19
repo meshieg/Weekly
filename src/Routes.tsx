@@ -28,7 +28,7 @@ export const routes: RouteType[] = [
     showToolbar: true,
   },
   {
-    path: "/addEvent",
+    path: "/add-event",
     element: <AddEventPage />,
     showToolbar: true,
   },

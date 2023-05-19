@@ -3,24 +3,30 @@ import "./AddEventPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, eventFields } from "./AddEventForm";
 import Colorful from "@uiw/react-color-colorful";
+import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
+import { useNavigate } from "react-router-dom";
 
 const AddEventPage = () => {
-  const initialValues: IAddEvent = {
+  const initialValues: IInputs = {
     title: "",
     location: "",
-    startTime: 8,
-    endTime: 9,
-    startDate: new Date(),
-    endDate: new Date(),
-    allDay: false,
-    description: "amazing",
+    startTime: new Date(),
+    endTime: new Date(),
+    // startDate: new Date(),
+    // endDate: new Date(),
+    // allDay: false,
+    description: "",
     // tag: { name: "", color: "#8a64d6" },
   };
-  const [inputValues, setInputsValues] = useState<IAddEvent>(initialValues);
+  const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+  // const [inputValues, setInputsValues] = useState<IAddEvent>(initialValues);
   const [tag, setTag] = useState<ITag>({ name: "default", color: "#8a64d6" });
+  const navigate = useNavigate();
+  const { addItem } = useNewItemsContext();
 
   const setValues = (objKey: string, newValue: any) => {
-    const key = objKey as keyof IAddEvent;
+    const key = objKey as keyof IInputs;
+    // const key = objKey as keyof IAddEvent;
     setInputsValues((prev) => {
       return {
         ...prev,
@@ -38,15 +44,20 @@ const AddEventPage = () => {
       location: inputValues.location,
       startTime: inputValues.startTime,
       endTime: inputValues.endTime,
-      startDate: inputValues.startDate,
-      endDate: inputValues.endDate,
-      allDay: inputValues.allDay,
+      // startTime: inputValues.startTime,
+      // endTime: inputValues.endTime,
+      // startDate: inputValues.startDate,
+      // endDate: inputValues.endDate,
+      // allDay: inputValues.allDay,
       tag: tag,
       description: inputValues.description,
-      isDone: false,
     };
 
-    console.log(newEvent);
+    // console.log(newEvent);
+    addItem(newEvent);
+    setInputsValues(initialValues);
+    navigate("/new-tasks");
+
     // TaskService.saveTask(newTask)
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
@@ -55,6 +66,7 @@ const AddEventPage = () => {
   const cancelTask = (event: any) => {
     event.preventDefault();
     setInputsValues(initialValues);
+    navigate(-1);
   };
 
   return (

@@ -8,6 +8,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { fieldsTypes } from "../../utils/constants";
 import moment from "moment";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
 // import "moment-timezone";
 
 interface IProps {
@@ -39,6 +41,10 @@ const SuperInputField: React.FC<IProps> = (props) => {
 
       case fieldsTypes.DatePicker:
         changeValue = moment(event).utcOffset(0, true).format();
+        break;
+
+      case fieldsTypes.TimePicker:
+        changeValue = val;
         break;
 
       // case fieldsTypes.FileUpload:
@@ -97,23 +103,23 @@ const SuperInputField: React.FC<IProps> = (props) => {
     case fieldsTypes.DatePicker:
       return (
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="he_IL">
-          {/* <DesktopDatePicker
+          <DesktopDatePicker
             key={props.id}
             label={props.label}
             value={props.value ? moment(props.value).utcOffset(0, true) : null}
             // inputFormat="DD/MM/YYYY"
             onChange={handleInputChanged}
             disablePast={true}
-            // renderInput={(params: any) => (
-            //   <TextField
-            //     {...params}
-            //     error={false}
-            //     // sx={styles.field}
-            //     // value={moment(props.value).tz("GMT")}
-            //     required={props.required}
-            //   />
-            // )}
-          /> */}
+            renderInput={(params: any) => (
+              <TextField
+                {...params}
+                error={false}
+                // sx={styles.field}
+                // value={moment(props.value).tz("GMT")}
+                required={props.required}
+              />
+            )}
+          />
         </LocalizationProvider>
       );
 
@@ -139,6 +145,19 @@ const SuperInputField: React.FC<IProps> = (props) => {
           placeholder={props.placeholder}
           type="password"
         />
+      );
+    case fieldsTypes.TimePicker:
+      return (
+        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="he_IL">
+          <TimePicker
+            renderInput={(params: any) => (
+              <TextField {...params} error={false} required={props.required} />
+            )}
+            label={props.label}
+            value={props.value}
+            onChange={handleInputChanged}
+          />
+        </LocalizationProvider>
       );
 
     default:

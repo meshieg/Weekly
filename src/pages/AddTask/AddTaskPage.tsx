@@ -19,6 +19,7 @@ const AddTaskPage = () => {
     location: "",
     estTime: 1,
     dueDate: new Date(),
+    dueTime: "",
     description: "",
     priority: 1,
     // tag: { name: "", color: "#8a64d6" },
@@ -40,13 +41,14 @@ const AddTaskPage = () => {
 
   const saveTask = (event: any) => {
     event.preventDefault();
-
+    const date: string = inputValues.dueDate.toLocaleDateString();
+    console.log(initialValues.dueTime);
     const newTask: ITask = {
       id: 0, //uuid().slice(0,8),
       title: inputValues.title,
       location: inputValues.location,
       estTime: inputValues.estTime,
-      dueDate: inputValues.dueDate,
+      dueDate: new Date(date + initialValues.dueTime),
       description: inputValues.description,
       priority: inputValues.priority,
       tag: tag,
@@ -57,13 +59,15 @@ const AddTaskPage = () => {
     //   .then(() => console.log("Task saved successfully"))
     //   .catch((error) => console.log(error));
 
-    addItem(newTask);
-    navigate("/new-tasks");
+    // addItem(newTask);
+    // setInputsValues(initialValues);
+    // navigate("/new-tasks");
   };
 
   const cancelTask = (event: any) => {
     event.preventDefault();
     setInputsValues(initialValues);
+    navigate(-1);
   };
 
   return (
@@ -88,7 +92,7 @@ const AddTaskPage = () => {
           })}
         </div>
 
-        <div className="colorPickerContainer">
+        {/* <div className="colorPickerContainer">
           <Colorful
             color={tag.color}
             onChange={(color) => {
@@ -97,7 +101,7 @@ const AddTaskPage = () => {
             }}
             disableAlpha={true}
           />
-        </div>
+        </div> */}
 
         <div className="add_task_buttons">
           <button className="btn btn__primary" type="submit">

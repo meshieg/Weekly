@@ -40,18 +40,19 @@ interface IAddEvent {
   description: string;
 }
 
-interface IEvent {
-  id: number;
-  title: string;
-  location?: string;
-  estTime: number;
-  dueDate: Date;
-  description?: string;
-  priority?: number;
-  tag?: ITag;
-  assignment?: Date;
-  isDone?: boolean;
-}
+// interface IEvent {
+//   id: number;
+//   title: string;
+//   location?: string;
+//   startTime: number;
+//   endTime: number;
+//   startDate: Date;
+//   endDate: Date;
+//   allDay: boolean;
+//   description?: string;
+//   tag?: ITag;
+//   assignment?: Date;
+// }
 
 interface IEvent {
   id: number;
