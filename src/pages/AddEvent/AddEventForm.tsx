@@ -37,23 +37,27 @@ export const eventFields: inputFields = {
     type: fieldsTypes.DatePicker,
     required: true,
     placeholder: "Start date",
+    width: "50%",
   },
   startTime: {
     label: "Start time",
     type: fieldsTypes.TimePicker,
     required: true,
     placeholder: "Start time",
+    width: "50%",
   },
   endDate: {
     label: "End Date",
     type: fieldsTypes.DatePicker,
     required: true,
     placeholder: "End date",
+    width: "50%",
   },
   endTime: {
     label: "End Time",
     type: fieldsTypes.TimePicker,
     required: true,
     placeholder: "End time",
+    width: "50%",
   },
 };

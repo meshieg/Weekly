@@ -115,6 +115,7 @@ const AddEventPage = () => {
                 onChange={setValues}
                 required={eventFields[fieldKey]?.required}
                 multiline={eventFields[fieldKey]?.multiline}
+                width={eventFields[fieldKey]?.width}
               />
             );
           })}

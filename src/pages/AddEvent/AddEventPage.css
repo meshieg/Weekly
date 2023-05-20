@@ -9,6 +9,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  /* row-gap: 0px;
+  grid-template-columns: repeat(auto-fill, minmax(100%, auto)); */
+  /* grid-template-columns: repeat(2, 50%); */
 }
 
 .add_event_buttons {

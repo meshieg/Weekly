@@ -26,6 +26,7 @@ interface IProps {
   required?: boolean;
   placeholder?: string;
   multiline?: boolean;
+  width?: string;
 }
 
 const SuperInputField: React.FC<IProps> = (props) => {
@@ -73,7 +74,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
       return (
         <Autocomplete
           key={props.id}
-          sx={styles.field}
+          sx={{ ...styles.field, width: props.width }}
           defaultValue={
             props.options?.find((option) => option.id === props.value) || null
           }
@@ -119,7 +120,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
               <TextField
                 {...params}
                 error={false}
-                sx={styles.field}
+                sx={{ ...styles.field, width: props.width }}
                 // value={moment(props.value).tz("GMT")}
                 required={props.required}
               />
@@ -149,7 +150,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           required={props.required}
           placeholder={props.placeholder}
           type="password"
-          sx={styles.field}
+          sx={{ ...styles.field, width: props.width }}
         />
       );
     case fieldsTypes.TimePicker:
@@ -166,7 +167,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
                 {...params}
                 error={false}
                 required={props.required}
-                sx={styles.field}
+                sx={{ ...styles.field, width: props.width }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -189,7 +190,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           label={props.label}
           value={props.value}
           onChange={handleInputChanged}
-          sx={styles.field}
+          sx={{ ...styles.field, width: props.width }}
           required={props.required}
           placeholder={props.placeholder}
           multiline={props.multiline}
