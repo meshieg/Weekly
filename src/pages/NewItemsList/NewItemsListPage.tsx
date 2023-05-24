@@ -1,5 +1,5 @@
 import "./NewItemsListPage.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { ScheduleService } from "../../services/schedule.service";
@@ -7,7 +7,6 @@ import ActionButtons from "../../assets/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import { ItemType } from "../../utils/constants";
-import { ExpandLess, ExpandMore} from "@mui/icons-material";
 
 const NewItemsListPage = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
