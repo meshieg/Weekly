@@ -5,9 +5,15 @@ const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 
 export class TaskService {
     static saveTask = async (task: ITask): Promise<ITask | void> => {
+
+        const taskJson = JSON.stringify({
+            ...task,
+            dueDate: task.dueDate.toISOString()
+        })
+
         const url = taskPrefix;
         return axios
-            .post(url, { ...task })
+            .post(url, taskJson)
             .then((res) => {
                 console.log("task saved successfully");
                 return (res.data as ITask)

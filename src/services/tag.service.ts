@@ -9,13 +9,7 @@ export class TagService {
         const url = `${tagPrefix}/all-by-user`;
         return await axios.get(url)
             .then(res => {
-                console.log(res.data)
                 return res.data as ITag[]
-                // return res.data.map((tags: ITag) => {
-                //     return {
-
-                //     } as ITag;
-                // })
             })
             .catch((err) => {
                 console.log(err);
