@@ -1,3 +1,4 @@
+import { getListOfHours } from "../heplers/functions";
 import { TTypePriority } from "./types";
 
 export enum fieldsTypes {
@@ -28,4 +29,6 @@ export enum ItemType {
 }
 
 export const DEFAULT_TAG: ITag = { id: 0, name: "None", color: "" };
+
+export const TIME_PICKER_OPTIONS = getListOfHours(60);
 

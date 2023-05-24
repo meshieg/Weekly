@@ -61,7 +61,10 @@ const AddTaskPage = () => {
     const dateAndTime: string =
       moment(inputValues.dueDate).format("YYYY-MM-DD") +
       " " +
-      moment(inputValues.dueTime).format("HH:mm:ss");
+      moment(inputValues.dueTime).format("HH:00:00");
+
+    console.log(inputValues.dueTime);
+    console.log(dateAndTime);
 
     const newTask: ITask = {
       id: 0,

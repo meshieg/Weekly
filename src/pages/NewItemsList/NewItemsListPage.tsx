@@ -20,14 +20,16 @@ const NewItemsListPage = () => {
 
   const scheduleItems = () => {
     ScheduleService.generateSchedule(newTasks, newEvents)
-      .then(() => console.log("Items saved successfully"))
+      .then(() => {
+        console.log("Items saved successfully");
+        refreshItems();
+      })
       .catch((error) => console.log(error));
-
-    refreshItems();
   };
 
   const onCancelClick = () => {
     // TODO: Add 'are you sure...' question
+    refreshItems();
     navigate("/");
   };
 

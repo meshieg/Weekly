@@ -22,7 +22,9 @@ const MyTasks: React.FC = () => {
 
     TaskService.getAllTasks()
       .then((tasks: ITask[]) => {
-        setAllTasks(tasks);
+        setAllTasks(
+          tasks?.sort((t1, t2) => t1.dueDate.getTime() - t2.dueDate.getTime())
+        );
       })
       .catch((err) => {
         console.log(err);
