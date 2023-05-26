@@ -1,15 +1,24 @@
-.pageContainer {
+.reg_pageContainer {
     flex-direction: column;
     display: flex;
     justify-content: space-between;
+    margin-top: 7vh;
+    margin-right: 7vw;
+    margin-left: 7vw
 }
 
-.image {
+.reg_image {
     display: flex;
     justify-content: center;
 }
 
-.form {
+.reg_form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+}
+
+.reg_form_fields {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -18,8 +27,7 @@
 }
 
 .reg_form_btn {
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    margin-top: 2rem;
+    margin-top: 2vh;
+    width: 65%;
+    align-self: center;
 }

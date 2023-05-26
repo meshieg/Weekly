@@ -9,6 +9,7 @@ import useToken from "../../customHooks/useToken";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import useAlert from "../../customHooks/useAlert";
 import { validateUserInputs } from "../../heplers/functions";
+import moment from "moment";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    beginDayHour: new Date(0, 0, 0, 0, 0, 0),
+    endDayHour: new Date(0, 0, 0, 0, 0, 0),
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
 
@@ -41,6 +44,8 @@ const Register = () => {
       lastName: inputValues.lastName,
       email: inputValues.email,
       password: inputValues.password,
+      beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
+      endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
     const alertMessage = validateUserInputs({
@@ -62,23 +67,27 @@ const Register = () => {
           firstName: newUser.firstName,
           lasrName: newUser.lastName,
           email: newUser.email,
+          beginDayHour: newUser.beginDayHour,
+          endDayHour: newUser.endDayHour,
         };
 
         sessionStorage.setItem("user", JSON.stringify(currUser));
         navigate("/week");
       })
       .catch((err) => {
-        console.log(err);
+        if (err?.response?.data?.errors[0]?.message) {
+          setAlert("error", err?.response.data.errors[0].message);
+        }
       });
   };
 
   return (
-    <div className="pageContainer">
-      <div className="image">
+    <div className="reg_pageContainer">
+      <div className="reg_image">
         <img src={require("../../assets/images/logo_no_background.png")} />
       </div>
-      <form onSubmit={handleRegister}>
-        <div className="form">
+      <form className="reg_form" onSubmit={handleRegister}>
+        <div className="reg_form_fields">
           {Object.keys(registerFields).map((field) => {
             const fieldKey = field as keyof IInputs;
 
@@ -96,11 +105,9 @@ const Register = () => {
             );
           })}
         </div>
-        <div className="reg_form_btn">
-          <button className="btn btn__primary" type="submit">
-            Lets start planning!
-          </button>
-        </div>
+        <button className="btn btn__primary reg_form_btn" type="submit">
+          Lets start planning!
+        </button>
         <AlertPopup />
       </form>
     </div>

@@ -25,6 +25,8 @@ export type IUser = {
   email: string;
   password?: string;
   confirmPassword?: string;
+  beginDayHour?: number;
+  endDayHour?: number;
 };
 
 export type IUserResponse = {
