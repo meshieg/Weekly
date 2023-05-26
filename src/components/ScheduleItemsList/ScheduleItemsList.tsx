@@ -1,7 +1,6 @@
 import React from "react";
 import ScheduleItemRow from "../ScheduleItemRow/ScheduleItemRow";
-import { instanceOfTask } from "../../utils/typeChecks";
-import { instanceOfEvent } from "../../utils/typeChecks";
+import { instanceOfTask, instanceOfEvent } from "../../utils/typeChecks";
 
 interface IScheduleItemsListProps {
   items: ITask[] | IEvent[];

@@ -9,7 +9,6 @@ const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
-  // const [openDone, setOpenDone] = useState<boolean>(true);
 
   const { setToolbar } = useToolbar();
 
