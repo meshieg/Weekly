@@ -20,14 +20,16 @@ const NewItemsListPage = () => {
 
   const scheduleItems = () => {
     ScheduleService.generateSchedule(newTasks, newEvents)
-      .then(() => console.log("Items saved successfully"))
+      .then(() => {
+        console.log("Items saved successfully");
+        refreshItems();
+      })
       .catch((error) => console.log(error));
-
-    refreshItems();
   };
 
   const onCancelClick = () => {
     // TODO: Add 'are you sure...' question
+    refreshItems();
     navigate("/");
   };
 
@@ -36,7 +38,7 @@ const NewItemsListPage = () => {
       {newTasks.length === 0 && newEvents.length === 0 ? (
         <h3 className="new-tasks__message">
           {`You have no new items to save :/ \n
-        But you can always add them here :)`}
+            But you can always add them here :)`}
         </h3>
       ) : (
         <>
@@ -46,11 +48,19 @@ const NewItemsListPage = () => {
             secondaryText="Cancel"
             secondaryAction={onCancelClick}
           />
+          
+          {newTasks.length !== 0 && <div className="new-tasks__list-header s">
+            Added Tasks
+          </div>}
           <ScheduleItemsList
             items={newTasks}
             type={ItemType.TASK}
             onDeleteClick={removeItem}
           />
+
+          {newEvents.length !== 0 && <div className="new-tasks__list-header ">
+            Added Events
+          </div>}
           <ScheduleItemsList
             items={newEvents}
             type={ItemType.EVENT}

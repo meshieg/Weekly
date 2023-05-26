@@ -1,3 +1,10 @@
 .new-tasks__message {
 
 }
+
+.new-tasks__list-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin: 1.5rem 0 0 1rem;
+}

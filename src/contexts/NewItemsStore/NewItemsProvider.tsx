@@ -31,6 +31,7 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
   const refreshItems = () => {
     setNewTasks([]);
     setNewEvents([]);
+    setId(0);
   }
   
   return (
