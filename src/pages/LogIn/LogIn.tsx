@@ -55,17 +55,19 @@ const LogIn = () => {
         navigate("/week");
       })
       .catch((err) => {
-        console.log(err);
+        if (err?.response?.data?.errors[0]?.message) {
+          setAlert("error", err?.response.data.errors[0].message);
+        }
       });
   };
 
   return (
-    <div className="pageContainer">
-      <div className="image">
+    <div className="login_pageContainer">
+      <div className="login_image">
         <img src={require("../../assets/images/logo_no_background.png")} />
       </div>
-      <form onSubmit={handleLogIn}>
-        <div className="form">
+      <form className="login_form" onSubmit={handleLogIn}>
+        <div className="login_form_fields">
           {Object.keys(logInFields).map((field) => {
             const fieldKey = field as keyof IInputs;
 
@@ -87,12 +89,10 @@ const LogIn = () => {
             onPress={() => navigate("/resetPassword")}
           />
         </div>
-        <div className="login_form_btn">
-          <div>
-            <button className="btn btn__primary" type="submit">
-              Log in
-            </button>
-          </div>
+        <div className="login_form_buttons">
+          <button className="btn btn__primary login_form_btn" type="submit">
+            Log in
+          </button>
           <div className="text">
             Not signed in yet?&nbsp;
             <CustomLink

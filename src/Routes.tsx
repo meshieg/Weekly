@@ -47,10 +47,12 @@ export const routes: RouteType[] = [
   {
     path: "/logIn",
     element: <LogIn />,
+    showToolbar: false,
   },
   {
     path: "/register",
     element: <Register />,
+    showToolbar: false,
   },
   {
     path: "/new-tasks",

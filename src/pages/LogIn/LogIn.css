@@ -1,31 +1,44 @@
-.pageContainer {
+.login_pageContainer {
     flex-direction: column;
     display: flex;
     justify-content: space-between;
+    margin: 7vh 7vw;
 }
 
-.image {
+.login_image {
     display: flex;
     justify-content: center;
 }
 
-.form {
+.login_form {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    margin-top: 7vh;
+}
+
+.login_form_fields {
+    display: flex;
+    flex-direction: column;
+    height: 70%;
     justify-content: space-evenly;
     margin-top: 2rem;
 }
 
-.login_form_btn {
+.login_form_buttons {
     flex-direction: column;
     display: flex;
     align-items: center;
-    margin-top: 5rem;
+    margin-top: 5vh;
+}
+
+.login_form_btn {
+    margin-top: 7vh;
+    width: 45%;
+    align-self: center;
 }
 
 .text {
-    margin-top: 1rem;
+    margin-top: 2vh;
     display: flex;
     flex-direction: row;
     align-items: center;
