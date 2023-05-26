@@ -1,10 +1,10 @@
 import React from "react";
-import { ItemType } from "../../utils/constants";
 import ScheduleItemRow from "../ScheduleItemRow/ScheduleItemRow";
+import { instanceOfTask } from "../../utils/typeChecks";
+import { instanceOfEvent } from "../../utils/typeChecks";
 
 interface IScheduleItemsListProps {
   items: ITask[] | IEvent[];
-  type: ItemType;
   onCheckedClick?: (taskId: number) => void;
   onItemClick?: (taskId: number) => void;
   onDeleteClick?: (taskId: number) => void;
@@ -20,15 +20,15 @@ const ScheduleItemsList: React.FC<IScheduleItemsListProps> = (props) => {
             id={item.id}
             title={item.title}
             date={
-              props.type === ItemType.TASK
-                ? (item as ITask).dueDate
-                : (item as IEvent).startTime
+              instanceOfTask(item) ? item.dueDate : 
+              instanceOfEvent(item) ? item.startTime :
+              new Date("")
             }
             tag={item.tag}
             isDone={
-              props.type === ItemType.TASK ? (item as ITask).isDone : undefined
+              instanceOfTask(item) ? item.isDone : undefined
             }
-            displayTime={props.type === ItemType.TASK ? false : true}
+            displayTime={instanceOfTask(item) ? false : true}
             checkbox={props.onCheckedClick ? true : false}
             onCheckedClick={props.onCheckedClick}
             onClick={props.onItemClick}
