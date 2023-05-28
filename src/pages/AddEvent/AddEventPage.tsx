@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import "./AddEventPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, eventFields } from "./AddEventForm";
-import Colorful from "@uiw/react-color-colorful";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { useNavigate } from "react-router-dom";
 import { DEFAULT_TAG } from "../../utils/constants";
