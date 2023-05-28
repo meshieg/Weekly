@@ -14,9 +14,6 @@ export class UserService {
         .then(res => {
             return res.data;
         })
-        .catch((err) => {
-            console.log(err);
-        });
     }
 
     static register = async (user: IUser): Promise<IUserResponse> => {
@@ -25,8 +22,5 @@ export class UserService {
             .then(res => {
                 return res.data
             })
-            .catch((err) => {
-                console.log(err);
-            });
     }
 }

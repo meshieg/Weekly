@@ -1,7 +1,7 @@
 const styles = {
   field: {
     width: "100%",
-    marginBottom: "1.3rem",
+    marginBottom: "1rem",
     "& label.Mui-focused": {
       color: "var(--primary-color)"
     },

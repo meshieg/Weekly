@@ -8,12 +8,22 @@ import {
 import styles from "./SuperInputField.style";
 import "./SuperInputField.css";
 import "../../general.css";
-import { DesktopDatePicker, MobileTimePicker } from "@mui/x-date-pickers";
+import {
+  DesktopDatePicker,
+  DesktopTimePicker,
+  MobileTimePicker,
+  // TimePicker,
+} from "@mui/x-date-pickers";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { fieldsTypes } from "../../utils/constants";
+import { fieldsTypes, TIME_PICKER_OPTIONS } from "../../utils/constants";
 import moment from "moment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import DatePicker from "react-datepicker";
+import { TimeField } from "@mui/x-date-pickers/TimeField";
+import { getListOfHours } from "../../heplers/functions";
+
 // import "moment-timezone";
 
 interface IProps {
@@ -49,7 +59,10 @@ const SuperInputField: React.FC<IProps> = (props) => {
         break;
 
       case fieldsTypes.TimePicker:
-        changeValue = moment(event).format();
+        changeValue = moment(event)
+          .set({ minute: 0, second: 0, millisecond: 0 })
+          .format();
+        console.log(changeValue);
         break;
 
       // case fieldsTypes.FileUpload:
@@ -112,18 +125,16 @@ const SuperInputField: React.FC<IProps> = (props) => {
             key={props.id}
             label={props.label}
             value={props.value ? moment(props.value) : null}
-            inputFormat="DD/MM/YYYY"
+            format="DD/MM/YYYY"
             onChange={handleInputChanged}
             disablePast={true}
-            renderInput={(params: any) => (
-              <TextField
-                {...params}
-                error={false}
-                sx={styles.field}
-                // value={moment(props.value).tz("GMT")}
-                required={props.required}
-              />
-            )}
+            slotProps={{
+              textField: {
+                required: props.required,
+                sx: styles.field,
+                error: false,
+              },
+            }}
           />
         </LocalizationProvider>
       );
@@ -158,16 +169,19 @@ const SuperInputField: React.FC<IProps> = (props) => {
           <MobileTimePicker
             key={props.id}
             label={props.label}
-            value={props.value ? moment(props.value).format() : null}
+            value={props.value ? moment(props.value) : null}
             onChange={handleInputChanged}
             ampm={false}
-            renderInput={(params: any) => (
-              <TextField
-                {...params}
-                error={false}
-                required={props.required}
-                sx={styles.field}
-                InputProps={{
+            views={["hours"]}
+            closeOnSelect={true}
+            // minutesStep={60}
+            // disablePast={true}
+            slotProps={{
+              textField: {
+                required: props.required,
+                sx: styles.field,
+                error: false,
+                InputProps: {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton edge="end">
@@ -175,13 +189,40 @@ const SuperInputField: React.FC<IProps> = (props) => {
                       </IconButton>
                     </InputAdornment>
                   ),
-                }}
-              />
-            )}
+                },
+              },
+            }}
           />
         </LocalizationProvider>
       );
-
+      {
+        /* <Autocomplete
+            key={props.id}
+            sx={styles.field}
+            defaultValue={
+              TIME_PICKER_OPTIONS?.find(
+                (option) => option.id === props.value
+              ) || null
+            }
+            value={
+              TIME_PICKER_OPTIONS?.find(
+                (option) => option.id === props.value
+              ) || null
+            }
+            onChange={handleInputChanged}
+            options={TIME_PICKER_OPTIONS!}
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            renderInput={(params: any) => (
+              <TimeField
+                {...params}
+                label={props.label}
+                // required={props.required}
+                format="HH:mm"
+              />
+            )}
+          /> */
+      }
     default:
       return (
         <TextField

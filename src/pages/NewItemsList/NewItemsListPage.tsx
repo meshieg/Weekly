@@ -1,13 +1,13 @@
-import "./NewItemsListPage.css";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { ScheduleService } from "../../services/schedule.service";
-import ActionButtons from "../../assets/ActionButtons/ActionButtons";
+import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import { ItemType } from "../../utils/constants";
 import { instanceOfTask } from "../../utils/typeChecks";
+import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
 const NewItemsListPage = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
@@ -16,19 +16,21 @@ const NewItemsListPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToolbar("My New Added Tasks and Events", true);
+    setToolbar("My New Added Tasks and Events", false);
   }, []);
 
   const scheduleItems = () => {
     ScheduleService.generateSchedule(newTasks, newEvents)
-      .then(() => console.log("Items saved successfully"))
+      .then(() => {
+        console.log("Items saved successfully");
+        refreshItems();
+      })
       .catch((error) => console.log(error));
-
-    refreshItems();
   };
 
   const onCancelClick = () => {
     // TODO: Add 'are you sure...' question
+    refreshItems();
     navigate("/");
   };
 
@@ -57,7 +59,7 @@ const NewItemsListPage = () => {
       {newTasks.length === 0 && newEvents.length === 0 ? (
         <h3 className="new-tasks__message">
           {`You have no new items to save :/ \n
-        But you can always add them here :)`}
+            But you can always add them here :)`}
         </h3>
       ) : (
         <>
@@ -67,18 +69,26 @@ const NewItemsListPage = () => {
             secondaryText="Cancel"
             secondaryAction={onCancelClick}
           />
-          <ScheduleItemsList
-            items={newTasks}
-            type={ItemType.TASK}
-            onDeleteClick={removeItem}
-            onItemClick={onItemClick}
-          />
-          <ScheduleItemsList
-            items={newEvents}
-            type={ItemType.EVENT}
-            onDeleteClick={removeItem}
-            onItemClick={onItemClick}
-          />
+
+          {newTasks.length !== 0 && (
+            <CollapseHeader headerText="Tasks">
+              <ScheduleItemsList
+                items={newTasks}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
+            </CollapseHeader>
+          )}
+
+          {newEvents.length !== 0 && (
+            <CollapseHeader headerText="Events">
+              <ScheduleItemsList
+                items={newEvents}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
+            </CollapseHeader>
+          )}
         </>
       )}
       <Link to="/add-task">
