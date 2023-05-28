@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import "./AddEventPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, eventFields } from "./AddEventForm";
-import Colorful from "@uiw/react-color-colorful";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { DEFAULT_TAG } from "../../utils/constants";
 import moment from "moment";
 import Tag from "../../components/Tag/Tag";
@@ -13,14 +12,16 @@ import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import useToolbar from "../../customHooks/useToolbar";
 
 const AddEventPage = () => {
+  const location = useLocation();
+  const eventToUpdate: IEvent = location.state?.event;
   const initialValues: IInputs = {
-    title: "",
-    location: "",
-    startTime: new Date(0, 0, 0, 0, 0, 0),
-    endTime: new Date(0, 0, 0, 0, 0, 0),
-    startDate: new Date(),
-    endDate: new Date(),
-    description: "",
+    title: eventToUpdate?.title ?? "",
+    location: eventToUpdate?.location ?? "",
+    startTime: eventToUpdate?.startTime ?? new Date(0, 0, 0, 0, 0, 0),
+    endTime: eventToUpdate?.endTime ?? new Date(0, 0, 0, 0, 0, 0),
+    startDate: eventToUpdate?.startTime ?? new Date(),
+    endDate: eventToUpdate?.endTime ?? new Date(),
+    description: eventToUpdate?.description ?? "",
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
@@ -31,6 +32,7 @@ const AddEventPage = () => {
   const { setToolbar } = useToolbar();
 
   useEffect(() => {
+    setInputsValues(initialValues);
     setToolbar("Add Event", true);
 
     TagService.getAllTagsByUser()
@@ -40,6 +42,9 @@ const AddEventPage = () => {
       .catch((err) => {
         console.log(err);
       });
+    if (eventToUpdate !== undefined) {
+      eventToUpdate.tag && onSelectTag(eventToUpdate.tag);
+    }
   }, []);
 
   const setValues = (objKey: string, newValue: any) => {
@@ -66,7 +71,7 @@ const AddEventPage = () => {
       moment(inputValues.endTime).format("HH:mm:ss");
 
     const newEvent: IEvent = {
-      id: 0,
+      id: eventToUpdate ? eventToUpdate.id : 0,
       title: inputValues.title,
       location: inputValues.location,
       startTime: new Date(startDateTime),
@@ -74,12 +79,16 @@ const AddEventPage = () => {
       tag: tag.id !== 0 ? tag : undefined,
       description: inputValues.description,
     };
+    if (eventToUpdate === undefined) {
+      console.log(newEvent);
 
-    console.log(newEvent);
-
-    addItem(newEvent);
-    setInputsValues(initialValues);
-    navigate("/new-tasks");
+      addItem(newEvent);
+      setInputsValues(initialValues);
+      navigate("/new-tasks");
+    } else {
+      // TODO add request to server
+      navigate("/new-tasks");
+    }
   };
 
   const cancelEvent = (event: any) => {

@@ -7,6 +7,9 @@ import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
+import DisplayItemPage from "./pages/EditShowEvent/displayItemPage";
+import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
+import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
 
 type RouteType = {
   path: string;
@@ -55,6 +58,18 @@ export const routes: RouteType[] = [
   {
     path: "/new-tasks",
     element: <NewItemsListPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+  },
+  {
+    path: "/display-task",
+    element: <DisplayTaskPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+  },
+  {
+    path: "/display-event",
+    element: <DisplayEventPage />,
     showBottomToolbar: false,
     showToolbar: true,
   },

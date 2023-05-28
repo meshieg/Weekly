@@ -7,6 +7,7 @@ import ActionButtons from "../../assets/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import { ItemType } from "../../utils/constants";
+import { instanceOfTask } from "../../utils/typeChecks";
 
 const NewItemsListPage = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
@@ -31,6 +32,26 @@ const NewItemsListPage = () => {
     navigate("/");
   };
 
+  const onItemClick = (id: number) => {
+    console.log("click");
+    const item =
+      newTasks.find((task) => task.id === id) ||
+      newEvents.find((event) => event.id === id);
+    if (instanceOfTask(item)) {
+      navigate("/details", {
+        state: {
+          task: item as ITask,
+        },
+      });
+    } else {
+      navigate("/details", {
+        state: {
+          event: item as IEvent,
+        },
+      });
+    }
+  };
+
   return (
     <>
       {newTasks.length === 0 && newEvents.length === 0 ? (
@@ -50,11 +71,13 @@ const NewItemsListPage = () => {
             items={newTasks}
             type={ItemType.TASK}
             onDeleteClick={removeItem}
+            onItemClick={onItemClick}
           />
           <ScheduleItemsList
             items={newEvents}
             type={ItemType.EVENT}
             onDeleteClick={removeItem}
+            onItemClick={onItemClick}
           />
         </>
       )}

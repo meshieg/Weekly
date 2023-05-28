@@ -21,9 +21,9 @@ interface ITask {
   id: number;
   title: string;
   location?: string;
+  description?: string;
   estTime: number;
   dueDate: Date;
-  description?: string;
   priority?: number;
   tag?: ITag;
   assignment?: Date;

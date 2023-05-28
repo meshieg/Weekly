@@ -12,7 +12,7 @@ import moment from "moment";
 import Tag from "../../components/Tag/Tag";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import { TagService } from "../../services/tag.service";
-import { DEFAULT_TAG } from "../../utils/constants";
+import { DEFAULT_TAG, Priority } from "../../utils/constants";
 import useToolbar from "../../customHooks/useToolbar";
 
 const AddTaskPage = () => {
@@ -23,7 +23,7 @@ const AddTaskPage = () => {
     dueDate: new Date(),
     dueTime: new Date(0, 0, 0, 0, 0, 0),
     description: "",
-    priority: 1,
+    priority: Priority.LOW,
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
