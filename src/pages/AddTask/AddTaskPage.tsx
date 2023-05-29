@@ -5,7 +5,7 @@ import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
 import Colorful from "@uiw/react-color-colorful";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { v4 as uuid } from "uuid";
 import moment from "moment";
@@ -16,14 +16,16 @@ import { DEFAULT_TAG, Priority } from "../../utils/constants";
 import useToolbar from "../../customHooks/useToolbar";
 
 const AddTaskPage = () => {
+  const location = useLocation();
+  const taskToUpdate: ITask = location.state?.task;
   const initialValues: IInputs = {
-    title: "",
-    location: "",
-    estTime: 1,
-    dueDate: new Date(),
-    dueTime: new Date(0, 0, 0, 0, 0, 0),
-    description: "",
-    priority: Priority.LOW,
+    title: taskToUpdate?.title ?? "",
+    location: taskToUpdate?.location ?? "",
+    estTime: taskToUpdate?.estTime ?? 1,
+    dueDate: taskToUpdate?.dueDate ?? new Date(),
+    dueTime: taskToUpdate?.dueDate ?? new Date(0, 0, 0, 0, 0, 0),
+    description: taskToUpdate?.description ?? "",
+    priority: taskToUpdate?.priority ?? Priority.LOW,
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
@@ -34,6 +36,7 @@ const AddTaskPage = () => {
   const { setToolbar } = useToolbar();
 
   useEffect(() => {
+    setInputsValues(initialValues);
     setToolbar("Add Task", true);
 
     TagService.getAllTagsByUser()
@@ -67,7 +70,7 @@ const AddTaskPage = () => {
     console.log(dateAndTime);
 
     const newTask: ITask = {
-      id: 0,
+      id: taskToUpdate ? taskToUpdate?.id : 0,
       title: inputValues.title,
       location: inputValues.location,
       estTime: inputValues.estTime,
@@ -78,10 +81,14 @@ const AddTaskPage = () => {
     };
 
     console.log(newTask);
-
-    addItem(newTask);
-    setInputsValues(initialValues);
-    navigate("/new-tasks");
+    if (taskFields === undefined) {
+      addItem(newTask);
+      setInputsValues(initialValues);
+      navigate("/new-tasks");
+    } else {
+      // TODO add request to server
+      navigate("./");
+    }
   };
 
   const cancelTask = (event: any) => {

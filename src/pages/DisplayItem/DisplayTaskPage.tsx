@@ -3,16 +3,17 @@ import { useLocation, useNavigate } from "react-router";
 const DisplayTaskPage = () => {
   const navigate = useNavigate();
   const navLocation = useLocation();
-  var taskToShow: IEvent = navLocation.state?.event;
+  var taskToShow: ITask = navLocation.state?.task;
   const navToEdit = () => {
-    navigate("/AddTaskPage", {
-      state: { task: { ...taskToShow } },
+    navigate("/add-task", {
+      state: { task: taskToShow },
     });
   };
+  console.log(taskToShow);
   return (
     <div>
       {taskToShow === undefined ? (
-        <></>
+        <>nothing to show</>
       ) : (
         <div>
           <span>{taskToShow.title}</span>

@@ -7,7 +7,6 @@ import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
-import DisplayItemPage from "./pages/EditShowEvent/displayItemPage";
 import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
 import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
 

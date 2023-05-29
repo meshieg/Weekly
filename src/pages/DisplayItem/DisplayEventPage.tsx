@@ -5,8 +5,8 @@ const DisplayEventPage = () => {
   const navLocation = useLocation();
   var eventToShow: IEvent = navLocation.state?.event;
   const navToEdit = () => {
-    navigate("/AddEventPage", {
-      state: { event: { ...eventToShow } },
+    navigate("/add-event", {
+      state: { event: eventToShow },
     });
   };
   return (

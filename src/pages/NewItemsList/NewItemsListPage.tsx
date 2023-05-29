@@ -40,13 +40,13 @@ const NewItemsListPage = () => {
       newTasks.find((task) => task.id === id) ||
       newEvents.find((event) => event.id === id);
     if (instanceOfTask(item)) {
-      navigate("/details", {
+      navigate("/display-task", {
         state: {
           task: item as ITask,
         },
       });
     } else {
-      navigate("/details", {
+      navigate("/display-event", {
         state: {
           event: item as IEvent,
         },

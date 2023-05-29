@@ -87,7 +87,7 @@ const AddEventPage = () => {
       navigate("/new-tasks");
     } else {
       // TODO add request to server
-      navigate("/new-tasks");
+      navigate("./");
     }
   };
 
