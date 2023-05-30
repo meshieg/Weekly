@@ -1,21 +1,19 @@
-import "./NewItemsListPage.css";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { ScheduleService } from "../../services/schedule.service";
-import ActionButtons from "../../assets/ActionButtons/ActionButtons";
+import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
-import { ItemType } from "../../utils/constants";
+import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
 const NewItemsListPage = () => {
-  const { newTasks, newEvents, removeItem, refreshItems } =
-    useNewItemsContext();
+  const { newTasks, newEvents, removeItem, refreshItems } = useNewItemsContext();
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToolbar("My New Added Tasks and Events", true);
+    setToolbar("My New Added Tasks and Events", false);
   }, []);
 
   const scheduleItems = () => {
@@ -49,23 +47,21 @@ const NewItemsListPage = () => {
             secondaryAction={onCancelClick}
           />
           
-          {newTasks.length !== 0 && <div className="new-tasks__list-header s">
-            Added Tasks
-          </div>}
-          <ScheduleItemsList
-            items={newTasks}
-            type={ItemType.TASK}
-            onDeleteClick={removeItem}
-          />
+          {newTasks.length !== 0 && 
+          <CollapseHeader headerText="Tasks">
+            <ScheduleItemsList
+              items={newTasks}
+              onDeleteClick={removeItem}
+            />
+          </CollapseHeader>}
 
-          {newEvents.length !== 0 && <div className="new-tasks__list-header ">
-            Added Events
-          </div>}
-          <ScheduleItemsList
-            items={newEvents}
-            type={ItemType.EVENT}
-            onDeleteClick={removeItem}
-          />
+          {newEvents.length !== 0 && 
+          <CollapseHeader headerText="Events">
+            <ScheduleItemsList
+              items={newEvents}
+              onDeleteClick={removeItem}
+            />
+          </CollapseHeader>}
         </>
       )}
       <Link to="/add-task">

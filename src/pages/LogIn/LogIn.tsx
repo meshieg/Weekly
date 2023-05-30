@@ -8,7 +8,7 @@ import { UserService } from "../../services/user.service";
 import useToken from "../../customHooks/useToken";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import { IUser } from "../../utils/types";
-import { validateUserInputs } from "../../heplers/functions";
+import { validateUserInputs } from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 
 const LogIn = () => {
@@ -64,7 +64,7 @@ const LogIn = () => {
   return (
     <div className="login_pageContainer">
       <div className="login_image">
-        <img src={require("../../assets/images/logo_no_background.png")} />
+        <img src={require("../../assets/images/logo_no_background.png")} alt="logo"/>
       </div>
       <form className="login_form" onSubmit={handleLogIn}>
         <div className="login_form_fields">

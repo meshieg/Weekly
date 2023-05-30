@@ -1,5 +1,5 @@
 import { Dialog } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { DEFAULT_TAG } from "../../utils/constants";
 import Tag from "../Tag/Tag";
 

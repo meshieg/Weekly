@@ -1,19 +1,14 @@
-import { Collapse } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { TaskService } from "../../services/task.service";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-
 import "./MyTasks.css";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
-import { ItemType } from "../../utils/constants";
+import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
-  const [openDone, setOpenDone] = useState<boolean>(true);
 
   const { setToolbar } = useToolbar();
 
@@ -64,20 +59,15 @@ const MyTasks: React.FC = () => {
     <div className="my-tasks">
       <ScheduleItemsList
         items={notDoneTasks}
-        type={ItemType.TASK}
         onCheckedClick={onTaskCheckedClick}
         onItemClick={onTaskClick}
       />
-      <div className="my-tasks__done" onClick={() => setOpenDone(!openDone)}>
-        {openDone ? <ExpandLess /> : <ExpandMore />} Done
-      </div>
-      <Collapse in={openDone} timeout="auto" unmountOnExit>
+      <CollapseHeader headerText="Done">
         <ScheduleItemsList
           items={doneTasks}
-          type={ItemType.TASK}
           onCheckedClick={onTaskCheckedClick}
         />
-      </Collapse>
+      </CollapseHeader>
     </div>
   );
 };
