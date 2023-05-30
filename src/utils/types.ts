@@ -9,13 +9,14 @@ export type IScheduleEntity = {
   title: string;
   startTime: Date;
   endTime: Date;
-  tagId?: number;
+  tag?: ITag;
 };
 
 export type AppointmentModel = {
   title: string;
   startDate: Date;
   endDate: Date;
+  color?: string;
 };
 
 export type IUser = {
