@@ -7,6 +7,7 @@ import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
+import DailySchedule from "./pages/DailySchedule/DailySchedule";
 
 type RouteType = {
   path: string;
@@ -37,6 +38,12 @@ export const routes: RouteType[] = [
     element: <WeeklySchedule />,
     showBottomToolbar: true,
     showToolbar: false,
+  },
+  {
+    path: "/day",
+    element: <DailySchedule date={new Date()} />, // TODO: maybe put the clicked date in a context?
+    showBottomToolbar: true,
+    showToolbar: true,
   },
   {
     path: "/my-tasks",
