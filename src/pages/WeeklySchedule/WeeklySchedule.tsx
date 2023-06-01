@@ -34,8 +34,9 @@ const WeeklySchedule = () => {
         onClick={onClick}
         data={data}
         style={{
-          backgroundColor: data.color || "#d9d9d9",
+          backgroundColor: data.color || "undefined",
           borderRadius: "4px",
+          // width: "auto",
         }}
       >
         {children}

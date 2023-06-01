@@ -41,7 +41,15 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
         <Tag width="2.2rem" color={props.tag?.color} />
         <div className="item__details">
           <span className="item__title">{props.title}</span>
-          <span className="item__date">
+          <span
+            className="item__date"
+            style={{
+              color:
+                props.date < new Date() && !props.isDone
+                  ? "#d91e1e"
+                  : undefined,
+            }}
+          >
             <TodayOutlinedIcon
               sx={{ width: "1.3rem", marginRight: "0.2rem" }}
             />{" "}
