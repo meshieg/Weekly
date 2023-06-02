@@ -1,7 +1,11 @@
+import React, { useState } from "react";
 import "./Home.css";
 import { Link } from "react-router-dom";
+import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
 
 const Home = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
       <h1>Weekly</h1>
@@ -15,6 +19,19 @@ const Home = () => {
           Add event
         </button>
       </Link>
+      <button
+        className="btn btn__primary"
+        style={{ margin: "2rem" }}
+        onClick={() => setOpen(true)}
+      >
+        popup
+      </button>
+      <AlgoMessagePopup
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
     </div>
   );
 };
