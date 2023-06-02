@@ -34,7 +34,7 @@ button {
   width: 12.5rem;
   height: 12.5rem;
   translate: -50% -50%;
-  border: 80px solid rgba(255, 255, 255, 0.05);
+  border: 80px solid transparent;
   border-radius: 50%;
   rotate: -220deg;
   scale: 0.7;

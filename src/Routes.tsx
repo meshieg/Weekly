@@ -49,6 +49,7 @@ export const routes: RouteType[] = [
     element: <DailySchedule date={new Date()} />, // TODO: maybe put the clicked date in a context?
     showBottomToolbar: true,
     showToolbar: true,
+    showFab: true
   },
   {
     path: "/my-tasks",
