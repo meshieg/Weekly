@@ -25,7 +25,7 @@ const AddEventPage = () => {
     description: eventToUpdate?.description ?? "",
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
-  const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
+  const [tag, setTag] = useState<ITag>(eventToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
   const { addItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
@@ -119,34 +119,36 @@ const AddEventPage = () => {
   };
 
   return (
-    <div className="pageContainer">
-      <form onSubmit={saveEvent} onReset={cancelEvent}>
-        <div className="add_event__form">
-          {Object.keys(eventFields).map((field) => {
-            const fieldKey = field as keyof IInputs;
+    <div className="add-event__pageContainer">
+      <form
+        onSubmit={saveEvent}
+        onReset={cancelEvent}
+        className="add-event__form"
+      >
+        {Object.keys(eventFields).map((field) => {
+          const fieldKey = field as keyof IInputs;
 
-            return (
-              <SuperInputField
-                key={fieldKey}
-                id={fieldKey}
-                label={eventFields[fieldKey]?.label || ""}
-                type={eventFields[fieldKey]?.type}
-                options={eventFields[fieldKey]?.options}
-                value={inputValues[fieldKey]}
-                onChange={setValues}
-                required={eventFields[fieldKey]?.required}
-                multiline={eventFields[fieldKey]?.multiline}
-              />
-            );
-          })}
+          return (
+            <SuperInputField
+              key={fieldKey}
+              id={fieldKey}
+              label={eventFields[fieldKey]?.label || ""}
+              type={eventFields[fieldKey]?.type}
+              options={eventFields[fieldKey]?.options}
+              value={inputValues[fieldKey]}
+              onChange={setValues}
+              required={eventFields[fieldKey]?.required}
+              multiline={eventFields[fieldKey]?.multiline}
+            />
+          );
+        })}
 
-          <Tag
-            width="2.8rem"
-            label={tag.name}
-            color={tag.color}
-            onClick={onTagClick}
-          />
-        </div>
+        <Tag
+          width="2.8rem"
+          label={tag.name}
+          color={tag.color}
+          onClick={onTagClick}
+        />
 
         <TagsListPopup
           open={tagsPopupOpen}
@@ -155,11 +157,11 @@ const AddEventPage = () => {
           onTagClick={onSelectTag}
         />
 
-        <div className="add_event_buttons">
-          <button className="btn btn__primary" type="submit">
+        <div className="add-event_buttons">
+          <button className="btn btn__primary add-event__btn" type="submit">
             Save
           </button>
-          <button className="btn btn__secondary" type="reset">
+          <button className="btn btn__secondary add-event__btn" type="reset">
             Cancel
           </button>
         </div>

@@ -28,7 +28,7 @@ const AddTaskPage = () => {
     priority: taskToUpdate?.priority ?? Priority.LOW,
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
-  const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
+  const [tag, setTag] = useState<ITag>(taskToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
   const { addItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
@@ -117,8 +117,8 @@ const AddTaskPage = () => {
   };
 
   return (
-    <div className="pageContainer">
-      <form onSubmit={saveTask} onReset={cancelTask} className="add_task__form">
+    <div className="add-task__pageContainer">
+      <form onSubmit={saveTask} onReset={cancelTask} className="add-task__form">
         {/* <div className="add_task__form"> */}
         {Object.keys(taskFields).map((field) => {
           const fieldKey = field as keyof IInputs;
@@ -163,11 +163,11 @@ const AddTaskPage = () => {
           />
         </div> */}
 
-        <div className="add_task_buttons">
-          <button className="btn btn__primary" type="submit">
+        <div className="add-task_buttons">
+          <button className="add-task__btn btn btn__primary" type="submit">
             Save
           </button>
-          <button className="btn btn__secondary" type="reset">
+          <button className="add-task__btn btn btn__secondary" type="reset">
             Cancel
           </button>
         </div>
