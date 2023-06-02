@@ -7,6 +7,7 @@ import Toolbar from "./components/Toolbar/Toolbar";
 import { ToolbarProvider } from "./contexts/ToolbarContext";
 import { AlertProvider } from "./contexts/AlertContext";
 import { NewItemsProvider } from "./contexts/NewItemsStore/NewItemsProvider";
+import FloatingActionButton from "./components/FloatingActionButton/FloatingActionButton";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                   ))}
                 </Routes>
               </div>
+              <FloatingActionButton />
               <div className="app__bottom">
                 <BottomToolbar />
               </div>
