@@ -89,10 +89,13 @@ const AddEventPage = () => {
       addItem(newEvent);
       setInputsValues(initialValues);
       navigate("/new-tasks");
+    } else if (location.state?.eventId === undefined) {
+      //TODO add save to list state
+      navigate(-1);
     } else {
       EventService.updateEvent(newEvent)
         .then(() => {
-          navigate("/");
+          navigate(-1);
         })
         .catch((err) => {
           console.log(err);

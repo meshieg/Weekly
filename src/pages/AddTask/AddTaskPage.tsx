@@ -87,15 +87,13 @@ const AddTaskPage = () => {
       addItem(newTask);
       setInputsValues(initialValues);
       navigate("/new-tasks");
+    } else if (location.state?.taskId === undefined) {
+      //TODO add save to list state
+      navigate(-1);
     } else {
       TaskService.updateTask(newTask)
         .then((updatedTask) => {
           navigate(-1);
-          // navigate(-1, {
-          //   state: {
-          //     task: updatedTask as ITask,
-          //   },
-          // });
         })
         .catch((err) => {
           console.log(err);

@@ -58,7 +58,7 @@ const MyTasks: React.FC = () => {
     if (item !== undefined) {
       navigate("/display-task", {
         state: {
-          task: item,
+          id: item.id,
         },
       });
     }
