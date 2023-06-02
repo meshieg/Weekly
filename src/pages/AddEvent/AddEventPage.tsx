@@ -10,6 +10,7 @@ import Tag from "../../components/Tag/Tag";
 import { TagService } from "../../services/tag.service";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import useToolbar from "../../customHooks/useToolbar";
+import { EventService } from "../../services/event.service";
 
 const AddEventPage = () => {
   const location = useLocation();
@@ -33,7 +34,10 @@ const AddEventPage = () => {
 
   useEffect(() => {
     setInputsValues(initialValues);
-    setToolbar("Add Event", true);
+    setToolbar(
+      location.state?.task === undefined ? "Add Event" : "Edit Event",
+      true
+    );
 
     TagService.getAllTagsByUser()
       .then((tags: ITag[]) => {
@@ -86,8 +90,13 @@ const AddEventPage = () => {
       setInputsValues(initialValues);
       navigate("/new-tasks");
     } else {
-      // TODO add request to server
-      navigate("./");
+      EventService.updateEvent(newEvent)
+        .then(() => {
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

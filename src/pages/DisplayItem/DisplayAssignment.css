@@ -1,0 +1,19 @@
+.pageStyle {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80%;
+  justify-content: space-between;
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  justify-content: space-between;
+}

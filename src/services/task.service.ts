@@ -4,58 +4,73 @@ import axios from "axios";
 const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 
 export class TaskService {
-    static saveTask = async (task: ITask): Promise<ITask | void> => {
+  static saveTask = async (task: ITask): Promise<ITask | void> => {
+    const taskJson = JSON.stringify({
+      ...task,
+      dueDate: task.dueDate.toISOString(),
+    });
 
-        const taskJson = JSON.stringify({
+    const url = taskPrefix;
+    return axios
+      .post(url, taskJson)
+      .then((res) => {
+        console.log("task saved successfully");
+        return res.data as ITask;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  static updateTask = async (updatedTask: ITask): Promise<ITask | void> => {
+    const url = `${taskPrefix}/${updatedTask.id}`;
+    return axios
+      .put(url, {
+        task: updatedTask,
+      })
+      .then((res) => {
+        return res.data as ITask;
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
+
+  static getAllTasks = async (): Promise<ITask[]> => {
+    const url = `${taskPrefix}/all`;
+    return await axios
+      .get(url)
+      .then((res) => {
+        console.log(res.data);
+        return res.data.map((task: ITask) => {
+          return {
             ...task,
-            dueDate: task.dueDate.toISOString()
-        })
+            dueDate: new Date(task.dueDate),
+            assignment: task.assignment && new Date(task.assignment),
+          } as ITask;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
 
-        const url = taskPrefix;
-        return axios
-            .post(url, taskJson)
-            .then((res) => {
-                console.log("task saved successfully");
-                return (res.data as ITask)
-            })
-            .catch((err) => {
-                throw err;
-            });
-    }
-
-    static getAllTasks = async (): Promise<ITask[]> => {
-        const url = `${taskPrefix}/all`;
-        return await axios.get(url)
-            .then(res => {
-                console.log(res.data)
-                return res.data.map((task: ITask) => {
-                    return {
-                        ...task,
-                        dueDate: new Date(task.dueDate),
-                        assignment: task.assignment && new Date(task.assignment)
-                    } as ITask;
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-                throw err;
-            });
-    }
-
-    static setDone = async (taskId: number): Promise<ITask | void> => {
-        const url = `${taskPrefix}/setdone/${taskId}`;;
-        return axios
-            .put(url)
-            .then((res) => {
-                console.log("task updated successfully");
-                return {
-                    ...res.data,
-                    dueDate: new Date(res.data.dueDate),
-                    assignment: res.data.assignment && new Date(res.data.assignment)
-                } as ITask;
-            })
-            .catch((err) => {
-                throw err;
-            });
-    }
+  static setDone = async (taskId: number): Promise<ITask | void> => {
+    const url = `${taskPrefix}/setdone/${taskId}`;
+    return axios
+      .put(url)
+      .then((res) => {
+        console.log("task updated successfully");
+        return {
+          ...res.data,
+          dueDate: new Date(res.data.dueDate),
+          assignment: res.data.assignment && new Date(res.data.assignment),
+        } as ITask;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
 }

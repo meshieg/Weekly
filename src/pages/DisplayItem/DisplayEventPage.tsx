@@ -1,8 +1,16 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
+import useToolbar from "../../customHooks/useToolbar";
 
 const DisplayEventPage = () => {
   const navigate = useNavigate();
   const navLocation = useLocation();
+  const { setToolbar } = useToolbar();
+
+  useEffect(() => {
+    setToolbar("Event Details", true);
+  }, []);
+
   var eventToShow: IEvent = navLocation.state?.event;
   const navToEdit = () => {
     navigate("/add-event", {

@@ -37,7 +37,10 @@ const AddTaskPage = () => {
 
   useEffect(() => {
     setInputsValues(initialValues);
-    setToolbar("Add Task", true);
+    setToolbar(
+      location.state?.task === undefined ? "Add Task" : "Edit Task",
+      true
+    );
 
     TagService.getAllTagsByUser()
       .then((tags: ITag[]) => {
@@ -66,8 +69,7 @@ const AddTaskPage = () => {
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    console.log(inputValues.dueTime);
-    console.log(dateAndTime);
+    console.log(inputValues);
 
     const newTask: ITask = {
       id: taskToUpdate ? taskToUpdate?.id : 0,
@@ -80,14 +82,24 @@ const AddTaskPage = () => {
       tag: tag.id !== 0 ? tag : undefined,
     };
 
-    console.log(newTask);
-    if (taskFields === undefined) {
+    console.log(newTask.id === 0);
+    if (newTask.id === 0) {
       addItem(newTask);
       setInputsValues(initialValues);
       navigate("/new-tasks");
     } else {
-      // TODO add request to server
-      navigate("./");
+      TaskService.updateTask(newTask)
+        .then((updatedTask) => {
+          navigate(-1);
+          // navigate(-1, {
+          //   state: {
+          //     task: updatedTask as ITask,
+          //   },
+          // });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
