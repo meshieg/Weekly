@@ -1,0 +1,26 @@
+hr {
+    background-color: #E0E0E0;
+    border: none;
+    height: 1px;
+}
+
+.my-profile {
+    margin-top: 3dvh;
+    /* display: flex;
+    flex-direction: column; */
+    position: relative;
+}
+
+.app-version {
+    /* text-align: center; */
+    position: absolute;
+    bottom: 0;
+    /* right: 50%;
+    left: 50%; 
+    display: grid;
+    place-items: center;  */
+}
+
+/* .my-profile > .app-version:nth-child(3) {
+    align-self: center;
+} */

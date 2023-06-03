@@ -6,8 +6,9 @@ import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
-import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
+import NewItemsList from "./pages/NewItemsList/NewItemsList";
 import DailySchedule from "./pages/DailySchedule/DailySchedule";
+import MyProfile from "./pages/MyProfile/MyProfile";
 
 type RouteType = {
   path: string;
@@ -72,9 +73,16 @@ export const routes: RouteType[] = [
   },
   {
     path: "/new-tasks",
-    element: <NewItemsListPage />,
+    element: <NewItemsList />,
     showBottomToolbar: false,
     showToolbar: true,
     showFab: true
+  },
+  {
+    path: "/my-profile",
+    element: <MyProfile />,
+    showBottomToolbar: true,
+    showToolbar: true,
+    showFab: false
   },
 ];
