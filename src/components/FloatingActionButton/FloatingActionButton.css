@@ -42,7 +42,7 @@ button {
   transition: 0.4s ease-out;
 }
 
-.fab.open .menu {
+.fab.fab-open .menu {
   rotate: 0deg;
   scale: 1;
   opacity: 1;
@@ -68,6 +68,6 @@ button {
   left: -170%
 }
 
-.fab.open > button {
+.fab.fab-open > button {
   rotate: 45deg;
 }

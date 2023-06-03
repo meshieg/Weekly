@@ -27,8 +27,11 @@ const MyProfile = () => {
     
     return (
         <div className="my-profile">
-            <ProfileActionsList actions={actions} onItemClick={clickTest} />
-            <ProfileActionsList actions={[logoutActions]} onItemClick={logout} color={"var(--primary-color)"} />
+            {/* <div> */}
+                <ProfileActionsList actions={actions} onItemClick={clickTest} />
+                <ProfileActionsList actions={[logoutActions]} onItemClick={logout} color={"var(--primary-color)"} />
+            {/* </div> */}
+            <div className="app-version">{process.env.REACT_APP_VERSION}</div>
         </div>
     );
 };
