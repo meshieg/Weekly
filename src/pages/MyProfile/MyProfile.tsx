@@ -4,6 +4,7 @@ import ProfileActionsList from "../../components/ProfileActionsList/ProfileActio
 import { navActions, logout as logoutActions } from "./MyProfileActions";
 import { useEffect } from "react";
 import useToolbar from "../../customHooks/useToolbar";
+import { signOut } from "../../helpers/functions";
 
 const MyProfile = () => {
     const navigation = useNavigate();
@@ -22,7 +23,7 @@ const MyProfile = () => {
     }
 
     const logout = () => {
-        console.log("logout");
+        signOut();
     }
     
     return (
