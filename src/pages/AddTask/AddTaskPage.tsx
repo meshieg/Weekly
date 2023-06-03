@@ -82,22 +82,21 @@ const AddTaskPage = () => {
       tag: tag.id !== 0 ? tag : undefined,
     };
 
-    console.log(newTask.id === 0);
     if (newTask.id === 0) {
       addItem(newTask);
       setInputsValues(initialValues);
       navigate("/new-tasks");
-    } else if (location.state?.taskId === undefined) {
-      //TODO add save to list state
-      navigate(-1);
-    } else {
+    } else if (location.state?.isFromDB) {
       TaskService.updateTask(newTask)
-        .then((updatedTask) => {
+        .then(() => {
           navigate(-1);
         })
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      //TODO add save to list state
+      navigate(-1);
     }
   };
 

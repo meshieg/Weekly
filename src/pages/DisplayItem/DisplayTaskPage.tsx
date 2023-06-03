@@ -18,19 +18,18 @@ const DisplayTaskPage = () => {
   const navLocation = useLocation();
   const { setToolbar } = useToolbar();
   var taskToShow: ITask = navLocation.state?.task;
-  var taskId: number = navLocation.state?.id;
 
   useEffect(() => {
     setToolbar("Task Details", true);
 
-    if (taskId !== undefined) {
+    if (navLocation.state?.isFromDB) {
       //ToDo add request fromDB
     }
-  }, [taskId]);
+  }, []);
 
   const navToEdit = () => {
     navigate("/add-task", {
-      state: { task: taskToShow, isInDB: taskId !== undefined },
+      state: { task: taskToShow, isFromDB: navLocation.state?.isFromDB },
     });
   };
   return (

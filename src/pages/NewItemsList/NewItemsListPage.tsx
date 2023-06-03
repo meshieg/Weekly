@@ -43,12 +43,14 @@ const NewItemsListPage = () => {
       navigate("/display-task", {
         state: {
           task: item as ITask,
+          isFromDb: false,
         },
       });
     } else {
       navigate("/display-event", {
         state: {
           event: item as IEvent,
+          isFromDb: false,
         },
       });
     }

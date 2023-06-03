@@ -59,6 +59,7 @@ const MyTasks: React.FC = () => {
       navigate("/display-task", {
         state: {
           task: item as ITask,
+          isFromDB: true,
         },
       });
     }

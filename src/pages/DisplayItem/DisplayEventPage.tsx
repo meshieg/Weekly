@@ -7,19 +7,18 @@ const DisplayEventPage = () => {
   const navLocation = useLocation();
   const { setToolbar } = useToolbar();
   var eventToShow: IEvent = navLocation.state?.event;
-  var eventId: number = navLocation.state?.id;
 
   useEffect(() => {
     setToolbar("Event Details", true);
 
-    if (eventId !== undefined) {
+    if (navLocation.state?.isFromDb) {
       //TODO add request fromDB
     }
   }, []);
 
   const navToEdit = () => {
     navigate("/add-event", {
-      state: { event: eventToShow, isInDB: eventId !== undefined },
+      state: { event: eventToShow, isInDB: navLocation.state?.isFromDb },
     });
   };
   return (
