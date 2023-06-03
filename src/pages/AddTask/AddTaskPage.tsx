@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import "./AddTaskPage.css";
-import AddTag from "../../components/AddTag/AddTag";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
-import Colorful from "@uiw/react-color-colorful";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
-import { v4 as uuid } from "uuid";
 import moment from "moment";
 import Tag from "../../components/Tag/Tag";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";

@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { NewItemsContext } from "./NewItemsContext";
-import { instanceOfTask } from "../../utils/typeChecks";
+import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 
 interface IProps {
   children: React.ReactNode;
 }
 
 export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
-    const [newTasks, setNewTasks] = useState<ITask[]>([]);
-    const [newEvents, setNewEvents] = useState<IEvent[]>([]);
-    const [id, setId] = useState<number>(0);
+  const [newTasks, setNewTasks] = useState<ITask[]>([]);
+  const [newEvents, setNewEvents] = useState<IEvent[]>([]);
+  const [id, setId] = useState<number>(0);
   
-    const addItem = (newItem: ITask | IEvent) => {
-      newItem.id = id;
+  const addItem = (newItem: ITask | IEvent) => {
+    newItem.id = id;
+    
+    instanceOfTask(newItem) ? setNewTasks(prevArray => [...prevArray, newItem])
+      : setNewEvents(prevArray => [...prevArray, newItem]);
 
-      instanceOfTask(newItem) ? setNewTasks(prevArray => [...prevArray, newItem])
-        : setNewEvents(prevArray => [...prevArray, newItem]);
-
-      setId(id+1);
+    setId(id+1);
   }
   
   const removeItem = (itemId: number) => {
@@ -26,6 +26,22 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
 
     setNewTasks(tasksCopy);
     setNewEvents(eventsCopy);
+  }
+
+  const updateItem = (item: ITask | IEvent) => {
+    newTasks.map(task => {
+      if (task.id === id && instanceOfTask(item)) {
+        task = item;
+      }
+      return task;
+    });
+
+    newEvents.map(event => {
+      if (event.id === id && instanceOfEvent(item)) {
+        event = item;
+      }
+      return event;
+    });
   }
 
   const refreshItems = () => {
@@ -41,6 +57,7 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
         newEvents,
         addItem,
         removeItem,
+        updateItem,
         refreshItems,
       }}
     >{children}</NewItemsContext.Provider>

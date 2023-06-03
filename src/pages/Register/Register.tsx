@@ -8,7 +8,7 @@ import { IUser } from "../../utils/types";
 import useToken from "../../customHooks/useToken";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import useAlert from "../../customHooks/useAlert";
-import { validateUserInputs } from "../../heplers/functions";
+import { validateUserInputs } from "../../helpers/functions";
 import moment from "moment";
 
 const Register = () => {
@@ -84,7 +84,7 @@ const Register = () => {
   return (
     <div className="reg_pageContainer">
       <div className="reg_image">
-        <img src={require("../../assets/images/logo_no_background.png")} />
+        <img src={require("../../assets/images/logo_no_background.png")} alt="logo" />
       </div>
       <form className="reg_form" onSubmit={handleRegister}>
         <div className="reg_form_fields">

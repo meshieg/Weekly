@@ -1,0 +1,73 @@
+button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+}
+
+.fab {
+  position: fixed;
+  right: 5%;
+  bottom: 10%;
+  border-radius: 50%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.fab > button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  transition: 0.2s;
+  rotate: 0;
+}
+
+.menu {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 12.5rem;
+  height: 12.5rem;
+  translate: -50% -50%;
+  border: 80px solid transparent;
+  border-radius: 50%;
+  rotate: -220deg;
+  scale: 0.7;
+  opacity: 0;
+  transition: 0.4s ease-out;
+}
+
+.fab.open .menu {
+  rotate: 0deg;
+  scale: 1;
+  opacity: 1;
+}
+
+.menu > button {
+  position: absolute;
+  transition: 0.3s;
+  width: 3rem;
+  height: 3rem;
+}
+
+.menu > button:hover {
+  scale: 1.2s;
+}
+
+.menu > button:nth-child(1) {
+  left: -100%;
+  top: -140%;
+}
+
+.menu > button:nth-child(2) {
+  left: -170%
+}
+
+.fab.open > button {
+  rotate: 45deg;
+}

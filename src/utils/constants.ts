@@ -1,4 +1,4 @@
-import { getListOfHours } from "../heplers/functions";
+import { getListOfHours } from "../helpers/functions";
 import { TTypePriority } from "./types";
 
 export enum fieldsTypes {

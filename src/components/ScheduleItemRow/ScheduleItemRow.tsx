@@ -1,6 +1,6 @@
 import { Checkbox, checkboxClasses, IconButton } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditIcon from "@mui/icons-material/Edit";
+// import EditIcon from "@mui/icons-material/Edit";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import React from "react";
 import Tag from "../Tag/Tag";
@@ -41,7 +41,15 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
         <Tag width="2.2rem" color={props.tag?.color} />
         <div className="item__details">
           <span className="item__title">{props.title}</span>
-          <span className="item__date">
+          <span
+            className="item__date"
+            style={{
+              color:
+                props.date < new Date() && !props.isDone
+                  ? "#d91e1e"
+                  : undefined,
+            }}
+          >
             <TodayOutlinedIcon
               sx={{ width: "1.3rem", marginRight: "0.2rem" }}
             />{" "}

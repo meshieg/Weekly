@@ -9,12 +9,14 @@ import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
 import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
 import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
+import DailySchedule from "./pages/DailySchedule/DailySchedule";
 
 type RouteType = {
   path: string;
   element: ReactElement;
   showBottomToolbar?: boolean;
   showToolbar?: boolean;
+  showFab: boolean;
 };
 
 export const routes: RouteType[] = [
@@ -23,55 +25,72 @@ export const routes: RouteType[] = [
     element: <Home />,
     showBottomToolbar: true,
     showToolbar: true,
+    showFab: true,
   },
   {
     path: "/add-task",
     element: <AddTaskPage />,
     showToolbar: true,
+    showFab: false,
   },
   {
     path: "/add-event",
     element: <AddEventPage />,
     showToolbar: true,
+    showFab: false,
   },
   {
     path: "/week",
     element: <WeeklySchedule />,
     showBottomToolbar: true,
     showToolbar: false,
+    showFab: true,
+  },
+  {
+    path: "/day",
+    element: <DailySchedule date={new Date()} />, // TODO: maybe put the clicked date in a context?
+    showBottomToolbar: true,
+    showToolbar: true,
+    showFab: true,
   },
   {
     path: "/my-tasks",
     element: <MyTasks />,
     showBottomToolbar: true,
     showToolbar: true,
+    showFab: true,
   },
   {
     path: "/logIn",
     element: <LogIn />,
     showToolbar: false,
+    showFab: false,
   },
   {
     path: "/register",
     element: <Register />,
     showToolbar: false,
+    showFab: false,
   },
   {
     path: "/new-tasks",
     element: <NewItemsListPage />,
     showBottomToolbar: false,
     showToolbar: true,
+    showFab: true,
   },
   {
     path: "/display-task",
     element: <DisplayTaskPage />,
     showBottomToolbar: false,
     showToolbar: true,
+    showFab: false,
   },
   {
     path: "/display-event",
     element: <DisplayEventPage />,
     showBottomToolbar: false,
     showToolbar: true,
+    showFab: false,
   },
 ];

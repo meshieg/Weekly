@@ -37,7 +37,7 @@
 }
 
 .item__done {
-  @keyframes appear {
+  /* @keyframes appear {
     0% {
       opacity: 0;
     }
@@ -47,6 +47,6 @@
   }
 
   animation-name: appear;
-  animation-duration: 2s;
-  color: #00000078;
+  animation-duration: 2s; */
+  color: #00000078 !important;
 }
