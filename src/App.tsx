@@ -1,7 +1,6 @@
 import { routes } from "./Routes";
 import BottomToolbar from "./components/BottomToolbar/BottomToolbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import "./general.css";
 import "./App.css";
 import Toolbar from "./components/Toolbar/Toolbar";
 import { ToolbarProvider } from "./contexts/ToolbarContext";
