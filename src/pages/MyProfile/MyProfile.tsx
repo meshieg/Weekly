@@ -1,7 +1,7 @@
 import "./MyProfile.css";
 import { useNavigate } from "react-router-dom";
 import ProfileActionsList from "../../components/ProfileActionsList/ProfileActionsList";
-import { actions, logout as logoutActions } from "./MyProfileActions";
+import { navActions, logout as logoutActions } from "./MyProfileActions";
 import { useEffect } from "react";
 import useToolbar from "../../customHooks/useToolbar";
 
@@ -13,12 +13,12 @@ const MyProfile = () => {
         setToolbar("My Profile", false);
       }, []);
 
-    const itemNavigation = (route: string) => {
-        navigation(route);
-    }
+    const itemNavigation = (id: number) => {
+        const currAction = navActions.find(action => {
+            return action.id === id;
+        });
 
-    const clickTest = () => {
-        console.log("click");
+        currAction?.route ? navigation(currAction.route) : navigation("/");
     }
 
     const logout = () => {
@@ -27,11 +27,9 @@ const MyProfile = () => {
     
     return (
         <div className="my-profile">
-            {/* <div> */}
-                <ProfileActionsList actions={actions} onItemClick={clickTest} />
-                <ProfileActionsList actions={[logoutActions]} onItemClick={logout} color={"var(--primary-color)"} />
-            {/* </div> */}
-            <div className="app-version">{process.env.REACT_APP_VERSION}</div>
+            <ProfileActionsList actions={navActions} onItemClick={itemNavigation} />
+            <ProfileActionsList actions={[logoutActions]} onItemClick={logout} color={"var(--primary-color)"} />
+            {/* <div className="app-version">{process.env.REACT_APP_VERSION}</div> */}
         </div>
     );
 };

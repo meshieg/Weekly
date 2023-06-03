@@ -4,24 +4,22 @@ import { IProfileAction } from "../../utils/types";
 
 interface IProfileActionsListProps {
     actions: IProfileAction[]
-    onItemClick: () => void;
+    onItemClick: (id: number) => void;
     color?: string
 }
 
 const ProfileActionsList: React.FC<IProfileActionsListProps> = ({actions, onItemClick, color}) => {
     return (
         <div className="actions-list">
-            {actions.map(actions => {
+            {actions.map(action => {
                 return (
-                    <>
+                    <div key={action.id}>
                         <ProfileActionRow
-                            icon={actions.icon} 
-                            text={actions.text} 
+                            action={action}
                             onItemClick={onItemClick} 
-                            displayArrow={actions.displayArrow}
                             color={color} />
                         <hr />
-                    </>
+                    </div>
                 )
             })}
         </div>

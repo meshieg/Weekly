@@ -5,7 +5,7 @@ hr {
 }
 
 .my-profile {
-    margin-top: 5%;
+    margin-top: 3dvh;
     /* display: flex;
     flex-direction: column; */
     position: relative;

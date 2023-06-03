@@ -37,7 +37,9 @@ export type IUserResponse = {
 };
 
 export interface IProfileAction {
+  id: number;
   icon?: ReactElement;
   text: string;
   displayArrow?: boolean;
+  route?: string
 }

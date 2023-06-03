@@ -1,25 +1,27 @@
-import React, { ReactElement } from "react";
-import { NavigateNext as Arrow } from '@mui/icons-material';
 import "./ProfileActionRow.css";
+import React from "react";
+import { NavigateNext as Arrow } from '@mui/icons-material';
+import { IProfileAction } from "../../utils/types";
 
 interface IProfileActionRowProps {
-  icon?: ReactElement;
-  text: string;
-  displayArrow?: boolean;
-  onItemClick: () => void;
-  color?: string;
+    action: IProfileAction;
+    onItemClick: (id: number) => void;
+    color?: string;
 }
 
 const ProfileActionRow: React.FC<IProfileActionRowProps> = ({
-    icon = <></>,
-    text,
-    displayArrow = true,
+    action: {
+        id,
+        icon = <></>,
+        text,
+        displayArrow = true
+    },
     onItemClick,
     color = "black"
 }) => {
 
   return (
-    <div className="action-row" onClick={onItemClick} style={{color: color}}>
+    <div className="action-row" onClick={() => onItemClick(id)} style={{color: color}}>
         <div className="action-row-details">
             {icon}
             <p>{text}</p>
