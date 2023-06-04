@@ -1,5 +1,4 @@
-import axios from "axios";
-// import { ITaskEntity } from "../utils/types";
+import { AxiosInstance } from "../config/axios";
 
 const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 
@@ -12,7 +11,7 @@ export class TaskService {
         })
 
         const url = taskPrefix;
-        return axios
+        return AxiosInstance
             .post(url, taskJson)
             .then((res) => {
                 console.log("task saved successfully");
@@ -25,7 +24,7 @@ export class TaskService {
 
     static getAllTasks = async (): Promise<ITask[]> => {
         const url = `${taskPrefix}/all`;
-        return await axios.get(url)
+        return await AxiosInstance.get(url)
             .then(res => {
                 console.log(res.data)
                 return res.data.map((task: ITask) => {
@@ -44,7 +43,7 @@ export class TaskService {
 
     static setDone = async (taskId: number): Promise<ITask | void> => {
         const url = `${taskPrefix}/setdone/${taskId}`;;
-        return axios
+        return AxiosInstance
             .put(url)
             .then((res) => {
                 console.log("task updated successfully");
