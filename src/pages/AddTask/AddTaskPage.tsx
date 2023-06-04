@@ -27,7 +27,7 @@ const AddTaskPage = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(taskToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
-  const { addItem } = useNewItemsContext();
+  const { addItem, updateItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
@@ -66,8 +66,6 @@ const AddTaskPage = () => {
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    console.log(inputValues);
-
     const newTask: ITask = {
       id: taskToUpdate ? taskToUpdate?.id : 0,
       title: inputValues.title,
@@ -79,7 +77,7 @@ const AddTaskPage = () => {
       tag: tag.id !== 0 ? tag : undefined,
     };
 
-    if (newTask.id === 0) {
+    if (taskToUpdate === undefined) {
       addItem(newTask);
       setInputsValues(initialValues);
       navigate("/new-tasks");
@@ -93,6 +91,7 @@ const AddTaskPage = () => {
         });
     } else {
       //TODO add save to list state
+      console.log(newTask);
       navigate(-1);
     }
   };

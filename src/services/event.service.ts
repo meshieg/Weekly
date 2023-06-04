@@ -17,4 +17,16 @@ export class EventService {
         throw err;
       });
   };
+
+  static deleteEvent = async (eventId: number) => {
+    const url = `${eventPrefix}/delete/${eventId}`;
+    return axios
+      .put(url)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
 }

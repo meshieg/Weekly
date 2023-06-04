@@ -62,12 +62,23 @@ export class TaskService {
     return axios
       .put(url)
       .then((res) => {
-        console.log("task updated successfully");
         return {
           ...res.data,
           dueDate: new Date(res.data.dueDate),
           assignment: res.data.assignment && new Date(res.data.assignment),
         } as ITask;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  static deleteTask = async (taskId: number) => {
+    const url = `${taskPrefix}/delete/${taskId}`;
+    return axios
+      .put(url)
+      .then((res) => {
+        console.log(res.data);
       })
       .catch((err) => {
         throw err;

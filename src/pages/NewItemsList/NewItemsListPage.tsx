@@ -35,7 +35,6 @@ const NewItemsListPage = () => {
   };
 
   const onItemClick = (id: number) => {
-    console.log("click");
     const item =
       newTasks.find((task) => task.id === id) ||
       newEvents.find((event) => event.id === id);
@@ -93,9 +92,6 @@ const NewItemsListPage = () => {
           )}
         </>
       )}
-      <Link to="/add-task">
-        <button>Add</button>
-      </Link>
     </>
   );
 };
