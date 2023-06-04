@@ -11,6 +11,15 @@ import { IUser } from "../utils/types";
 //     return token;
 // }
 
+export const getTokenFromStorage = () => {
+    const tokenString = localStorage.getItem('token');
+    let userToken;
+    if (tokenString && tokenString !== "undefined") {
+        userToken = JSON.parse(tokenString);
+    }
+    return userToken ? userToken : null
+};
+
 export function signOut() {
     sessionStorage.removeItem("user");
     localStorage.removeItem("token");
