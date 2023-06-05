@@ -14,12 +14,14 @@ import {
 import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../customHooks/useUser";
 
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>([]);
   const [currDate, setCurrDate] = useState(new Date());
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
+  const { user } = useUser();
 
   // TODO: Add on click - open the task/event to display and edit
   const Appointment = ({
@@ -47,26 +49,23 @@ const WeeklySchedule = () => {
   // TODO: specify the date in the day display
   const DayScaleCell = ({ ...restProps }: WeekView.DayScaleCellProps) => {
     return (
-      <WeekView.DayScaleCell {...restProps} onClick={() => navigate("/day")} />
+      <WeekView.DayScaleCell
+        {...restProps}
+        onClick={(event: any) => navigate("/day")}
+      />
     );
   };
 
   useEffect(() => {
-    const userString = sessionStorage.getItem("user");
-
-    if (userString) {
-      const userObj = JSON.parse(userString);
-
-      // Set to a restricted display when the user's day takes place within the 24 hours.
-      // When the user's day takes place within two different days - the display won't be rectricted.
-      if (userObj?.endDayHour === 0) {
-        setDayHours({ beginDayHour: userObj?.beginDayHour, endDayHour: 24 });
-      } else if (userObj?.beginDayHour <= userObj?.endDayHour) {
-        setDayHours({
-          beginDayHour: userObj?.beginDayHour,
-          endDayHour: userObj?.endDayHour,
-        });
-      }
+    // Set to a restricted display when the user's day takes place within the 24 hours.
+    // When the user's day takes place within two different days - the display won't be rectricted.
+    if (user?.endDayHour === 0) {
+      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    } else if (user?.beginDayHour <= user?.endDayHour) {
+      setDayHours({
+        beginDayHour: user?.beginDayHour,
+        endDayHour: user?.endDayHour,
+      });
     }
 
     ScheduleService.getSchedule(
