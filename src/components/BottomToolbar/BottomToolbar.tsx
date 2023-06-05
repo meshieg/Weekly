@@ -16,7 +16,7 @@ const actions = [
   {
     label: "My Week",
     icon: <EventIcon />,
-    to: "/week",
+    to: "/",
   },
   {
     label: "My Tasks",

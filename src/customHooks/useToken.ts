@@ -10,9 +10,15 @@ const useToken = () => {
     setToken(userToken);
   };
 
+  const clearToken = () => {
+    localStorage.removeItem("token");
+    setToken(null)
+  }
+
   return {
     setToken: saveToken,
-    token
+    token,
+    clearToken
   }
 }
 
