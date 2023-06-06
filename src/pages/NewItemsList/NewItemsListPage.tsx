@@ -6,7 +6,7 @@ import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import { ItemType } from "../../utils/constants";
-import { instanceOfTask } from "../../utils/typeChecks";
+import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
 const NewItemsListPage = () => {
@@ -41,14 +41,14 @@ const NewItemsListPage = () => {
     if (instanceOfTask(item)) {
       navigate("/display-task", {
         state: {
-          task: item as ITask,
+          taskId: item.id,
           isFromDb: false,
         },
       });
-    } else {
+    } else if (instanceOfEvent(item)) {
       navigate("/display-event", {
         state: {
-          event: item as IEvent,
+          eventId: item.id,
           isFromDb: false,
         },
       });

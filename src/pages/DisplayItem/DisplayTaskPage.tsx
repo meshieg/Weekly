@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import "./DisplayAssignment.css";
@@ -7,6 +7,7 @@ import { Priority, PriorityLabels } from "../../utils/constants";
 import Tag from "../../components/Tag/Tag";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { TaskService } from "../../services/task.service";
+import { instanceOfTask } from "../../utils/typeChecks";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -16,19 +17,25 @@ const textFieldStyle = {
 };
 
 const DisplayTaskPage = () => {
-  const { removeItem } = useNewItemsContext();
+  const { removeItem, getById } = useNewItemsContext();
   const navigate = useNavigate();
   const navLocation = useLocation();
   const { setToolbar } = useToolbar();
-  var taskToShow: ITask = navLocation.state?.task;
+  const [taskToShow, setTaskToShow] = useState<ITask | undefined>(undefined);
+  const taskId = navLocation.state?.taskId;
 
   useEffect(() => {
     setToolbar("Task Details", true);
-
     if (navLocation.state?.isFromDB) {
-      //ToDo add request fromDB
+      TaskService.getTaskById(taskId).then((task) => {
+        console.log("task: " + task);
+        if (instanceOfTask(task)) setTaskToShow(task as ITask);
+      });
+    } else {
+      const task = getById(taskId);
+      if (instanceOfTask(task)) setTaskToShow(task as ITask);
     }
-  }, []);
+  }, [taskId, getById, navLocation.state?.isFromDB]);
 
   const navToEdit = () => {
     navigate("/add-task", {
@@ -37,12 +44,14 @@ const DisplayTaskPage = () => {
   };
 
   const deleteTask = () => {
-    if (navLocation.state?.isFromDB) {
-      TaskService.deleteTask(taskToShow.id);
-      navigate(-1);
-    } else {
-      removeItem(taskToShow.id);
-      navigate(-1);
+    if (taskToShow) {
+      if (navLocation.state?.isFromDB) {
+        TaskService.deleteTask(taskToShow.id);
+        navigate(-1);
+      } else {
+        removeItem(taskToShow.id);
+        navigate(-1);
+      }
     }
   };
 

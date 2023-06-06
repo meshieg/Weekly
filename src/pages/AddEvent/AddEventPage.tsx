@@ -67,12 +67,12 @@ const AddEventPage = () => {
     const startDateTime: string =
       moment(inputValues.startDate).format("YYYY-MM-DD") +
       " " +
-      moment(inputValues.startTime).format("HH:mm:ss");
+      moment(inputValues.startTime).format("HH:00:00");
 
     const endDateTime: string =
       moment(inputValues.endDate).format("YYYY-MM-DD") +
       " " +
-      moment(inputValues.endTime).format("HH:mm:ss");
+      moment(inputValues.endTime).format("HH:00:00");
     if (startDateTime < endDateTime) {
       const newEvent: IEvent = {
         id: eventToUpdate ? eventToUpdate.id : 0,

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useToolbar from "../../customHooks/useToolbar";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
@@ -6,6 +6,7 @@ import { TextField } from "@mui/material";
 import Tag from "../../components/Tag/Tag";
 import { PriorityLabels } from "../../utils/constants";
 import { EventService } from "../../services/event.service";
+import { instanceOfEvent } from "../../utils/typeChecks";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -18,14 +19,20 @@ const DisplayEventPage = () => {
   const navigate = useNavigate();
   const navLocation = useLocation();
   const { setToolbar } = useToolbar();
-  const { removeItem } = useNewItemsContext();
-  var eventToShow: IEvent = navLocation.state?.event;
+  const { removeItem, getById } = useNewItemsContext();
+  const [eventToShow, setEventToShow] = useState<IEvent | undefined>();
+  const eventId: number = navLocation.state?.eventId;
 
   useEffect(() => {
     setToolbar("Event Details", true);
 
     if (navLocation.state?.isFromDb) {
       //TODO add request fromDB
+      const event = EventService.getEventById(eventId);
+      if (instanceOfEvent(event)) setEventToShow(event);
+    } else {
+      const event = getById(eventId);
+      if (instanceOfEvent(event)) setEventToShow(event as IEvent);
     }
   }, []);
 
@@ -37,10 +44,10 @@ const DisplayEventPage = () => {
 
   const deleteEvent = () => {
     if (navLocation.state?.isFromDB) {
-      EventService.deleteEvent(eventToShow.id);
+      EventService.deleteEvent(eventId);
       navigate(-1);
     } else {
-      removeItem(eventToShow.id);
+      removeItem(eventId);
       navigate(-1);
     }
   };

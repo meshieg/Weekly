@@ -91,7 +91,8 @@ const AddTaskPage = () => {
         });
     } else {
       //TODO add save to list state
-      console.log(newTask);
+      // console.log(newTask);
+      updateItem(newTask);
       navigate(-1);
     }
   };

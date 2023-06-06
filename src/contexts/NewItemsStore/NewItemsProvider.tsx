@@ -37,6 +37,17 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
     }
   };
 
+  const getById = (itemId: number) => {
+    return (
+      newTasks.find((task) => {
+        return task.id === itemId;
+      }) ||
+      newEvents.find((event) => {
+        return event.id === itemId;
+      })
+    );
+  };
+
   const refreshItems = () => {
     setNewTasks([]);
     setNewEvents([]);
@@ -52,6 +63,7 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
         removeItem,
         updateItem,
         refreshItems,
+        getById,
       }}
     >
       {children}
