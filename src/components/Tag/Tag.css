@@ -1,0 +1,16 @@
+.tag {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  min-width: max-content;
+}
+
+.tag__color {
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  width: max-content;
+  min-width: 30px;
+  aspect-ratio: 1/1;
+  /* margin: 0.5rem; */
+}

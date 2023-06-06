@@ -1,0 +1,24 @@
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10%;
+  height: 100%;
+}
+
+.add_task__form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.add_task_buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  /* align-items: center; */
+  margin-top: 5vh;
+}
+
+.colorPickerContainer {
+  margin-bottom: 1rem;
+}
