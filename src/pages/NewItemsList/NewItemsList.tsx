@@ -9,7 +9,7 @@ import { ItemType } from "../../utils/constants";
 import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
-const NewItemsListPage = () => {
+const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
     useNewItemsContext();
   const { setToolbar } = useToolbar();
@@ -96,4 +96,4 @@ const NewItemsListPage = () => {
   );
 };
 
-export default NewItemsListPage;
+export default NewItemsList;

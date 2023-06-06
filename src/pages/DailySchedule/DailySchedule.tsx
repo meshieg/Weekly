@@ -9,6 +9,7 @@ import {
 import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
 import useToolbar from "../../customHooks/useToolbar";
+import useUser from "../../customHooks/useUser";
 
 interface IDailyScheduleProps {
   date: Date;
@@ -18,25 +19,20 @@ const DailySchedule = ({ date }: IDailyScheduleProps) => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const { setToolbar } = useToolbar();
+  const { user } = useUser();
 
   useEffect(() => {
     setToolbar("", true);
 
-    const userString = sessionStorage.getItem("user");
-
-    if (userString) {
-      const userObj = JSON.parse(userString);
-
-      // Set to a restricted display when the user's day takes place within the 24 hours.
-      // When the user's day takes place within two different days - the display won't be rectricted.
-      if (userObj?.endDayHour === 0) {
-        setDayHours({ beginDayHour: userObj?.beginDayHour, endDayHour: 24 });
-      } else if (userObj?.beginDayHour <= userObj?.endDayHour) {
-        setDayHours({
-          beginDayHour: userObj?.beginDayHour,
-          endDayHour: userObj?.endDayHour,
-        });
-      }
+    // Set to a restricted display when the user's day takes place within the 24 hours.
+    // When the user's day takes place within two different days - the display won't be rectricted.
+    if (user?.endDayHour === 0) {
+      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    } else if (user?.beginDayHour <= user?.endDayHour) {
+      setDayHours({
+        beginDayHour: user?.beginDayHour,
+        endDayHour: user?.endDayHour,
+      });
     }
 
     // TODO: arrange the dates according to the clicked date

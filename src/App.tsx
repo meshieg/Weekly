@@ -1,13 +1,14 @@
+import { useEffect, useContext } from "react";
 import { routes } from "./Routes";
 import BottomToolbar from "./components/BottomToolbar/BottomToolbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import "./general.css";
 import "./App.css";
 import Toolbar from "./components/Toolbar/Toolbar";
 import { ToolbarProvider } from "./contexts/ToolbarContext";
 import { AlertProvider } from "./contexts/AlertContext";
 import { NewItemsProvider } from "./contexts/NewItemsStore/NewItemsProvider";
 import FloatingActionButton from "./components/FloatingActionButton/FloatingActionButton";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
@@ -16,8 +17,6 @@ function App() {
         <AlertProvider>
           <NewItemsProvider>
             <BrowserRouter>
-              {/* <div className="app__header"> */}
-              {/* </div> */}
               <Toolbar />
               <div className="app__content">
                 <Routes>
@@ -25,7 +24,13 @@ function App() {
                     <Route
                       key={route.path}
                       path={route.path}
-                      element={route.element}
+                      element={
+                        <ProtectedRoute
+                          allowedUserState={route.allowedUserState}
+                        >
+                          {route.element}
+                        </ProtectedRoute>
+                      }
                     />
                   ))}
                 </Routes>
