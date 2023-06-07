@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import user from "../../assets/images/user.svg";
 import { UserService } from "../../services/user.service";
 import { IUser } from "../../utils/types";
+import useUser from "../../customHooks/useUser";
 
 // import useAlert from "../../customHooks/useAlert";
 // import AlertPopup from "../../components/AlertPopup/AlertPopup";

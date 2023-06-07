@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { Priority } from "./constants";
 
 export type TTypePriority = {
@@ -34,3 +35,11 @@ export type IUserResponse = {
   token: string;
   user: IUser;
 };
+
+export interface IProfileAction {
+  id: number;
+  icon?: ReactElement;
+  text: string;
+  displayArrow?: boolean;
+  route?: string
+}

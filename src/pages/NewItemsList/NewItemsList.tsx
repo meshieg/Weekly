@@ -7,7 +7,7 @@ import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
-const NewItemsListPage = () => {
+const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } = useNewItemsContext();
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
@@ -71,4 +71,4 @@ const NewItemsListPage = () => {
   );
 };
 
-export default NewItemsListPage;
+export default NewItemsList;

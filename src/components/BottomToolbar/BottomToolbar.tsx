@@ -11,12 +11,12 @@ const actions = [
   {
     label: "My Profile",
     icon: <AccountCircleIcon />,
-    to: "/", // TODO: change the route
+    to: "/my-profile",
   },
   {
     label: "My Week",
     icon: <EventIcon />,
-    to: "/week",
+    to: "/",
   },
   {
     label: "My Tasks",

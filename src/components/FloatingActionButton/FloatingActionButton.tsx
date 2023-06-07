@@ -14,7 +14,6 @@ const FloatingActionButton = () => {
         const route = routes.find((route) => route.path === location.pathname);
         setDisplay(
             route?.showFab !== undefined ? route?.showFab : false
-            // route?.showFab !== undefined ?? route?.showFab
             );
     }, [location.pathname]);
 
@@ -28,7 +27,7 @@ const FloatingActionButton = () => {
     }
 
     return (
-        <div className={`fab ${isOpen ? "open" : ""}`}>
+        <div className={`fab ${isOpen ? "fab-open" : ""}`}>
             <button onClick={() => setIsOpen(!isOpen)}>
                 <Add/>
             </button>
