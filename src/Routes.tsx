@@ -8,6 +8,7 @@ import LogIn from "./pages/LogIn/LogIn";
 import Register from "./pages/Register/Register";
 import NewItemsListPage from "./pages/NewItemsList/NewItemsListPage";
 import DailySchedule from "./pages/DailySchedule/DailySchedule";
+import PersonalData from "./pages/PersonalData/PersonalData";
 
 type RouteType = {
   path: string;
@@ -20,7 +21,7 @@ type RouteType = {
 export const routes: RouteType[] = [
   {
     path: "/",
-    element: <Home />,
+    element: <PersonalData />, //<Home />,
     showBottomToolbar: true,
     showToolbar: true,
     showFab: true
@@ -76,5 +77,12 @@ export const routes: RouteType[] = [
     showBottomToolbar: false,
     showToolbar: true,
     showFab: true
+  },
+  {
+    path: "/personal-data",
+    element: <PersonalData />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false
   },
 ];
