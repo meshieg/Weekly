@@ -91,10 +91,15 @@ const AddTaskPage = () => {
     } else {
       TaskService.updateTask(newTask)
         .then((updatedTask) => {
-          navigate(-1);
+          if (updatedTask) {
+            // setInputsValues(initialValues);
+            navigate(-1);
+          } else {
+            //TODO: show error message in alert
+          }
         })
         .catch((err) => {
-          console.log(err);
+          //TODO: show error message in alert
         });
     }
   };

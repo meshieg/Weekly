@@ -3,23 +3,23 @@ import { AxiosInstance } from "../config/axios";
 const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 
 export class TaskService {
-  static saveTask = async (task: ITask): Promise<ITask | void> => {
-    const taskJson = JSON.stringify({
-      ...task,
-      dueDate: task.dueDate.toISOString(),
-    });
+  // static saveTask = async (task: ITask): Promise<ITask | void> => {
+  //   const taskJson = JSON.stringify({
+  //     ...task,
+  //     dueDate: task.dueDate.toISOString(),
+  //   });
 
-    const url = taskPrefix;
-    return AxiosInstance
-      .post(url, taskJson)
-      .then((res) => {
-        console.log("task saved successfully");
-        return res.data as ITask;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  };
+  //   const url = taskPrefix;
+  //   return axios
+  //     .post(url, taskJson)
+  //     .then((res) => {
+  //       console.log("task saved successfully");
+  //       return res.data as ITask;
+  //     })
+  //     .catch((err) => {
+  //       // throw err;
+  //     });
+  // };
 
   static updateTask = async (updatedTask: ITask): Promise<ITask | void> => {
     const url = `${taskPrefix}/${updatedTask.id}`;
@@ -28,7 +28,11 @@ export class TaskService {
         task: updatedTask,
       })
       .then((res) => {
-        return res.data as ITask;
+        return {
+          ...res.data,
+          dueDate: new Date(res.data?.dueDate),
+          assignment: res.data?.assignment && new Date(res.data?.assignment),
+        } as ITask;
       })
       .catch((err) => {
         console.log(err);
@@ -68,6 +72,7 @@ export class TaskService {
         } as ITask;
       })
       .catch((err) => {
+        console.log(err);
         throw err;
       });
   }

@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import AddTaskPage from "./pages/AddTask/AddTaskPage";
-import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 import AddEventPage from "./pages/AddEvent/AddEventPage";
@@ -103,13 +102,15 @@ export const routes: RouteType[] = [
     element: <DisplayTaskPage />,
     showBottomToolbar: false,
     showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
   },
   {
     path: "/display-event",
     element: <DisplayEventPage />,
     showBottomToolbar: false,
     showToolbar: true,
-    showFab: true,
+    showFab: false,
     allowedUserState: UserState.SIGNED,
   },
 ];
