@@ -1,0 +1,21 @@
+.action-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+    margin: 1rem 0;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .action-row-details {
+    display: flex;
+    flex-direction: row;
+    margin-left: 5%;
+    align-items: center;
+  }
+
+  .action-row-details > p {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+  }

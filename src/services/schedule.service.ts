@@ -1,4 +1,4 @@
-import axios from "axios";
+import { AxiosInstance } from "../config/axios";
 import { IScheduleEntity } from "../utils/types";
 
 const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule`;
@@ -6,7 +6,7 @@ const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule`;
 export class ScheduleService {
     static getSchedule = async (minDate: Date, maxDate: Date): Promise<IScheduleEntity[]> => {
         const url = schedulePrefix + "/week";
-        return await axios.get(url, {
+        return await AxiosInstance.get(url, {
             params: {
                 minDate, maxDate
             }
@@ -26,7 +26,7 @@ export class ScheduleService {
     static generateSchedule = async (tasks?: ITask[], events?: IEvent[]): Promise<IScheduleEntity[] | void> => {
         const url = schedulePrefix;
 
-        return axios.post(url, { tasks, events })
+        return AxiosInstance.post(url, { tasks, events })
             .then(res => {
                 console.log("Schedule generated successfully");
                 console.log(res.data);
