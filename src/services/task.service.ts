@@ -23,7 +23,7 @@ export class TaskService {
 
   static updateTask = async (updatedTask: ITask): Promise<ITask | void> => {
     const url = `${taskPrefix}/${updatedTask.id}`;
-    return axios
+    return AxiosInstance
       .put(url, {
         task: updatedTask,
       })
