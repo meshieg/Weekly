@@ -24,21 +24,25 @@ const DisplayEventPage = () => {
   const eventId: number = navLocation.state?.eventId;
 
   useEffect(() => {
-    setToolbar("Event Details", true);
-
-    if (navLocation.state?.isFromDb) {
-      //TODO add request fromDB
-      const event = EventService.getEventById(eventId);
-      if (instanceOfEvent(event)) setEventToShow(event);
+    if (!eventId) {
+      //TODO: display error message
+      console.log("no event id");
     } else {
-      const event = getById(eventId);
-      if (instanceOfEvent(event)) setEventToShow(event as IEvent);
+      setToolbar("Event Details", true);
+      if (navLocation.state?.isFromDB) {
+        EventService.getEventById(eventId).then((event) => {
+          setEventToShow(event as IEvent);
+        });
+      } else {
+        const event = getById(eventId);
+        if (instanceOfEvent(event)) setEventToShow(event as IEvent);
+      }
     }
   }, []);
 
   const navToEdit = () => {
     navigate("/add-event", {
-      state: { event: eventToShow, isInDB: navLocation.state?.isFromDb },
+      state: { event: eventToShow, isFromDB: navLocation.state?.isFromDB },
     });
   };
 

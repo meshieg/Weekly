@@ -28,8 +28,9 @@ const DisplayTaskPage = () => {
     setToolbar("Task Details", true);
     if (navLocation.state?.isFromDB) {
       TaskService.getTaskById(taskId).then((task) => {
-        console.log("task: " + task);
-        if (instanceOfTask(task)) setTaskToShow(task as ITask);
+        if (instanceOfTask(task)) {
+          setTaskToShow(task as ITask);
+        }
       });
     } else {
       const task = getById(taskId);

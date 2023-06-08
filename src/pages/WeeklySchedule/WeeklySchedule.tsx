@@ -24,16 +24,35 @@ const WeeklySchedule = () => {
   const { user } = useUser();
 
   // TODO: Add on click - open the task/event to display and edit
+  const onAppointmentClick = (id: number, isTask: boolean) => {
+    console.log("On click");
+    console.log("taskId:" + id);
+    if (isTask) {
+      navigate("/display-task", {
+        state: {
+          taskId: id,
+          isFromDB: true,
+        },
+      });
+    } else {
+      navigate("/display-event", {
+        state: {
+          eventId: id,
+          isFromDB: true,
+        },
+      });
+    }
+  };
+
   const Appointment = ({
     children,
-    onClick,
     data,
     ...restProps
   }: Appointments.AppointmentProps) => {
     return (
       <Appointments.Appointment
         {...restProps}
-        onClick={onClick}
+        onClick={() => onAppointmentClick(data?.id as number, data?.isTask)}
         data={data}
         style={{
           backgroundColor: data.color || "undefined",
@@ -74,10 +93,12 @@ const WeeklySchedule = () => {
     ).then((data) => {
       const dataDisplay = data?.map((scheduleEntity) => {
         return {
+          id: scheduleEntity.id,
           title: scheduleEntity.title,
           startDate: scheduleEntity.startTime,
           endDate: scheduleEntity.endTime,
           color: scheduleEntity.tag?.color,
+          isTask: scheduleEntity.isTask,
         };
       });
       setScheduleData(dataDisplay);

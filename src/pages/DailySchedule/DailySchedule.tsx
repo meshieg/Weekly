@@ -42,10 +42,12 @@ const DailySchedule = ({ date }: IDailyScheduleProps) => {
     ).then((data) => {
       const dataDisplay = data?.map((scheduleEntity) => {
         return {
+          id: scheduleEntity.id,
           title: scheduleEntity.title,
           startDate: scheduleEntity.startTime,
           endDate: scheduleEntity.endTime,
           color: scheduleEntity.tag?.color,
+          isTask: scheduleEntity.isTask,
         };
       });
       setScheduleData(dataDisplay);

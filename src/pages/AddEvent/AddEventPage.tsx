@@ -63,6 +63,7 @@ const AddEventPage = () => {
 
   const saveEvent = (event: any) => {
     event.preventDefault();
+    console.log(eventToUpdate);
 
     const startDateTime: string =
       moment(inputValues.startDate).format("YYYY-MM-DD") +
@@ -90,10 +91,16 @@ const AddEventPage = () => {
         navigate("/new-tasks");
       } else if (location.state?.isFromDB) {
         EventService.updateEvent(newEvent)
-          .then(() => {
-            navigate(-1);
+          .then((updatedEvent) => {
+            console.log(updatedEvent);
+            if (updatedEvent) {
+              navigate(-1);
+            } else {
+              //TODO: show alert with error message
+            }
           })
           .catch((err) => {
+            //TODO: show alert with error message
             console.log(err);
           });
       } else {

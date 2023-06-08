@@ -5,10 +5,13 @@ const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 export class TaskService {
   static getTaskById = async (taskId: number): Promise<ITask | void> => {
     const url = `${taskPrefix}/getOne/${taskId}`;
-    return AxiosInstance.get(url)
+    return await AxiosInstance.get(url)
       .then((res) => {
-        console.log("data: " + res);
-        return res.data as ITask;
+        return {
+          ...res.data,
+          dueDate: new Date(res.data.dueDate),
+          assignment: res.data.assignment && new Date(res.data.assignment),
+        } as ITask;
       })
       .catch((err) => {
         console.log(err);
@@ -51,7 +54,6 @@ export class TaskService {
     const url = `${taskPrefix}/all`;
     return await AxiosInstance.get(url)
       .then((res) => {
-        console.log(res.data);
         return res.data.map((task: ITask) => {
           return {
             ...task,
