@@ -6,6 +6,8 @@ import "./AlgoMessagePopup.css";
 interface IAlgoMessagePopupProps {
   open: boolean;
   onClose: () => void;
+  primaryAction: () => void;
+  secondaryAction: () => void;
 }
 
 const AlgoMessagePopup: React.FC<IAlgoMessagePopupProps> = (props) => {
@@ -19,12 +21,18 @@ const AlgoMessagePopup: React.FC<IAlgoMessagePopupProps> = (props) => {
           <b>Would you like us to regenerate it for you?</b>
         </div>
         <div className="algo-popup__buttons">
-          <ActionButtons
-            primaryText="Yes, regenerate!"
-            secondaryText="No, I'll do it myself"
-            primaryAction={() => {}}
-            secondaryAction={() => {}}
-          />
+          <button
+            className="btn btn__primary algo-popup_btn"
+            onClick={props.primaryAction}
+          >
+            Yes, regenerate!
+          </button>
+          <button
+            className="btn btn__secondary algo-popup_btn"
+            onClick={props.secondaryAction}
+          >
+            No, I'll do it myself
+          </button>
         </div>
       </div>
     </GeneralMessageDialog>
