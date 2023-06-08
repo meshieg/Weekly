@@ -3,6 +3,27 @@ import { AxiosInstance } from "../config/axios";
 const taskPrefix = `${process.env.REACT_APP_BACKEND_URL}/task`;
 
 export class TaskService {
+  static getTaskById = async (taskId: number): Promise<ITask | void> => {
+    const url = `${taskPrefix}/getOne/${taskId}`;
+    return await AxiosInstance.get(url)
+      .then((res) => {
+        return {
+          ...res.data,
+          dueDate: new Date(res.data.dueDate),
+          assignment: res.data.assignment && new Date(res.data.assignment),
+        } as ITask;
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
+
+  static saveTask = async (task: ITask): Promise<ITask | void> => {
+    const taskJson = JSON.stringify({
+      ...task,
+      dueDate: task.dueDate.toISOString(),
+    });
   // static saveTask = async (task: ITask): Promise<ITask | void> => {
   //   const taskJson = JSON.stringify({
   //     ...task,
@@ -75,5 +96,16 @@ export class TaskService {
         console.log(err);
         throw err;
       });
-  }
+  };
+
+  static deleteTask = async (taskId: number) => {
+    const url = `${taskPrefix}/delete/${taskId}`;
+    return AxiosInstance.put(url)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
 }

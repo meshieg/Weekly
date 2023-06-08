@@ -10,46 +10,50 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
   const [newTasks, setNewTasks] = useState<ITask[]>([]);
   const [newEvents, setNewEvents] = useState<IEvent[]>([]);
   const [id, setId] = useState<number>(0);
-  
+
   const addItem = (newItem: ITask | IEvent) => {
     newItem.id = id;
-    
-    instanceOfTask(newItem) ? setNewTasks(prevArray => [...prevArray, newItem])
-      : setNewEvents(prevArray => [...prevArray, newItem]);
 
-    setId(id+1);
-  }
-  
+    instanceOfTask(newItem)
+      ? setNewTasks((prevArray) => [...prevArray, newItem])
+      : setNewEvents((prevArray) => [...prevArray, newItem]);
+
+    setId(id + 1);
+  };
+
   const removeItem = (itemId: number) => {
-    const tasksCopy = newTasks.filter(task => task.id !== itemId);
-    const eventsCopy = newEvents.filter(event => event.id !== itemId);
+    const tasksCopy = newTasks.filter((task) => task.id !== itemId);
+    const eventsCopy = newEvents.filter((event) => event.id !== itemId);
 
     setNewTasks(tasksCopy);
     setNewEvents(eventsCopy);
-  }
+  };
 
   const updateItem = (item: ITask | IEvent) => {
-    newTasks.map(task => {
-      if (task.id === id && instanceOfTask(item)) {
-        task = item;
-      }
-      return task;
-    });
+    if (instanceOfTask(item)) {
+      newTasks[newTasks.findIndex((task) => task.id === item.id)] = item;
+    } else if (instanceOfEvent(item)) {
+      newEvents[newEvents.findIndex((event) => event.id === item.id)] = item;
+    }
+  };
 
-    newEvents.map(event => {
-      if (event.id === id && instanceOfEvent(item)) {
-        event = item;
-      }
-      return event;
-    });
-  }
+  const getById = (itemId: number) => {
+    return (
+      newTasks.find((task) => {
+        return task.id === itemId;
+      }) ||
+      newEvents.find((event) => {
+        return event.id === itemId;
+      })
+    );
+  };
 
   const refreshItems = () => {
     setNewTasks([]);
     setNewEvents([]);
     setId(0);
-  }
-  
+  };
+
   return (
     <NewItemsContext.Provider
       value={{
@@ -59,8 +63,12 @@ export const NewItemsProvider: React.FC<IProps> = ({ children }) => {
         removeItem,
         updateItem,
         refreshItems,
+        getById,
       }}
-    >{children}</NewItemsContext.Provider>
-  )};
-  
-  export default NewItemsContext;
+    >
+      {children}
+    </NewItemsContext.Provider>
+  );
+};
+
+export default NewItemsContext;

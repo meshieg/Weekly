@@ -13,6 +13,11 @@
   justify-content: space-between;
 }
 
+.eventDateRowContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .btnContainer {
   display: flex;
   flex-direction: row;

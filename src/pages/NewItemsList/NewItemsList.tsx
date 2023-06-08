@@ -5,6 +5,8 @@ import { ScheduleService } from "../../services/schedule.service";
 import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
+import { ItemType } from "../../utils/constants";
+import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
 const NewItemsList = () => {
@@ -30,6 +32,27 @@ const NewItemsList = () => {
     // TODO: Add 'are you sure...' question
     refreshItems();
     navigate("/");
+  };
+
+  const onItemClick = (id: number) => {
+    const item =
+      newTasks.find((task) => task.id === id) ||
+      newEvents.find((event) => event.id === id);
+    if (instanceOfTask(item)) {
+      navigate("/display-task", {
+        state: {
+          taskId: item.id,
+          isFromDb: false,
+        },
+      });
+    } else if (instanceOfEvent(item)) {
+      navigate("/display-event", {
+        state: {
+          eventId: item.id,
+          isFromDb: false,
+        },
+      });
+    }
   };
 
   return (
@@ -61,9 +84,6 @@ const NewItemsList = () => {
           )}
         </>
       )}
-      <Link to="/add-task">
-        <button>Add</button>
-      </Link>
     </>
   );
 };

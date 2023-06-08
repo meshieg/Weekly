@@ -58,7 +58,8 @@ const MyTasks: React.FC = () => {
     if (item !== undefined) {
       navigate("/display-task", {
         state: {
-          task: item as ITask,
+          taskId: item.id,
+          isFromDB: true,
         },
       });
     }

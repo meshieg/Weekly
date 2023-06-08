@@ -27,7 +27,7 @@ const AddEventPage = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(eventToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
-  const { addItem } = useNewItemsContext();
+  const { addItem, updateItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
@@ -35,7 +35,7 @@ const AddEventPage = () => {
   useEffect(() => {
     setInputsValues(initialValues);
     setToolbar(
-      location.state?.task === undefined ? "Add Event" : "Edit Event",
+      location.state?.event === undefined ? "Add Event" : "Edit Event",
       true
     );
 
@@ -63,43 +63,52 @@ const AddEventPage = () => {
 
   const saveEvent = (event: any) => {
     event.preventDefault();
+    console.log(eventToUpdate);
 
     const startDateTime: string =
       moment(inputValues.startDate).format("YYYY-MM-DD") +
       " " +
-      moment(inputValues.startTime).format("HH:mm:ss");
+      moment(inputValues.startTime).format("HH:00:00");
 
     const endDateTime: string =
       moment(inputValues.endDate).format("YYYY-MM-DD") +
       " " +
-      moment(inputValues.endTime).format("HH:mm:ss");
+      moment(inputValues.endTime).format("HH:00:00");
+    if (startDateTime < endDateTime) {
+      const newEvent: IEvent = {
+        id: eventToUpdate ? eventToUpdate.id : 0,
+        title: inputValues.title,
+        location: inputValues.location,
+        startTime: new Date(startDateTime),
+        endTime: new Date(endDateTime),
+        tag: tag.id !== 0 ? tag : undefined,
+        description: inputValues.description,
+      };
 
-    const newEvent: IEvent = {
-      id: eventToUpdate ? eventToUpdate.id : 0,
-      title: inputValues.title,
-      location: inputValues.location,
-      startTime: new Date(startDateTime),
-      endTime: new Date(endDateTime),
-      tag: tag.id !== 0 ? tag : undefined,
-      description: inputValues.description,
-    };
-    if (eventToUpdate === undefined) {
-      console.log(newEvent);
-
-      addItem(newEvent);
-      setInputsValues(initialValues);
-      navigate("/new-tasks");
-    } else if (location.state?.eventId === undefined) {
-      //TODO add save to list state
-      navigate(-1);
+      if (eventToUpdate === undefined) {
+        addItem(newEvent);
+        setInputsValues(initialValues);
+        navigate("/new-tasks");
+      } else if (location.state?.isFromDB) {
+        EventService.updateEvent(newEvent)
+          .then((updatedEvent) => {
+            console.log(updatedEvent);
+            if (updatedEvent) {
+              navigate(-1);
+            } else {
+              //TODO: show alert with error message
+            }
+          })
+          .catch((err) => {
+            //TODO: show alert with error message
+            console.log(err);
+          });
+      } else {
+        updateItem(newEvent);
+        navigate(-1);
+      }
     } else {
-      EventService.updateEvent(newEvent)
-        .then(() => {
-          navigate(-1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      //TODO add error message
     }
   };
 

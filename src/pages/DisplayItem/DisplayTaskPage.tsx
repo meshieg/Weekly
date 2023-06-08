@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import "./DisplayAssignment.css";
 import useToolbar from "../../customHooks/useToolbar";
 import { Priority, PriorityLabels } from "../../utils/constants";
 import Tag from "../../components/Tag/Tag";
+import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
+import { TaskService } from "../../services/task.service";
+import { instanceOfTask } from "../../utils/typeChecks";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -14,25 +17,45 @@ const textFieldStyle = {
 };
 
 const DisplayTaskPage = () => {
+  const { removeItem, getById } = useNewItemsContext();
   const navigate = useNavigate();
   const navLocation = useLocation();
   const { setToolbar } = useToolbar();
-  var taskToShow: ITask = navLocation.state?.task;
-  var taskId: number = navLocation.state?.id;
+  const [taskToShow, setTaskToShow] = useState<ITask | undefined>(undefined);
+  const taskId = navLocation.state?.taskId;
 
   useEffect(() => {
     setToolbar("Task Details", true);
-
-    if (taskId !== undefined) {
-      //ToDo add request fromDB
+    if (navLocation.state?.isFromDB) {
+      TaskService.getTaskById(taskId).then((task) => {
+        if (instanceOfTask(task)) {
+          setTaskToShow(task as ITask);
+        }
+      });
+    } else {
+      const task = getById(taskId);
+      if (instanceOfTask(task)) setTaskToShow(task as ITask);
     }
-  }, [taskId]);
+  }, [taskId, getById, navLocation.state?.isFromDB]);
 
   const navToEdit = () => {
     navigate("/add-task", {
-      state: { task: taskToShow, isInDB: taskId !== undefined },
+      state: { task: taskToShow, isFromDB: navLocation.state?.isFromDB },
     });
   };
+
+  const deleteTask = () => {
+    if (taskToShow) {
+      if (navLocation.state?.isFromDB) {
+        TaskService.deleteTask(taskToShow.id);
+        navigate(-1);
+      } else {
+        removeItem(taskToShow.id);
+        navigate(-1);
+      }
+    }
+  };
+
   return (
     <>
       {taskToShow === undefined ? (
@@ -56,16 +79,6 @@ const DisplayTaskPage = () => {
               sx={textFieldStyle}
             />
             <TextField
-              value={
-                taskToShow.description === "" ? " " : taskToShow.description
-              }
-              multiline
-              disabled={true}
-              label="Description"
-              variant="standard"
-              sx={textFieldStyle}
-            />
-            <TextField
               value={taskToShow.dueDate.toLocaleDateString()}
               disabled={true}
               label="Due date"
@@ -76,6 +89,16 @@ const DisplayTaskPage = () => {
               value={taskToShow.dueDate.toLocaleTimeString()}
               disabled={true}
               label="Due time"
+              variant="standard"
+              sx={textFieldStyle}
+            />
+            <TextField
+              value={
+                taskToShow.description === "" ? " " : taskToShow.description
+              }
+              multiline
+              disabled={true}
+              label="Description"
               variant="standard"
               sx={textFieldStyle}
             />
@@ -102,7 +125,7 @@ const DisplayTaskPage = () => {
             </button>
             <button
               className="btn btn__primary display__button"
-              onClick={navToEdit}
+              onClick={deleteTask}
               style={{ background: "#d32f2f", border: "#d32f2f" }}
             >
               Delete

@@ -3,7 +3,6 @@ import "./AddTaskPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
 import { TaskService } from "../../services/task.service";
-import Colorful from "@uiw/react-color-colorful";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import moment from "moment";
@@ -28,7 +27,7 @@ const AddTaskPage = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [tag, setTag] = useState<ITag>(taskToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
-  const { addItem } = useNewItemsContext();
+  const { addItem, updateItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
@@ -67,8 +66,6 @@ const AddTaskPage = () => {
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    console.log(inputValues);
-
     const newTask: ITask = {
       id: taskToUpdate ? taskToUpdate?.id : 0,
       title: inputValues.title,
@@ -80,15 +77,11 @@ const AddTaskPage = () => {
       tag: tag.id !== 0 ? tag : undefined,
     };
 
-    console.log(newTask.id === 0);
-    if (newTask.id === 0) {
+    if (taskToUpdate === undefined) {
       addItem(newTask);
       setInputsValues(initialValues);
       navigate("/new-tasks");
-    } else if (location.state?.taskId === undefined) {
-      //TODO add save to list state
-      navigate(-1);
-    } else {
+    } else if (location.state?.isFromDB) {
       TaskService.updateTask(newTask)
         .then((updatedTask) => {
           if (updatedTask) {
@@ -101,6 +94,11 @@ const AddTaskPage = () => {
         .catch((err) => {
           //TODO: show error message in alert
         });
+    } else {
+      //TODO add save to list state
+      // console.log(newTask);
+      updateItem(newTask);
+      navigate(-1);
     }
   };
 
