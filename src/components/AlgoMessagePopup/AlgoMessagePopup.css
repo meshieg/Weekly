@@ -1,0 +1,24 @@
+.algo-popup__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.algo-popup__text {
+  /* align-self: center; */
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  /* font-weight: bold; */
+}
+
+.algo-popup__buttons {
+  /* margin-top: 2vh; */
+}
+
+.algo-popup_btn {
+  width: 100%;
+  margin: 0.3rem 0;
+  height: 4.5vh;
+  border-radius: 10px;
+}
