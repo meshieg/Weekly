@@ -5,11 +5,9 @@ import { ScheduleService } from "../../services/schedule.service";
 import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
-import { ItemType } from "../../utils/constants";
-import { instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 
-const NewItemsListPage = () => {
+const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
     useNewItemsContext();
   const { setToolbar } = useToolbar();
@@ -34,26 +32,6 @@ const NewItemsListPage = () => {
     navigate("/");
   };
 
-  const onItemClick = (id: number) => {
-    console.log("click");
-    const item =
-      newTasks.find((task) => task.id === id) ||
-      newEvents.find((event) => event.id === id);
-    if (instanceOfTask(item)) {
-      navigate("/display-task", {
-        state: {
-          task: item as ITask,
-        },
-      });
-    } else {
-      navigate("/display-event", {
-        state: {
-          event: item as IEvent,
-        },
-      });
-    }
-  };
-
   return (
     <>
       {newTasks.length === 0 && newEvents.length === 0 ? (
@@ -72,21 +50,13 @@ const NewItemsListPage = () => {
 
           {newTasks.length !== 0 && (
             <CollapseHeader headerText="Tasks">
-              <ScheduleItemsList
-                items={newTasks}
-                onDeleteClick={removeItem}
-                onItemClick={onItemClick}
-              />
+              <ScheduleItemsList items={newTasks} onDeleteClick={removeItem} />
             </CollapseHeader>
           )}
 
           {newEvents.length !== 0 && (
             <CollapseHeader headerText="Events">
-              <ScheduleItemsList
-                items={newEvents}
-                onDeleteClick={removeItem}
-                onItemClick={onItemClick}
-              />
+              <ScheduleItemsList items={newEvents} onDeleteClick={removeItem} />
             </CollapseHeader>
           )}
         </>
@@ -98,4 +68,4 @@ const NewItemsListPage = () => {
   );
 };
 
-export default NewItemsListPage;
+export default NewItemsList;

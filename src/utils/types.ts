@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { Priority } from "./constants";
 
 export type TTypePriority = {
@@ -9,13 +10,14 @@ export type IScheduleEntity = {
   title: string;
   startTime: Date;
   endTime: Date;
-  tagId?: number;
+  tag?: ITag;
 };
 
 export type AppointmentModel = {
   title: string;
   startDate: Date;
   endDate: Date;
+  color?: string;
 };
 
 export type IUser = {
@@ -33,3 +35,11 @@ export type IUserResponse = {
   token: string;
   user: IUser;
 };
+
+export interface IProfileAction {
+  id: number;
+  icon?: ReactElement;
+  text: string;
+  displayArrow?: boolean;
+  route?: string
+}

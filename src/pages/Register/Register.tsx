@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import "./Register.css";
 import { IInputs, registerFields } from "../Register/RegisterFields";
@@ -8,13 +8,15 @@ import { IUser } from "../../utils/types";
 import useToken from "../../customHooks/useToken";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import useAlert from "../../customHooks/useAlert";
-import { validateUserInputs } from "../../heplers/functions";
+import { validateUserInputs } from "../../helpers/functions";
 import moment from "moment";
+import useUser from "../../customHooks/useUser";
 
 const Register = () => {
   const navigate = useNavigate();
   const { setToken } = useToken();
   const { setAlert } = useAlert();
+  const { setUser } = useUser();
 
   const initialValues: IInputs = {
     firstName: "",
@@ -71,8 +73,8 @@ const Register = () => {
           endDayHour: newUser.endDayHour,
         };
 
-        sessionStorage.setItem("user", JSON.stringify(currUser));
-        navigate("/week");
+        setUser(data?.user);
+        navigate("/");
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
@@ -84,7 +86,10 @@ const Register = () => {
   return (
     <div className="reg_pageContainer">
       <div className="reg_image">
-        <img src={require("../../assets/images/logo_no_background.png")} />
+        <img
+          src={require("../../assets/images/logo_no_background.png")}
+          alt="logo"
+        />
       </div>
       <form className="reg_form" onSubmit={handleRegister}>
         <div className="reg_form_fields">

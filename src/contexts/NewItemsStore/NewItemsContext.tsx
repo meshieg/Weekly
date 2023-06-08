@@ -5,6 +5,7 @@ interface INewItemsContext {
     newEvents: IEvent[];
     addItem: (newItem: ITask | IEvent) => void;
     removeItem: (itemId: number) => void;
+    updateItem: (item: ITask | IEvent) => void;
     refreshItems: () => void;
 }
 
@@ -13,6 +14,7 @@ const defaultValues: INewItemsContext = {
     newEvents: [],
     addItem: (newItem: ITask | IEvent) => {},
     removeItem: (itemId: number) => {},
+    updateItem: (item: ITask | IEvent) => {},
     refreshItems: () => {}
 }
 
