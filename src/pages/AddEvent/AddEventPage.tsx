@@ -11,6 +11,9 @@ import { TagService } from "../../services/tag.service";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import useToolbar from "../../customHooks/useToolbar";
 import { EventService } from "../../services/event.service";
+import { validateEventInputs } from "../../helpers/functions";
+import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const AddEventPage = () => {
   const location = useLocation();
@@ -31,6 +34,7 @@ const AddEventPage = () => {
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setInputsValues(initialValues);
@@ -63,7 +67,6 @@ const AddEventPage = () => {
 
   const saveEvent = (event: any) => {
     event.preventDefault();
-    console.log(eventToUpdate);
 
     const startDateTime: string =
       moment(inputValues.startDate).format("YYYY-MM-DD") +
@@ -74,41 +77,49 @@ const AddEventPage = () => {
       moment(inputValues.endDate).format("YYYY-MM-DD") +
       " " +
       moment(inputValues.endTime).format("HH:00:00");
-    if (startDateTime < endDateTime) {
-      const newEvent: IEvent = {
-        id: eventToUpdate ? eventToUpdate.id : 0,
-        title: inputValues.title,
-        location: inputValues.location,
-        startTime: new Date(startDateTime),
-        endTime: new Date(endDateTime),
-        tag: tag.id !== 0 ? tag : undefined,
-        description: inputValues.description,
-      };
 
-      if (eventToUpdate === undefined) {
-        addItem(newEvent);
-        setInputsValues(initialValues);
-        navigate("/new-tasks");
-      } else if (location.state?.isFromDB) {
-        EventService.updateEvent(newEvent)
-          .then((updatedEvent) => {
-            console.log(updatedEvent);
-            if (updatedEvent) {
-              navigate(-1);
-            } else {
-              //TODO: show alert with error message
-            }
-          })
-          .catch((err) => {
-            //TODO: show alert with error message
-            console.log(err);
-          });
-      } else {
-        updateItem(newEvent);
-        navigate(-1);
-      }
+    //TODO: add a function that contains all validations instead of this if and returns a suitable error message
+    // if (startDateTime < endDateTime) {
+    const newEvent: IEvent = {
+      id: eventToUpdate ? eventToUpdate.id : 0,
+      title: inputValues.title,
+      location: inputValues.location,
+      startTime: new Date(startDateTime),
+      endTime: new Date(endDateTime),
+      tag: tag.id !== 0 ? tag : undefined,
+      description: inputValues.description,
+    };
+
+    // Validate inputs
+    const alertMessage = validateEventInputs(newEvent);
+    if (alertMessage) {
+      setAlert("error", alertMessage);
+      return;
+    }
+
+    if (eventToUpdate === undefined) {
+      // add new event
+      addItem(newEvent);
+      setInputsValues(initialValues);
+      navigate("/new-tasks");
+    } else if (location.state?.isFromDB) {
+      // update event on DB
+      EventService.updateEvent(newEvent)
+        .then((updatedEvent) => {
+          console.log(updatedEvent);
+          if (updatedEvent) {
+            navigate(-1);
+          } else {
+            setAlert("error", "failed to save event");
+          }
+        })
+        .catch(() => {
+          setAlert("error", "failed to save event");
+        });
     } else {
-      //TODO add error message
+      // update local event
+      updateItem(newEvent);
+      navigate(-1);
     }
   };
 
@@ -166,6 +177,7 @@ const AddEventPage = () => {
           onTagClick={onSelectTag}
         />
 
+        <AlertPopup />
         <div className="add-event_buttons">
           <button className="btn btn__primary add-event__btn" type="submit">
             Save

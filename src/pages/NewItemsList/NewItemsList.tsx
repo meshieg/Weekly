@@ -8,6 +8,7 @@ import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsL
 import { ItemType } from "../../utils/constants";
 import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
+import "./NewItemsList.css";
 
 const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
@@ -56,12 +57,20 @@ const NewItemsList = () => {
   };
 
   return (
-    <>
+    <div className="new-items__container">
       {newTasks.length === 0 && newEvents.length === 0 ? (
-        <h3 className="new-tasks__message">
-          {`You have no new items to save :/ \n
-            But you can always add them here :)`}
-        </h3>
+        <div className="new-items__message">
+          <h3>
+            You have no new items to save :/ <br />
+            But you can always add them here :)
+          </h3>
+          <button
+            className="btn btn__primary new-items__return-button"
+            onClick={() => navigate("/")}
+          >
+            Return back to my schedule
+          </button>
+        </div>
       ) : (
         <>
           <ActionButtons
@@ -73,18 +82,26 @@ const NewItemsList = () => {
 
           {newTasks.length !== 0 && (
             <CollapseHeader headerText="Tasks">
-              <ScheduleItemsList items={newTasks} onDeleteClick={removeItem} />
+              <ScheduleItemsList
+                items={newTasks}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
             </CollapseHeader>
           )}
 
           {newEvents.length !== 0 && (
             <CollapseHeader headerText="Events">
-              <ScheduleItemsList items={newEvents} onDeleteClick={removeItem} />
+              <ScheduleItemsList
+                items={newEvents}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
             </CollapseHeader>
           )}
         </>
       )}
-    </>
+    </div>
   );
 };
 

@@ -28,15 +28,13 @@ const DisplayTaskPage = () => {
     setToolbar("Task Details", true);
     if (navLocation.state?.isFromDB) {
       TaskService.getTaskById(taskId).then((task) => {
-        if (instanceOfTask(task)) {
-          setTaskToShow(task as ITask);
-        }
+        setTaskToShow(task as ITask);
       });
-    } else {
+    } else if (taskId !== undefined) {
       const task = getById(taskId);
-      if (instanceOfTask(task)) setTaskToShow(task as ITask);
+      if (task && instanceOfTask(task)) setTaskToShow(task as ITask);
     }
-  }, [taskId, getById, navLocation.state?.isFromDB]);
+  }, [taskId]);
 
   const navToEdit = () => {
     navigate("/add-task", {
@@ -47,8 +45,19 @@ const DisplayTaskPage = () => {
   const deleteTask = () => {
     if (taskToShow) {
       if (navLocation.state?.isFromDB) {
-        TaskService.deleteTask(taskToShow.id);
-        navigate(-1);
+        TaskService.deleteTask(taskToShow.id)
+          .then((deleted) => {
+            if (deleted) {
+              navigate(-1);
+            } else {
+              //TODO: add alert error message
+              console.log("failed to delete task");
+            }
+          })
+          .catch(() => {
+            //TODO: add alert error message
+            console.log("failed to delete task");
+          });
       } else {
         removeItem(taskToShow.id);
         navigate(-1);
@@ -78,20 +87,22 @@ const DisplayTaskPage = () => {
               variant="standard"
               sx={textFieldStyle}
             />
-            <TextField
-              value={taskToShow.dueDate.toLocaleDateString()}
-              disabled={true}
-              label="Due date"
-              variant="standard"
-              sx={textFieldStyle}
-            />
-            <TextField
-              value={taskToShow.dueDate.toLocaleTimeString()}
-              disabled={true}
-              label="Due time"
-              variant="standard"
-              sx={textFieldStyle}
-            />
+            <div className="dateRowContainer">
+              <TextField
+                value={taskToShow.dueDate.toLocaleDateString()}
+                disabled={true}
+                label="Due date"
+                variant="standard"
+                sx={textFieldStyle}
+              />
+              <TextField
+                value={taskToShow.dueDate.toLocaleTimeString()}
+                disabled={true}
+                label="Due time"
+                variant="standard"
+                sx={textFieldStyle}
+              />
+            </div>
             <TextField
               value={
                 taskToShow.description === "" ? " " : taskToShow.description
@@ -104,12 +115,29 @@ const DisplayTaskPage = () => {
             />
             <TextField
               value={PriorityLabels[taskToShow.priority as Priority]}
-              // value={ PriorityLabels[taskToShow.priority]}
               disabled={true}
               label="Priority"
               variant="standard"
               sx={textFieldStyle}
             />
+            {navLocation.state?.isFromDB && (
+              <div className="dateRowContainer">
+                <TextField
+                  value={taskToShow.assignment?.toLocaleDateString()}
+                  disabled={true}
+                  label="Assignment date"
+                  variant="standard"
+                  sx={textFieldStyle}
+                />
+                <TextField
+                  value={taskToShow.assignment?.toLocaleTimeString()}
+                  disabled={true}
+                  label="Assignment time"
+                  variant="standard"
+                  sx={textFieldStyle}
+                />
+              </div>
+            )}
             <Tag
               width="2.8rem"
               label={taskToShow.tag?.name}

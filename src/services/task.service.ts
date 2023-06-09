@@ -81,7 +81,12 @@ export class TaskService {
     const url = `${taskPrefix}/delete/${taskId}`;
     return AxiosInstance.put(url)
       .then((res) => {
-        console.log(res.data);
+        if (res.data) {
+          console.log("task deleted successfully");
+          return true;
+        } else {
+          return false;
+        }
       })
       .catch((err) => {
         console.log(err);

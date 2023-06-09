@@ -24,19 +24,15 @@ const DisplayEventPage = () => {
   const eventId: number = navLocation.state?.eventId;
 
   useEffect(() => {
-    if (!eventId) {
-      //TODO: display error message
-      console.log("no event id");
+    console.log(navLocation.state);
+    setToolbar("Event Details", true);
+    if (navLocation.state?.isFromDB) {
+      EventService.getEventById(eventId).then((event) => {
+        setEventToShow(event as IEvent);
+      });
     } else {
-      setToolbar("Event Details", true);
-      if (navLocation.state?.isFromDB) {
-        EventService.getEventById(eventId).then((event) => {
-          setEventToShow(event as IEvent);
-        });
-      } else {
-        const event = getById(eventId);
-        if (instanceOfEvent(event)) setEventToShow(event as IEvent);
-      }
+      const event = getById(eventId);
+      if (event && instanceOfEvent(event)) setEventToShow(event as IEvent);
     }
   }, []);
 
@@ -78,7 +74,7 @@ const DisplayEventPage = () => {
               variant="standard"
               sx={textFieldStyle}
             />
-            <div className="eventDateRowContainer">
+            <div className="dateRowContainer">
               <TextField
                 value={eventToShow.startTime.toLocaleDateString()}
                 disabled={true}
@@ -87,18 +83,18 @@ const DisplayEventPage = () => {
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.endTime.toLocaleDateString()}
+                value={eventToShow.startTime.toLocaleTimeString()}
                 disabled={true}
-                label="End date"
+                label="Start time"
                 variant="standard"
                 sx={textFieldStyle}
               />
             </div>
-            <div className="eventDateRowContainer">
+            <div className="dateRowContainer">
               <TextField
-                value={eventToShow.startTime.toLocaleTimeString()}
+                value={eventToShow.endTime.toLocaleDateString()}
                 disabled={true}
-                label="Start time"
+                label="End date"
                 variant="standard"
                 sx={textFieldStyle}
               />

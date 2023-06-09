@@ -39,10 +39,16 @@ export class EventService {
     const url = `${eventPrefix}/delete/${eventId}`;
     return AxiosInstance.put(url)
       .then((res) => {
-        console.log(res.data);
+        if (res.data) {
+          console.log("event deleted successfully");
+          return true;
+        } else {
+          return false;
+        }
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 }
