@@ -4,7 +4,7 @@ import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, eventFields } from "./AddEventForm";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DEFAULT_TAG } from "../../utils/constants";
+import { DEFAULT_TAG, EditScreensState } from "../../utils/constants";
 import moment from "moment";
 import Tag from "../../components/Tag/Tag";
 import { TagService } from "../../services/tag.service";
@@ -14,6 +14,10 @@ import { EventService } from "../../services/event.service";
 import { validateEventInputs } from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
+import { ScheduleService } from "../../services/schedule.service";
+
+const fieldsToDisplayAlgoPopup = ["startTime", "endTime"];
 
 const AddEventPage = () => {
   const location = useLocation();
@@ -35,6 +39,20 @@ const AddEventPage = () => {
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
   const { setAlert } = useAlert();
+  const [algoPopupOpen, setAlgoPopupOpen] = useState(false);
+  const [newEventState, setNewEventState] = useState<IEvent>();
+
+  const getScreenState = () => {
+    if (eventToUpdate === undefined) {
+      return EditScreensState.ADD;
+    }
+    if (location.state?.isFromDB) {
+      return EditScreensState.EDIT;
+    }
+    return EditScreensState.EDIT_LOCAL;
+  };
+
+  const screenState = getScreenState();
 
   useEffect(() => {
     setInputsValues(initialValues);
@@ -78,8 +96,6 @@ const AddEventPage = () => {
       " " +
       moment(inputValues.endTime).format("HH:00:00");
 
-    //TODO: add a function that contains all validations instead of this if and returns a suitable error message
-    // if (startDateTime < endDateTime) {
     const newEvent: IEvent = {
       id: eventToUpdate ? eventToUpdate.id : 0,
       title: inputValues.title,
@@ -90,6 +106,8 @@ const AddEventPage = () => {
       description: inputValues.description,
     };
 
+    setNewEventState(newEvent);
+
     // Validate inputs
     const alertMessage = validateEventInputs(newEvent);
     if (alertMessage) {
@@ -97,14 +115,48 @@ const AddEventPage = () => {
       return;
     }
 
-    if (eventToUpdate === undefined) {
+    // Save event
+    switch (screenState) {
       // add new event
-      addItem(newEvent);
-      setInputsValues(initialValues);
-      navigate("/new-tasks");
-    } else if (location.state?.isFromDB) {
+      case EditScreensState.ADD:
+        addItem(newEvent);
+        setInputsValues(initialValues);
+        navigate("/new-tasks");
+        break;
+
       // update event on DB
-      EventService.updateEvent(newEvent)
+      case EditScreensState.EDIT:
+        if (displayAlgoPopup(newEvent)) {
+          setAlgoPopupOpen(true);
+        } else {
+          updateEventOnDB(newEvent);
+        }
+        break;
+
+      // update local event
+      case EditScreensState.EDIT_LOCAL:
+        updateItem(newEvent);
+        navigate(-1);
+        break;
+    }
+  };
+
+  const displayAlgoPopup = (newEvent: IEvent) => {
+    let changedFieldKey;
+    if (newEvent) {
+      changedFieldKey = fieldsToDisplayAlgoPopup.find(
+        (fieldKey: string) =>
+          newEvent[fieldKey as keyof IEvent]?.toString() !==
+          eventToUpdate[fieldKey as keyof IEvent]?.toString()
+      );
+    }
+
+    return changedFieldKey !== undefined;
+  };
+
+  const updateEventOnDB = async (newEvent: IEvent) => {
+    if (newEvent) {
+      return await EventService.updateEvent(newEvent)
         .then((updatedEvent) => {
           console.log(updatedEvent);
           if (updatedEvent) {
@@ -116,10 +168,20 @@ const AddEventPage = () => {
         .catch(() => {
           setAlert("error", "failed to save event");
         });
-    } else {
-      // update local event
-      updateItem(newEvent);
-      navigate(-1);
+    }
+  };
+
+  const generateSchedule = () => {
+    if (newEventState) {
+      ScheduleService.generateSchedule([], [newEventState])
+        .then(() => {
+          console.log("Items saved successfully");
+          navigate(-1);
+        })
+        .catch((error) => {
+          console.log(error);
+          //TODO: add error message to user
+        });
     }
   };
 
@@ -187,6 +249,13 @@ const AddEventPage = () => {
           </button>
         </div>
       </form>
+
+      <AlgoMessagePopup
+        open={algoPopupOpen}
+        onClose={() => setAlgoPopupOpen(false)}
+        primaryAction={generateSchedule}
+        secondaryAction={() => newEventState && updateEventOnDB(newEventState)}
+      />
     </div>
   );
 };

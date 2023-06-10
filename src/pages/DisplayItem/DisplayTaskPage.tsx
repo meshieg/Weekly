@@ -78,13 +78,21 @@ const DisplayTaskPage = () => {
               label="Title"
               variant="standard"
               sx={textFieldStyle}
-              inputProps={{ style: { color: "black" } }}
+              // inputProps={{ style: { color: "black" } }}
             />
             <TextField
               value={taskToShow.location === "" ? " " : taskToShow.location}
               disabled={true}
               label="Location"
               variant="standard"
+              sx={textFieldStyle}
+            />
+            <TextField
+              value={taskToShow.estTime}
+              disabled={true}
+              label="Estimated time"
+              variant="standard"
+              type="number"
               sx={textFieldStyle}
             />
             <div className="dateRowContainer">
@@ -123,14 +131,22 @@ const DisplayTaskPage = () => {
             {navLocation.state?.isFromDB && (
               <div className="dateRowContainer">
                 <TextField
-                  value={taskToShow.assignment?.toLocaleDateString()}
+                  value={
+                    taskToShow.assignment
+                      ? taskToShow.assignment?.toLocaleDateString()
+                      : " "
+                  }
                   disabled={true}
                   label="Assignment date"
                   variant="standard"
                   sx={textFieldStyle}
                 />
                 <TextField
-                  value={taskToShow.assignment?.toLocaleTimeString()}
+                  value={
+                    taskToShow.assignment
+                      ? taskToShow.assignment?.toLocaleTimeString()
+                      : " "
+                  }
                   disabled={true}
                   label="Assignment time"
                   variant="standard"
