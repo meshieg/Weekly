@@ -14,7 +14,7 @@ const AddTagPopup = (props: IAddTagProps) => {
   const [tagName, setTagName] = useState("");
 
   const onSaveTag = () => {
-    console.log(TagService.addTag({ name: tagName, color: tagColor } as ITag));
+    TagService.addTag({ name: tagName, color: tagColor } as ITag);
     props.onCancel();
   };
   return (

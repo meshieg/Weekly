@@ -23,10 +23,9 @@ export class TaskService {
 
   static updateTask = async (updatedTask: ITask): Promise<ITask | void> => {
     const url = `${taskPrefix}/${updatedTask.id}`;
-    return AxiosInstance
-      .put(url, {
-        task: updatedTask,
-      })
+    return AxiosInstance.put(url, {
+      task: updatedTask,
+    })
       .then((res) => {
         return {
           ...res.data,
@@ -43,32 +42,31 @@ export class TaskService {
   static getAllTasks = async (): Promise<ITask[]> => {
     const url = `${taskPrefix}/all`;
     return await AxiosInstance.get(url)
-      .then(res => {
-        console.log(res.data)
+      .then((res) => {
+        console.log(res.data);
         return res.data.map((task: ITask) => {
           return {
             ...task,
             dueDate: new Date(task.dueDate),
-            assignment: task.assignment && new Date(task.assignment)
+            assignment: task.assignment && new Date(task.assignment),
           } as ITask;
-        })
+        });
       })
       .catch((err) => {
         console.log(err);
         throw err;
       });
-  }
+  };
 
   static setDone = async (taskId: number): Promise<ITask | void> => {
-    const url = `${taskPrefix}/setdone/${taskId}`;;
-    return AxiosInstance
-      .put(url)
+    const url = `${taskPrefix}/setdone/${taskId}`;
+    return AxiosInstance.put(url)
       .then((res) => {
         console.log("task updated successfully");
         return {
           ...res.data,
           dueDate: new Date(res.data.dueDate),
-          assignment: res.data.assignment && new Date(res.data.assignment)
+          assignment: res.data.assignment && new Date(res.data.assignment),
         } as ITask;
       })
       .catch((err) => {
@@ -82,7 +80,6 @@ export class TaskService {
     return AxiosInstance.put(url)
       .then((res) => {
         if (res.data) {
-          console.log("task deleted successfully");
           return true;
         } else {
           return false;

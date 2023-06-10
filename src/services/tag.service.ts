@@ -26,4 +26,21 @@ export class TagService {
         throw err;
       });
   };
+
+  static deleteTag = async (tagId: number) => {
+    const url = `${tagPrefix}/delete/${tagId}`;
+    return AxiosInstance.put(url)
+      .then((res) => {
+        if (res.data) {
+          console.log("tag deleted successfully");
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
 }
