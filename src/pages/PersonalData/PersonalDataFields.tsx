@@ -1,39 +1,35 @@
 import { fieldsTypes } from "../../utils/constants";
-import { IInputs, inputFields } from "./RegisterFields";
-
-// type inputFields = {
-//   [id in keyof IInputs]: IField;
-// };
+import { inputFields } from "./RegisterFields";
 
 export const personalDataFields: inputFields = {
   firstName: {
     label: "First name",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "First name",
+    disabled: false
   },
   lastName: {
     label: "Last name",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "Last name",
+    disabled: false
   },
   email: {
     label: "Email",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "Email",
+    disabled: true
   },
   beginDayHour: {
     label: "I start my day at...",
     type: fieldsTypes.TimePicker,
     required: true,
-    placeholder: "I start my day at...",
+    disabled: false
   },
   endDayHour: {
     label: "I end my day at...",
     type: fieldsTypes.TimePicker,
     required: true,
-    placeholder: "I end my day at...",
+    disabled: false
   },
 };

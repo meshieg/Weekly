@@ -2,7 +2,7 @@ import "./PersonalData.css";
 import { useState, useEffect } from "react";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { personalDataFields } from "./PersonalDataFields";
-import { IInputs, inputFields, registerFields } from "./RegisterFields";
+import { IInputs, registerFields } from "./RegisterFields";
 import { useNavigate } from "react-router";
 import { UserService } from "../../services/user.service";
 import { IUser } from "../../utils/types";
@@ -18,13 +18,6 @@ import useToolbar from "../../customHooks/useToolbar";
 import { ModeEditOutlineOutlined as EditIcon } from '@mui/icons-material';
 
 const PersonalData = () => {
-  const navigate = useNavigate();
-  const { setToken } = useToken();
-  const { setAlert } = useAlert();
-  const { setToolbar } = useToolbar();
-  const { setUser, user } = useUser();
-  const [ currInputFields, setInputFields ] = useState<inputFields>(registerFields);
-
   const initialValues: IInputs = {
     firstName: "",
     lastName: "",
@@ -34,14 +27,21 @@ const PersonalData = () => {
     beginDayHour: new Date(0, 0, 0, 0, 0, 0),
     endDayHour: new Date(0, 0, 0, 0, 0, 0),
   };
-  const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+
+  const navigate = useNavigate();
+  const { setToken } = useToken();
+  const { setAlert } = useAlert();
+  const { setToolbar } = useToolbar();
+  const { setUser, user } = useUser();
+  const currInputFields = user ? personalDataFields : registerFields 
+  const [ editMode, setEditMode ] = useState<boolean>(false);
+  const [ inputValues, setInputsValues ] = useState<IInputs>(initialValues);
+  const [ displaySchedulePopup, setDisplayPopup ] = useState<boolean>(false);
 
   useEffect(() => {
-    if(user !== undefined) {
-      console.log(user.beginDayHour.type);
+    if(user) {
       setInputsValues(user);
       setToolbar("Personal Data", true);
-      setInputFields(personalDataFields);
     }
   }, [user]);
 
@@ -59,15 +59,23 @@ const PersonalData = () => {
     event.preventDefault();
 
     if(user) {
-      console.log("test");
+      if(editMode) {                // Save the updated user
+        handleUpdateUser();
+      } else {                      // Change to 'edit mode'
+        setEditMode(true);
+      }
     } else {
       handleRegister();
     }
   }
 
-  const handleRegister = async () => {
-    // event.preventDefault();
+  const onCancel = (event: any) => {
+    event.preventDefault();
+    setEditMode(false);
+    setInputsValues(user);
+  }
 
+  const handleRegister = async () => {
     const newUser: IUser = {
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
@@ -91,15 +99,6 @@ const PersonalData = () => {
       .then((data) => {
         setToken(data?.token);
 
-        const currUser = {
-          id: data.user.id,
-          firstName: newUser.firstName,
-          lasrName: newUser.lastName,
-          email: newUser.email,
-          beginDayHour: newUser.beginDayHour,
-          endDayHour: newUser.endDayHour,
-        };
-
         setUser(data?.user);
         navigate("/");
       })
@@ -110,12 +109,51 @@ const PersonalData = () => {
       });
   };
 
+  const handleUpdateUser = async () => {
+    const updatedUser = {
+      id: user.id,
+      firstName: inputValues.firstName,
+      lastName: inputValues.lastName,
+      email: inputValues.email,
+      beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
+      endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
+    }
+
+    if (checkChangedFields(updatedUser)) {
+      await UserService.updateUser(updatedUser)
+      .then(data => {
+        setAlert("success", "Changes were saved successfully!");
+        setUser(updatedUser);
+        if(displaySchedulePopup) {
+          console.log("reschedule");
+        }
+
+        setEditMode(false);
+      })
+      .catch(error => {
+        if (error?.response?.data?.errors[0]?.message) {
+          setAlert("error", error?.response.data.errors[0].message);
+        }
+      });
+    }
+  }
+
+  const checkChangedFields = (updatedUser: IUser) => {
+    const timeChanged = ( user.beginDayHour !== updatedUser.beginDayHour ||
+                          user.endDayHour !== updatedUser.endDayHour );
+    const nameChanged = ( user.firstName !== updatedUser.firstName ||
+                          user.lastName !== updatedUser.lastName );
+
+    setDisplayPopup(timeChanged);
+    return nameChanged || timeChanged;
+  }
+
   return (
     <div className="reg_pageContainer">
       <div className="reg_image">
         <img src={user ? userImg : weeklyLogo} alt="logo" />
       </div>
-      <form className="reg_form" onSubmit={onSubmit}>
+      <form className="reg_form" onSubmit={onSubmit} onReset={onCancel}>
         <div className="reg_form_fields">
           {Object.keys(currInputFields).map((field) => {
             const fieldKey = field as keyof IInputs;
@@ -130,22 +168,32 @@ const PersonalData = () => {
                 value={inputValues[fieldKey]}
                 onChange={setValues}
                 required={true}
+                disabled={(user && !editMode) || currInputFields[fieldKey]?.disabled}
               />
             );
           })}
         </div>
-        {user ?
-          <button className="btn btn__primary reg_form_btn" type="submit">
-            <EditIcon />
-            Edit
-            </button>
-          :
+        {!user ?
           <button className="btn btn__primary reg_form_btn" type="submit">
             Lets start planning!
           </button>
+        : editMode ?
+          <div className="buttons_panel">
+            <button className="btn btn__primary action-btn" type="submit">
+              Save
+            </button>
+            <button className="btn btn__secondary action-btn" type="reset">
+              Cancel
+            </button>
+          </div> 
+        :
+          <button className="btn btn__primary reg_form_btn" type="submit">
+            <EditIcon />
+            Edit
+          </button>
         }
-        <AlertPopup />
-      </form>
+      </form>  
+      <AlertPopup />
     </div>
   );
 };

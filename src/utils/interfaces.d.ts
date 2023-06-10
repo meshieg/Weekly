@@ -9,6 +9,7 @@ interface IField {
   required?: boolean = false;
   placeholder?: string;
   multiline?: boolean;
+  disabled?: boolean;
 }
 
 interface ITag {

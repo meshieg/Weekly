@@ -25,21 +25,10 @@ export class UserService {
             })
     }
 
-    // static getCurrentUser = async (): Promise<IInputs> => {
-    //     // const url = userPrefix;
-    //     // return await axios.get(url)
-    //     //     .then(res => {
-    //     //         return res.data
-    //     //     })
-
-    //     const user: IInputs = {
-    //         // id: 1,
-    //         firstName: "Omer",
-    //         lastName: "Damari",
-    //         email: "email@gmail.com",
-    //         beginDayHour: new Date(0, 0, 0, 0),
-    //         endDayHour: new Date(0, 0, 0, 0)
-    //     };
-    //     return user;
-    // }
+    static updateUser = async (user: IUser): Promise<IInputs> => {
+        return await AxiosInstance.put(userPrefix, {user})
+            .then(res => {
+                return res.data;
+            })
+    }
 }
