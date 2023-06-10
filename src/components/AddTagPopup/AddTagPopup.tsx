@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Colorful from "@uiw/react-color-colorful";
 import { Dialog, TextField } from "@mui/material";
 import "./AddTagPopup.css";
@@ -7,14 +7,33 @@ import { TagService } from "../../services/tag.service";
 interface IAddTagProps {
   open: boolean;
   onCancel: () => void;
+  tag?: ITag;
 }
 
 const AddTagPopup = (props: IAddTagProps) => {
   const [tagColor, setTagColor] = useState("#8A64D6");
   const [tagName, setTagName] = useState("");
 
+  useEffect(() => {
+    if (props.tag) {
+      setTagColor(props.tag.color);
+      setTagName(props.tag.name);
+    } else {
+      setTagColor("#8A64D6");
+      setTagName("");
+    }
+  }, [props.open]);
+
   const onSaveTag = () => {
-    TagService.addTag({ name: tagName, color: tagColor } as ITag);
+    if (props.tag) {
+      TagService.updateTag({
+        id: props.tag.id,
+        name: tagName,
+        color: tagColor,
+      } as ITag);
+    } else {
+      TagService.addTag({ name: tagName, color: tagColor } as ITag);
+    }
     props.onCancel();
   };
   return (

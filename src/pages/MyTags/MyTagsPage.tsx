@@ -11,6 +11,7 @@ const MyTagsPage = () => {
   const { setToolbar } = useToolbar();
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const [openAddEditPopup, setOpenAddEditPopup] = useState<boolean>(false);
+  const [tagToUpdate, setTagToUpdate] = useState<ITag | undefined>();
 
   useEffect(() => {
     setToolbar("My Tags", true);
@@ -26,13 +27,22 @@ const MyTagsPage = () => {
 
   const MyTagsList = tagsList.map((tag) => {
     return (
-      <div
-        key={tag.id}
-        className="tag__row"
-        // onClick={() => props.onTagClick?.(tag)}
-      >
-        <Tag width="1.5rem" color={tag.color} />
-        <span className="tag__title">{tag.name}</span>
+      <div key={tag.id} className="tag__row">
+        <Tag
+          width="1.5rem"
+          color={tag.color}
+          onClick={() => {
+            onTagClick(tag);
+          }}
+        />
+        <span
+          className="tag__title"
+          onClick={() => {
+            onTagClick(tag);
+          }}
+        >
+          {tag.name}
+        </span>
         <IconButton
           onClick={() => {
             onTagDelete(tag.id);
@@ -44,7 +54,10 @@ const MyTagsPage = () => {
     );
   });
 
-  //   const onTagClick = ()=>{}
+  const onTagClick = (tag: ITag) => {
+    setTagToUpdate(tag);
+    setOpenAddEditPopup(true);
+  };
   const onTagDelete = (tagId: number) => {
     TagService.deleteTag(tagId)
       .then((deleted) => {
@@ -63,17 +76,28 @@ const MyTagsPage = () => {
 
   const onClosePopup = () => {
     setOpenAddEditPopup(false);
+    setTagToUpdate(undefined);
   };
 
   return (
     <div>
       {" "}
       {MyTagsList}
-      <div className="tag__row" onClick={() => setOpenAddEditPopup(true)}>
+      <div
+        className="tag__row"
+        onClick={() => {
+          setTagToUpdate(undefined);
+          setOpenAddEditPopup(true);
+        }}
+      >
         <img src={add_tag} width="30px" height="30px" />
         <span className="tag__title">Add tag</span>
       </div>
-      <AddTagPopup open={openAddEditPopup} onCancel={onClosePopup} />
+      <AddTagPopup
+        open={openAddEditPopup}
+        onCancel={onClosePopup}
+        tag={tagToUpdate}
+      />
     </div>
   );
 };

@@ -43,4 +43,20 @@ export class TagService {
         throw err;
       });
   };
+
+  static updateTag = async (updatedTag: ITag): Promise<ITag | void> => {
+    const url = `${tagPrefix}/update/${updatedTag.id}`;
+    return AxiosInstance.put(url, {
+      tag: updatedTag,
+    })
+      .then((res) => {
+        return {
+          ...res.data,
+        } as ITag;
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
 }
