@@ -16,37 +16,52 @@ import userImg from "../../assets/images/user_logo.svg";
 import weeklyLogo from "../../assets/images/weekly_logo.svg";
 import useToolbar from "../../customHooks/useToolbar";
 import { ModeEditOutlineOutlined as EditIcon } from '@mui/icons-material';
+import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
+import { ScheduleService } from "../../services/schedule.service";
+import { EditScreensState } from "../../utils/constants";
+
+// const fieldsToDisplayAlgoPopup = [
+//   "beginDayHour",
+//   "endDayHour"
+// ];
+
+const initialValues: IInputs = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  beginDayHour: new Date(0, 0, 0, 0, 0, 0),
+  endDayHour: new Date(0, 0, 0, 0, 0, 0),
+};
 
 const PersonalData = () => {
-  const initialValues: IInputs = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    beginDayHour: new Date(0, 0, 0, 0, 0, 0),
-    endDayHour: new Date(0, 0, 0, 0, 0, 0),
-  };
-
   const navigate = useNavigate();
   const { setToken } = useToken();
   const { setAlert } = useAlert();
   const { setToolbar } = useToolbar();
   const { setUser, user } = useUser();
-  const currInputFields = user ? personalDataFields : registerFields 
-  const [ editMode, setEditMode ] = useState<boolean>(false);
+  const currInputFields = user ? personalDataFields : registerFields;
   const [ inputValues, setInputsValues ] = useState<IInputs>(initialValues);
   const [ displaySchedulePopup, setDisplayPopup ] = useState<boolean>(false);
+  const [ screenState, setScreenState ] = useState<number>(EditScreensState.ADD);
 
   useEffect(() => {
     if(user) {
-      setInputsValues(user);
+      setScreenState(EditScreensState.EDIT_LOCAL);
+      setInputsValues({
+        ...user,
+        beginDayHour: new Date(0, 0, 0, user.beginDayHour),
+        endDayHour: new Date(0, 0, 0, user.endDayHour)
+       });
+
       setToolbar("Personal Data", true);
     }
   }, [user]);
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
+
     setInputsValues((prev) => {
       return {
         ...prev,
@@ -58,21 +73,32 @@ const PersonalData = () => {
   const onSubmit = (event: any) => {
     event.preventDefault();
 
-    if(user) {
-      if(editMode) {                // Save the updated user
+    switch(screenState) {
+      // Register
+      case EditScreensState.ADD:
+        handleRegister();
+        break;
+
+      // Save the updated user
+      case EditScreensState.EDIT:
         handleUpdateUser();
-      } else {                      // Change to 'edit mode'
-        setEditMode(true);
-      }
-    } else {
-      handleRegister();
+        break;
+
+      // Change to 'edit mode'
+      case EditScreensState.EDIT_LOCAL:
+        setScreenState(EditScreensState.EDIT);
+        break;
     }
   }
 
   const onCancel = (event: any) => {
     event.preventDefault();
-    setEditMode(false);
-    setInputsValues(user);
+    setScreenState(EditScreensState.EDIT_LOCAL);
+    setInputsValues({
+      ...user,
+      beginDayHour: new Date(0, 0, 0, user.beginDayHour),
+      endDayHour: new Date(0, 0, 0, user.endDayHour)
+     });
   }
 
   const handleRegister = async () => {
@@ -122,19 +148,21 @@ const PersonalData = () => {
     if (checkChangedFields(updatedUser)) {
       await UserService.updateUser(updatedUser)
       .then(data => {
-        setAlert("success", "Changes were saved successfully!");
+        
         setUser(updatedUser);
         if(displaySchedulePopup) {
           console.log("reschedule");
+          generateSchedule();
         }
-
-        setEditMode(false);
+        setAlert("success", "Changes were saved successfully!");
       })
       .catch(error => {
         if (error?.response?.data?.errors[0]?.message) {
           setAlert("error", error?.response.data.errors[0].message);
         }
       });
+    } else {
+      setScreenState(EditScreensState.EDIT_LOCAL);
     }
   }
 
@@ -147,6 +175,20 @@ const PersonalData = () => {
     setDisplayPopup(timeChanged);
     return nameChanged || timeChanged;
   }
+
+  // TODO: bug
+  const generateSchedule = async () => {
+    await ScheduleService.generateSchedule([])
+      .then(res => {
+        setAlert("success", "Schedule generated successfully");
+        setDisplayPopup(false);
+        setScreenState(EditScreensState.EDIT_LOCAL);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlert("error", "Error while generating the schedule. Try again later");
+      });
+  };
 
   return (
     <div className="reg_pageContainer">
@@ -168,16 +210,16 @@ const PersonalData = () => {
                 value={inputValues[fieldKey]}
                 onChange={setValues}
                 required={true}
-                disabled={(user && !editMode) || currInputFields[fieldKey]?.disabled}
+                disabled={screenState === EditScreensState.EDIT_LOCAL || currInputFields[fieldKey]?.disabled}
               />
             );
           })}
         </div>
-        {!user ?
+        { screenState === EditScreensState.ADD ?
           <button className="btn btn__primary reg_form_btn" type="submit">
             Lets start planning!
           </button>
-        : editMode ?
+        : screenState === EditScreensState.EDIT ?
           <div className="buttons_panel">
             <button className="btn btn__primary action-btn" type="submit">
               Save
@@ -194,6 +236,12 @@ const PersonalData = () => {
         }
       </form>  
       <AlertPopup />
+      <AlgoMessagePopup
+        open={displaySchedulePopup}
+        onClose={() => setDisplayPopup(false)}
+        primaryAction={generateSchedule}
+        secondaryAction={() => setDisplayPopup(false)}
+      />
     </div>
   );
 };

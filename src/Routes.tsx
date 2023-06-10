@@ -4,7 +4,6 @@ import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
-import Register from "./pages/Register/Register";
 import NewItemsList from "./pages/NewItemsList/NewItemsList";
 import DailySchedule from "./pages/DailySchedule/DailySchedule";
 import MyProfile from "./pages/MyProfile/MyProfile";
@@ -77,7 +76,6 @@ export const routes: RouteType[] = [
   },
   {
     path: "/register",
-    // element: <Register />,
     element: <PersonalData />,
     showToolbar: false,
     showFab: false,

@@ -95,9 +95,9 @@ const AddTaskPage = () => {
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    let assignemtDateAndTime: string | undefined = undefined;
+    let assignmentDateAndTime: string | undefined = undefined;
     if (inputValues.assignmentDate && initialValues.assignmentTime) {
-      assignemtDateAndTime =
+      assignmentDateAndTime =
         moment(inputValues.assignmentDate).format("YYYY-MM-DD") +
         " " +
         moment(inputValues.assignmentTime).format("HH:00:00");
@@ -112,8 +112,8 @@ const AddTaskPage = () => {
       description: inputValues.description,
       priority: inputValues.priority,
       tag: tag.id !== 0 ? tag : undefined,
-      assignment: assignemtDateAndTime
-        ? new Date(assignemtDateAndTime)
+      assignment: assignmentDateAndTime
+        ? new Date(assignmentDateAndTime)
         : undefined,
     };
 
