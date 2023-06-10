@@ -2,35 +2,49 @@ import { useEffect, useState } from "react";
 import "./AddTaskPage.css";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
 import { IInputs, taskFields } from "./AddTaskForm";
-import { useNavigate } from "react-router-dom";
+import { TaskService } from "../../services/task.service";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import moment from "moment";
 import Tag from "../../components/Tag/Tag";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import { TagService } from "../../services/tag.service";
-import { DEFAULT_TAG } from "../../utils/constants";
+import { DEFAULT_TAG, Priority } from "../../utils/constants";
 import useToolbar from "../../customHooks/useToolbar";
+import { validateTaskInputs } from "../../helpers/functions";
+import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const AddTaskPage = () => {
+  const location = useLocation();
+  const taskToUpdate: ITask = location.state?.task;
   const initialValues: IInputs = {
-    title: "",
-    location: "",
-    estTime: 1,
-    dueDate: new Date(),
-    dueTime: new Date(0, 0, 0, 0, 0, 0),
-    description: "",
-    priority: 1,
+    title: taskToUpdate?.title ?? "",
+    location: taskToUpdate?.location ?? "",
+    estTime: taskToUpdate?.estTime ?? 1,
+    dueDate: taskToUpdate?.dueDate ?? new Date(),
+    dueTime: taskToUpdate?.dueDate ?? new Date(0, 0, 0, 0, 0, 0),
+    description: taskToUpdate?.description ?? "",
+    priority: taskToUpdate?.priority ?? Priority.LOW,
+    assignmentDate: taskToUpdate?.assignment ?? undefined,
+    assignmentTime: taskToUpdate?.assignment ?? undefined,
   };
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
-  const [tag, setTag] = useState<ITag>(DEFAULT_TAG);
+  const [tag, setTag] = useState<ITag>(taskToUpdate?.tag || DEFAULT_TAG);
   const navigate = useNavigate();
-  const { addItem } = useNewItemsContext();
+  const { addItem, updateItem } = useNewItemsContext();
   const [tagsPopupOpen, setTagsPopupOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
+  const { setAlert } = useAlert();
+  // const [displayAlgoPopup, setDisplayAlgoPopup] = useState(false);
 
   useEffect(() => {
-    setToolbar("Add Task", true);
+    setInputsValues(initialValues);
+    setToolbar(
+      location.state?.task === undefined ? "Add Task" : "Edit Task",
+      true
+    );
 
     TagService.getAllTagsByUser()
       .then((tags: ITag[]) => {
@@ -54,30 +68,63 @@ const AddTaskPage = () => {
   const saveTask = (event: any) => {
     event.preventDefault();
 
-    const dateAndTime: string =
+    const dueDateAndTime: string =
       moment(inputValues.dueDate).format("YYYY-MM-DD") +
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    console.log(inputValues.dueTime);
-    console.log(dateAndTime);
+    let assignemtDateAndTime: string | undefined = undefined;
+    if (inputValues.assignmentDate && initialValues.assignmentTime) {
+      assignemtDateAndTime =
+        moment(inputValues.assignmentDate).format("YYYY-MM-DD") +
+        " " +
+        moment(inputValues.assignmentTime).format("HH:00:00");
+    }
 
     const newTask: ITask = {
-      id: 0,
+      id: taskToUpdate ? taskToUpdate?.id : 0,
       title: inputValues.title,
       location: inputValues.location,
       estTime: inputValues.estTime,
-      dueDate: new Date(dateAndTime),
+      dueDate: new Date(dueDateAndTime),
       description: inputValues.description,
       priority: inputValues.priority,
       tag: tag.id !== 0 ? tag : undefined,
+      assignment: assignemtDateAndTime
+        ? new Date(assignemtDateAndTime)
+        : undefined,
     };
 
-    console.log(newTask);
+    // Validate inputs
+    const alertMessage = validateTaskInputs(newTask);
+    if (alertMessage) {
+      setAlert("error", alertMessage);
+      return;
+    }
 
-    addItem(newTask);
-    setInputsValues(initialValues);
-    navigate("/new-tasks");
+    if (taskToUpdate === undefined) {
+      // add new task
+      addItem(newTask);
+      setInputsValues(initialValues);
+      navigate("/new-tasks");
+    } else if (location.state?.isFromDB) {
+      // update task on DB
+      TaskService.updateTask(newTask)
+        .then((updatedTask) => {
+          if (updatedTask) {
+            navigate(-1);
+          } else {
+            setAlert("error", "failed to save task");
+          }
+        })
+        .catch((err) => {
+          setAlert("error", "failed to save task");
+        });
+    } else {
+      // update local task
+      updateItem(newTask);
+      navigate(-1);
+    }
   };
 
   const cancelTask = (event: any) => {
@@ -96,11 +143,18 @@ const AddTaskPage = () => {
   };
 
   return (
-    <div className="pageContainer">
-      <form onSubmit={saveTask} onReset={cancelTask} className="add_task__form">
-        {/* <div className="add_task__form"> */}
+    <div className="add-task__pageContainer">
+      <form onSubmit={saveTask} onReset={cancelTask} className="add-task__form">
         {Object.keys(taskFields).map((field) => {
           const fieldKey = field as keyof IInputs;
+
+          // Display assignment field only in update task from DB
+          if (
+            (fieldKey === "assignmentDate" || fieldKey === "assignmentTime") &&
+            (!taskToUpdate || !location.state?.isFromDB)
+          ) {
+            return <></>;
+          }
 
           return (
             <SuperInputField
@@ -131,6 +185,8 @@ const AddTaskPage = () => {
           onTagClick={onSelectTag}
         />
 
+        <AlertPopup />
+
         {/* <div className="colorPickerContainer">
           <Colorful
             color={tag.color}
@@ -142,11 +198,11 @@ const AddTaskPage = () => {
           />
         </div> */}
 
-        <div className="add_task_buttons">
-          <button className="btn btn__primary" type="submit">
+        <div className="add-task_buttons">
+          <button className="add-task__btn btn btn__primary" type="submit">
             Save
           </button>
-          <button className="btn btn__secondary" type="reset">
+          <button className="add-task__btn btn btn__secondary" type="reset">
             Cancel
           </button>
         </div>

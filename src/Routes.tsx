@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
 import AddTaskPage from "./pages/AddTask/AddTaskPage";
-import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 import AddEventPage from "./pages/AddEvent/AddEventPage";
@@ -11,6 +10,8 @@ import DailySchedule from "./pages/DailySchedule/DailySchedule";
 import MyProfile from "./pages/MyProfile/MyProfile";
 import PersonalData from "./pages/PersonalData/PersonalData";
 import { UserState } from "./utils/constants";
+import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
+import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
 
 type RouteType = {
   path: string;
@@ -88,6 +89,22 @@ export const routes: RouteType[] = [
     showBottomToolbar: false,
     showToolbar: true,
     showFab: true,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
+    path: "/display-task",
+    element: <DisplayTaskPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
+    path: "/display-event",
+    element: <DisplayEventPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false,
     allowedUserState: UserState.SIGNED,
   },
   {

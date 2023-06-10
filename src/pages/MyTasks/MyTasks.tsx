@@ -4,6 +4,7 @@ import "./MyTasks.css";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
+import { useNavigate } from "react-router-dom";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
@@ -11,6 +12,7 @@ const MyTasks: React.FC = () => {
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
 
   const { setToolbar } = useToolbar();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setToolbar("My Tasks", false);
@@ -52,7 +54,15 @@ const MyTasks: React.FC = () => {
   }, [allTasks]);
 
   const onTaskClick = (id: number) => {
-    // TODO: navigate to task details screen
+    const item = allTasks.find((task) => task.id === id);
+    if (item !== undefined) {
+      navigate("/display-task", {
+        state: {
+          taskId: item.id,
+          isFromDB: true,
+        },
+      });
+    }
   };
 
   return (

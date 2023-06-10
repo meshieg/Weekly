@@ -9,10 +9,10 @@ const AlertPopup = () => {
       <Alert
         severity={alert.type}
         sx={{
-          position: "fixed",
+          position: "relative",
           zIndex: 10,
-          top: "5em",
-          width: "21.5em",
+          // top: "5em",
+          // width: "21.5em",
         }}
       >
         {alert.text}

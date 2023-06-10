@@ -9,7 +9,8 @@ export interface IInputs {
   dueTime: Date;
   description: string;
   priority: number;
-  // tag: ITag;
+  assignmentDate?: Date;
+  assignmentTime?: Date;
 }
 
 type inputFields = {
@@ -62,5 +63,15 @@ export const taskFields: inputFields = {
     ],
     required: true,
     placeholder: "Priority",
+  },
+  assignmentDate: {
+    label: "Assignment Date",
+    type: fieldsTypes.DatePicker,
+    placeholder: "Assignment Date",
+  },
+  assignmentTime: {
+    label: "Assignment Time",
+    type: fieldsTypes.TimePicker,
+    placeholder: "Assignment Time",
   },
 };

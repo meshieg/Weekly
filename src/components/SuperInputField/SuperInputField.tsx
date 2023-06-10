@@ -74,7 +74,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
   };
 
   useEffect(() => {
-    console.log("autocomplete", props.options, props.value);
+    // console.log("omplete", props.options, props.value);
   }, []);
 
   switch (props.type) {

@@ -66,7 +66,12 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
           </IconButton>
         )} */}
         {props.onDeleteClick && (
-          <IconButton onClick={() => props.onDeleteClick?.(props.id)}>
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              props.onDeleteClick?.(props.id);
+            }}
+          >
             <DeleteOutlinedIcon />
           </IconButton>
         )}
