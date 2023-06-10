@@ -11,7 +11,7 @@ interface IAlert {
   text: string;
 }
 
-const ALERT_TIME = 3000000;
+const ALERT_TIME = 3000;
 
 const initialState: IAlert = {
   type: undefined,
