@@ -21,7 +21,15 @@ const NewItemsList = () => {
   }, []);
 
   const scheduleItems = () => {
-    ScheduleService.generateSchedule(newTasks, newEvents)
+    // set the new items' id to 0 so it won't change existing items on DB
+    const taskToAdd = newTasks.map((task) => {
+      return { ...task, id: 0 };
+    });
+    const eventsToAdd = newEvents.map((event) => {
+      return { ...event, id: 0 };
+    });
+
+    ScheduleService.generateSchedule(taskToAdd, eventsToAdd)
       .then(() => {
         console.log("Items saved successfully");
         refreshItems();
