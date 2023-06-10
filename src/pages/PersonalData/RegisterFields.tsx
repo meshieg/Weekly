@@ -1,11 +1,20 @@
 import { fieldsTypes } from "../../utils/constants";
-import { IInputs, inputFields } from "./RegisterFields";
 
-// type inputFields = {
-//   [id in keyof IInputs]: IField;
-// };
+export interface IInputs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+  beginDayHour: Date;
+  endDayHour: Date;
+}
 
-export const personalDataFields: inputFields = {
+export type inputFields = {
+  [id in keyof IInputs]: IField;
+};
+
+export const registerFields: inputFields = {
   firstName: {
     label: "First name",
     type: fieldsTypes.TextField,
@@ -23,6 +32,18 @@ export const personalDataFields: inputFields = {
     type: fieldsTypes.TextField,
     required: true,
     placeholder: "Email",
+  },
+  password: {
+    label: "Password",
+    type: fieldsTypes.Password,
+    required: true,
+    placeholder: "Password",
+  },
+  confirmPassword: {
+    label: "Confirm password",
+    type: fieldsTypes.Password,
+    required: true,
+    placeholder: "Confirm password",
   },
   beginDayHour: {
     label: "I start my day at...",

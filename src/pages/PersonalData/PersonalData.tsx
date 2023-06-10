@@ -1,158 +1,150 @@
 import "./PersonalData.css";
+import { useState, useEffect } from "react";
 import SuperInputField from "../../components/SuperInputField/SuperInputField";
-import { IInputs, personalDataFields } from "./PersonalDataFields";
-import { useEffect, useState } from "react";
-import user from "../../assets/images/user.svg";
+import { personalDataFields } from "./PersonalDataFields";
+import { IInputs, inputFields, registerFields } from "./RegisterFields";
+import { useNavigate } from "react-router";
 import { UserService } from "../../services/user.service";
 import { IUser } from "../../utils/types";
+import useToken from "../../customHooks/useToken";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import useAlert from "../../customHooks/useAlert";
+import { validateUserInputs } from "../../helpers/functions";
+import moment from "moment";
 import useUser from "../../customHooks/useUser";
-
-// import useAlert from "../../customHooks/useAlert";
-// import AlertPopup from "../../components/AlertPopup/AlertPopup";
-// import { useNavigate } from "react-router";
-// import { UserService } from "../../services/user.service";
-// import { IUser } from "../../utils/types";
-// import useToken from "../../customHooks/useToken";
-
-// import { validateUserInputs } from "../../helpers/functions";
-// import moment from "moment";
-
-type ICurrUser = Omit<IUser, "confirmPassword">;
+import userImg from "../../assets/images/user_logo.svg";
+import weeklyLogo from "../../assets/images/weekly_logo.svg";
+import useToolbar from "../../customHooks/useToolbar";
+import { ModeEditOutlineOutlined as EditIcon } from '@mui/icons-material';
 
 const PersonalData = () => {
-//   const navigate = useNavigate();
-//   const { setToken } = useToken();
-//   const { setAlert } = useAlert();
+  const navigate = useNavigate();
+  const { setToken } = useToken();
+  const { setAlert } = useAlert();
+  const { setToolbar } = useToolbar();
+  const { setUser, user } = useUser();
+  const [ currInputFields, setInputFields ] = useState<inputFields>(registerFields);
 
-    const initialValues: IInputs = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        beginDayHour: new Date(0, 0, 0, 0, 0, 0),
-        endDayHour: new Date(0, 0, 0, 0, 0, 0),
+  const initialValues: IInputs = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    beginDayHour: new Date(0, 0, 0, 0, 0, 0),
+    endDayHour: new Date(0, 0, 0, 0, 0, 0),
+  };
+  const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+
+  useEffect(() => {
+    if(user !== undefined) {
+      console.log(user.beginDayHour.type);
+      setInputsValues(user);
+      setToolbar("Personal Data", true);
+      setInputFields(personalDataFields);
+    }
+  }, [user]);
+
+  const setValues = (objKey: string, newValue: any) => {
+    const key = objKey as keyof IInputs;
+    setInputsValues((prev) => {
+      return {
+        ...prev,
+        [key]: newValue,
       };
+    });
+  };
 
-    const [currUserData, setCurrUserData] = useState<IInputs>(initialValues);
-    const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
+  const onSubmit = (event: any) => {
+    event.preventDefault();
 
-    const setValues = (objKey: string, newValue: any) => {
-        const key = objKey as keyof IInputs;
-        setInputsValues((prev) => {
-          return {
-              ...prev,
-              [key]: newValue,
-          };
-        });
+    if(user) {
+      console.log("test");
+    } else {
+      handleRegister();
+    }
+  }
+
+  const handleRegister = async () => {
+    // event.preventDefault();
+
+    const newUser: IUser = {
+      firstName: inputValues.firstName,
+      lastName: inputValues.lastName,
+      email: inputValues.email,
+      password: inputValues.password,
+      beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
+      endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    useEffect(() => {
-        getCurrUser();
-    }, []);
+    const alertMessage = validateUserInputs({
+      ...newUser,
+      confirmPassword: inputValues.confirmPassword,
+    });
 
-    const getCurrUser = async () => {
-        await UserService.getCurrentUser()
-        .then((data) => {
-            // setToken(data?.token);
-            
-            setCurrUserData({
-                // id: data.id,
-                firstName: data.firstName ? data.firstName : initialValues.firstName,
-                lastName: data.lastName ? data.lastName : initialValues.lastName,
-                email: data.email,
-                password: data.password,
-                beginDayHour: data.beginDayHour ? data.beginDayHour : initialValues.beginDayHour,
-                endDayHour: data.endDayHour? data.endDayHour : initialValues.endDayHour,
-            });
-
-            // sessionStorage.setItem("user", JSON.stringify(currUser));
-            // navigate("/week");
-        })
-        .catch((err) => {
-            if (err?.response?.data?.errors[0]?.message) {
-                console.log(err?.response.data.errors[0].message);
-            }
-        });
+    if (alertMessage) {
+      setAlert("error", alertMessage);
+      return;
     }
 
-//   const handleRegister = async (event: any) => {
-//     event.preventDefault();
-//     const newUser: IUser = {
-//       firstName: inputValues.firstName,
-//       lastName: inputValues.lastName,
-//       email: inputValues.email,
-//       password: inputValues.password,
-//       beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
-//       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
-//     };
+    await UserService.register(newUser)
+      .then((data) => {
+        setToken(data?.token);
 
-//     const alertMessage = validateUserInputs({
-//       ...newUser,
-//       confirmPassword: inputValues.confirmPassword,
-//     });
+        const currUser = {
+          id: data.user.id,
+          firstName: newUser.firstName,
+          lasrName: newUser.lastName,
+          email: newUser.email,
+          beginDayHour: newUser.beginDayHour,
+          endDayHour: newUser.endDayHour,
+        };
 
-//     if (alertMessage) {
-//       setAlert("error", alertMessage);
-//       return;
-//     }
-
-//     await UserService.register(newUser)
-//       .then((data) => {
-//         setToken(data?.token);
-
-//         const currUser = {
-//           id: data.user.id,
-//           firstName: newUser.firstName,
-//           lasrName: newUser.lastName,
-//           email: newUser.email,
-//           beginDayHour: newUser.beginDayHour,
-//           endDayHour: newUser.endDayHour,
-//         };
-
-//         sessionStorage.setItem("user", JSON.stringify(currUser));
-//         navigate("/week");
-//       })
-//       .catch((err) => {
-//         if (err?.response?.data?.errors[0]?.message) {
-//           setAlert("error", err?.response.data.errors[0].message);
-//         }
-//       });
-//   };
-
-    const test = () => {
-        console.log("submit");
-    }
+        setUser(data?.user);
+        navigate("/");
+      })
+      .catch((err) => {
+        if (err?.response?.data?.errors[0]?.message) {
+          setAlert("error", err?.response.data.errors[0].message);
+        }
+      });
+  };
 
   return (
     <div className="reg_pageContainer">
       <div className="reg_image">
-        {/* <img src={require("../../assets/images/logo_no_background.png")} alt="logo" /> */}
-        <img src={user} alt="user logo" />
+        <img src={user ? userImg : weeklyLogo} alt="logo" />
       </div>
-      <form className="reg_form" onSubmit={test}>
+      <form className="reg_form" onSubmit={onSubmit}>
         <div className="reg_form_fields">
-          {Object.keys(personalDataFields).map((field) => {
+          {Object.keys(currInputFields).map((field) => {
             const fieldKey = field as keyof IInputs;
 
             return (
               <SuperInputField
                 key={fieldKey}
                 id={fieldKey}
-                label={personalDataFields[fieldKey]?.label || ""}
-                type={personalDataFields[fieldKey]?.type}
-                options={personalDataFields[fieldKey]?.options}
-                // value={inputValues[fieldKey]}
-                value={currUserData[fieldKey]}
+                label={currInputFields[fieldKey]?.label || ""}
+                type={currInputFields[fieldKey]?.type}
+                options={currInputFields[fieldKey]?.options}
+                value={inputValues[fieldKey]}
                 onChange={setValues}
                 required={true}
               />
             );
           })}
         </div>
-        <button className="btn btn__primary reg_form_btn" type="submit">
-          Lets start planning!
-        </button>
-        {/* <AlertPopup /> */}
+        {user ?
+          <button className="btn btn__primary reg_form_btn" type="submit">
+            <EditIcon />
+            Edit
+            </button>
+          :
+          <button className="btn btn__primary reg_form_btn" type="submit">
+            Lets start planning!
+          </button>
+        }
+        <AlertPopup />
       </form>
     </div>
   );

@@ -1,0 +1,36 @@
+.reg_pageContainer {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7vh;
+    margin-right: 7vw;
+    margin-left: 7vw
+}
+
+.reg_image {
+    display: flex;
+    justify-content: center;
+}
+
+.reg_form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+}
+
+.reg_form_fields {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+.reg_form_btn {
+    margin-top: 2vh;
+    width: 65%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

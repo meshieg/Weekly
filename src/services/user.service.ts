@@ -1,6 +1,6 @@
 import { AxiosInstance } from "../config/axios";
 import { IUser, IUserResponse } from "../utils/types";
-import { IInputs } from "../pages/PersonalData/PersonalDataFields";
+import { IInputs } from "../pages/PersonalData/RegisterFields";
 
 const userPrefix = `${process.env.REACT_APP_BACKEND_URL}/user`;
 
@@ -25,22 +25,21 @@ export class UserService {
             })
     }
 
-    static getCurrentUser = async (): Promise<IInputs> => {
-        // const url = userPrefix;
-        // return await axios.get(url)
-        //     .then(res => {
-        //         return res.data
-        //     })
+    // static getCurrentUser = async (): Promise<IInputs> => {
+    //     // const url = userPrefix;
+    //     // return await axios.get(url)
+    //     //     .then(res => {
+    //     //         return res.data
+    //     //     })
 
-        const user: IInputs = {
-            // id: 1,
-            firstName: "Omer",
-            lastName: "Damari",
-            email: "email@gmail.com",
-            password: "123456",
-            beginDayHour: new Date(0, 0, 0, 0),
-            endDayHour: new Date(0, 0, 0, 0)
-        };
-        return user;
-    }
+    //     const user: IInputs = {
+    //         // id: 1,
+    //         firstName: "Omer",
+    //         lastName: "Damari",
+    //         email: "email@gmail.com",
+    //         beginDayHour: new Date(0, 0, 0, 0),
+    //         endDayHour: new Date(0, 0, 0, 0)
+    //     };
+    //     return user;
+    // }
 }

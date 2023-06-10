@@ -24,7 +24,7 @@ type RouteType = {
 export const routes: RouteType[] = [
   {
     path: "/",
-    element: <Home />,
+    element: <WeeklySchedule />,
     showBottomToolbar: true,
     showToolbar: false,
     showFab: true,
@@ -76,7 +76,8 @@ export const routes: RouteType[] = [
   },
   {
     path: "/register",
-    element: <Register />,
+    // element: <Register />,
+    element: <PersonalData />,
     showToolbar: false,
     showFab: false,
     allowedUserState: UserState.NOT_SIGNED,
@@ -98,7 +99,7 @@ export const routes: RouteType[] = [
     allowedUserState: UserState.SIGNED,
   },
   {
-    path: "/personal-data",
+    path: "/my-profile/personal-data",
     element: <PersonalData />,
     showBottomToolbar: false,
     showToolbar: true,
