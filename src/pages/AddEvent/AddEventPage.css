@@ -1,19 +1,24 @@
-.pageContainer {
-  display: flex;
-  justify-content: center;
+.add-event__pageContainer {
   padding: 10%;
   height: 100%;
 }
 
-.add_event__form {
+.add-event__form {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.add_event_buttons {
+.add-event_buttons {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 2vh;
+  margin-top: 6vh;
+  align-self: center;
+}
+
+.add-event__btn {
+  width: 45%;
+  height: 5vh;
+  font-size: 1.2rem !important;
 }

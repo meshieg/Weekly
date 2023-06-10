@@ -5,10 +5,14 @@ import { ScheduleService } from "../../services/schedule.service";
 import ActionButtons from "../../components/ActionButtons/ActionButtons";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
+import { ItemType } from "../../utils/constants";
+import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
+import "./NewItemsList.css";
 
 const NewItemsList = () => {
-  const { newTasks, newEvents, removeItem, refreshItems } = useNewItemsContext();
+  const { newTasks, newEvents, removeItem, refreshItems } =
+    useNewItemsContext();
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
 
@@ -31,13 +35,42 @@ const NewItemsList = () => {
     navigate("/");
   };
 
+  const onItemClick = (id: number) => {
+    const item =
+      newTasks.find((task) => task.id === id) ||
+      newEvents.find((event) => event.id === id);
+    if (instanceOfTask(item)) {
+      navigate("/display-task", {
+        state: {
+          taskId: item.id,
+          isFromDb: false,
+        },
+      });
+    } else if (instanceOfEvent(item)) {
+      navigate("/display-event", {
+        state: {
+          eventId: item.id,
+          isFromDb: false,
+        },
+      });
+    }
+  };
+
   return (
-    <>
+    <div className="new-items__container">
       {newTasks.length === 0 && newEvents.length === 0 ? (
-        <h3 className="new-tasks__message">
-          {`You have no new items to save :/ \n
-            But you can always add them here :)`}
-        </h3>
+        <div className="new-items__message">
+          <h3>
+            You have no new items to save :/ <br />
+            But you can always add them here :)
+          </h3>
+          <button
+            className="btn btn__primary new-items__return-button"
+            onClick={() => navigate("/")}
+          >
+            Return back to my schedule
+          </button>
+        </div>
       ) : (
         <>
           <ActionButtons
@@ -46,28 +79,29 @@ const NewItemsList = () => {
             secondaryText="Cancel"
             secondaryAction={onCancelClick}
           />
-          
-          {newTasks.length !== 0 && 
-          <CollapseHeader headerText="Tasks">
-            <ScheduleItemsList
-              items={newTasks}
-              onDeleteClick={removeItem}
-            />
-          </CollapseHeader>}
 
-          {newEvents.length !== 0 && 
-          <CollapseHeader headerText="Events">
-            <ScheduleItemsList
-              items={newEvents}
-              onDeleteClick={removeItem}
-            />
-          </CollapseHeader>}
+          {newTasks.length !== 0 && (
+            <CollapseHeader headerText="Tasks">
+              <ScheduleItemsList
+                items={newTasks}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
+            </CollapseHeader>
+          )}
+
+          {newEvents.length !== 0 && (
+            <CollapseHeader headerText="Events">
+              <ScheduleItemsList
+                items={newEvents}
+                onDeleteClick={removeItem}
+                onItemClick={onItemClick}
+              />
+            </CollapseHeader>
+          )}
         </>
       )}
-      <Link to="/add-task">
-        <button>Add</button>
-      </Link>
-    </>
+    </div>
   );
 };
 
