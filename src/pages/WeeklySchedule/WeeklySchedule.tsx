@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./WeeklySchedule.css";
 import Paper from "@mui/material/Paper";
 import { ViewState } from "@devexpress/dx-react-scheduler";
 import {
@@ -9,6 +10,7 @@ import {
   Toolbar,
   DateNavigator,
   ViewSwitcher,
+  CurrentTimeIndicator,
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 import { AppointmentModel } from "../../utils/types";
@@ -23,7 +25,6 @@ const WeeklySchedule = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  // TODO: Add on click - open the task/event to display and edit
   const onAppointmentClick = (id: number, isTask: boolean) => {
     console.log("On click");
     console.log("taskId:" + id);
@@ -57,7 +58,6 @@ const WeeklySchedule = () => {
         style={{
           backgroundColor: data.color || "undefined",
           borderRadius: "4px",
-          // width: "auto",
         }}
       >
         {children}
@@ -65,12 +65,17 @@ const WeeklySchedule = () => {
     );
   };
 
-  // TODO: specify the date in the day display
   const DayScaleCell = ({ ...restProps }: WeekView.DayScaleCellProps) => {
     return (
       <WeekView.DayScaleCell
         {...restProps}
-        onClick={(event: any) => navigate("/day")}
+        onClick={() =>
+          navigate("/day", {
+            state: {
+              date: restProps?.startDate,
+            },
+          })
+        }
       />
     );
   };
@@ -127,6 +132,7 @@ const WeeklySchedule = () => {
         <ViewSwitcher />
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
+        <CurrentTimeIndicator />
       </Scheduler>
     </Paper>
   );

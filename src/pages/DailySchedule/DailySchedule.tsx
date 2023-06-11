@@ -5,21 +5,62 @@ import {
   Scheduler,
   DayView,
   Appointments,
+  CurrentTimeIndicator,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
 import useToolbar from "../../customHooks/useToolbar";
 import useUser from "../../customHooks/useUser";
+import { useLocation, useNavigate } from "react-router-dom";
 
-interface IDailyScheduleProps {
-  date: Date;
-}
-
-const DailySchedule = ({ date }: IDailyScheduleProps) => {
+const DailySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const { setToolbar } = useToolbar();
   const { user } = useUser();
+  const navLocation = useLocation();
+  const date = navLocation.state?.date;
+  const navigate = useNavigate();
+
+  const onAppointmentClick = (id: number, isTask: boolean) => {
+    console.log("On click");
+    console.log("taskId:" + id);
+    if (isTask) {
+      navigate("/display-task", {
+        state: {
+          taskId: id,
+          isFromDB: true,
+        },
+      });
+    } else {
+      navigate("/display-event", {
+        state: {
+          eventId: id,
+          isFromDB: true,
+        },
+      });
+    }
+  };
+
+  const Appointment = ({
+    children,
+    data,
+    ...restProps
+  }: Appointments.AppointmentProps) => {
+    return (
+      <Appointments.Appointment
+        {...restProps}
+        onClick={() => onAppointmentClick(data?.id as number, data?.isTask)}
+        data={data}
+        style={{
+          backgroundColor: data.color || "undefined",
+          borderRadius: "4px",
+        }}
+      >
+        {children}
+      </Appointments.Appointment>
+    );
+  };
 
   useEffect(() => {
     setToolbar("", true);
@@ -37,8 +78,22 @@ const DailySchedule = ({ date }: IDailyScheduleProps) => {
 
     // TODO: arrange the dates according to the clicked date
     ScheduleService.getSchedule(
-      new Date("2023-01-01 00:00:00"),
-      new Date("2050-12-31 00:00:00")
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        dayHours?.beginDayHour,
+        0,
+        0
+      ),
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        dayHours?.endDayHour,
+        0,
+        0
+      )
     ).then((data) => {
       const dataDisplay = data?.map((scheduleEntity) => {
         return {
@@ -62,7 +117,8 @@ const DailySchedule = ({ date }: IDailyScheduleProps) => {
           startDayHour={dayHours.beginDayHour}
           endDayHour={dayHours.endDayHour}
         />
-        <Appointments />
+        <Appointments appointmentComponent={Appointment} />
+        <CurrentTimeIndicator />
       </Scheduler>
     </Paper>
   );
