@@ -8,6 +8,10 @@ import Tag from "../../components/Tag/Tag";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { TaskService } from "../../services/task.service";
 import { instanceOfTask } from "../../utils/typeChecks";
+import { useAppContext } from "../../contexts/AppContext";
+import { USER_MESSAGES } from "../../utils/messages";
+import MessageDialog from "../../components/MessageDialog/MessageDialog";
+import Loading from "../../components/Loading/Loading";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -23,13 +27,18 @@ const DisplayTaskPage = () => {
   const { setToolbar } = useToolbar();
   const [taskToShow, setTaskToShow] = useState<ITask | undefined>(undefined);
   const taskId = navLocation.state?.taskId;
+  const { setPopupMessage, popupMessage } = useAppContext();
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
     setToolbar("Task Details", true);
     if (navLocation.state?.isFromDB) {
-      TaskService.getTaskById(taskId).then((task) => {
-        setTaskToShow(task as ITask);
-      });
+      setDataLoading(true);
+      TaskService.getTaskById(taskId)
+        .then((task) => {
+          setTaskToShow(task as ITask);
+        })
+        .finally(() => setDataLoading(false));
     } else if (taskId !== undefined) {
       const task = getById(taskId);
       if (task && instanceOfTask(task)) setTaskToShow(task as ITask);
@@ -43,6 +52,7 @@ const DisplayTaskPage = () => {
   };
 
   const deleteTask = () => {
+    setPopupMessage(undefined);
     if (taskToShow) {
       if (navLocation.state?.isFromDB) {
         TaskService.deleteTask(taskToShow.id)
@@ -64,6 +74,10 @@ const DisplayTaskPage = () => {
       }
     }
   };
+
+  if (dataLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -169,7 +183,9 @@ const DisplayTaskPage = () => {
             </button>
             <button
               className="btn btn__primary display__button"
-              onClick={deleteTask}
+              onClick={() =>
+                setPopupMessage(USER_MESSAGES.DELETE_CONFIRMATION_MESSAGE)
+              }
               style={{ background: "#d32f2f", border: "#d32f2f" }}
             >
               Delete
@@ -177,6 +193,21 @@ const DisplayTaskPage = () => {
           </div>
         </div>
       )}
+
+      <MessageDialog
+        open={popupMessage !== undefined}
+        onClose={() => {
+          setPopupMessage(undefined);
+        }}
+        title={popupMessage?.title}
+        message={popupMessage?.message}
+        extraMessage={popupMessage?.extraMessage}
+        primaryButtonText={popupMessage?.primaryButtonText}
+        secondaryButtonText={popupMessage?.secondaryButtonText}
+        icon={popupMessage?.icon}
+        primaryButtonAction={deleteTask}
+        secondaryButtonAction={() => setPopupMessage(undefined)}
+      />
     </>
   );
 };
