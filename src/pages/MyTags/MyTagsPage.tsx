@@ -27,22 +27,40 @@ const MyTagsPage = () => {
 
   const MyTagsList = tagsList.map((tag) => {
     return (
-      <div key={tag.id} className="tag__row">
-        <Tag
-          width="1.5rem"
-          color={tag.color}
-          onClick={() => {
-            onTagClick(tag);
-          }}
-        />
-        <span
-          className="tag__title"
-          onClick={() => {
-            onTagClick(tag);
+      <div
+        key={tag.id}
+        className="tag__row"
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingRight: "5%",
+          width: "100%",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
-          {tag.name}
-        </span>
+          <Tag
+            width="1.5rem"
+            color={tag.color}
+            onClick={() => {
+              onTagClick(tag);
+            }}
+          />
+          <span
+            className="tag__title"
+            onClick={() => {
+              onTagClick(tag);
+            }}
+          >
+            {tag.name}
+          </span>
+        </div>
         <IconButton
           onClick={() => {
             onTagDelete(tag.id);
@@ -80,7 +98,11 @@ const MyTagsPage = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        margin: "3%",
+      }}
+    >
       {" "}
       {MyTagsList}
       <div
