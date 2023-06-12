@@ -30,14 +30,16 @@ export class ScheduleService {
             .then(res => {
                 console.log("Schedule generated successfully");
                 console.log(res.data);
+                return res.data;
                 // return res.data.map((scheduleEntity: IScheduleEntity) => {
                 //     return {
                 //         ...scheduleEntity
                 //     } as IScheduleEntity;
                 // })
             })
-            // .catch((err) => {
-            //     console.log(err);
-            // });
+            .catch((err) => {
+                console.log(err);
+                throw err
+            });
     }
 }

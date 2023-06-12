@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useNewItemsContext } from "../../contexts/NewItemsStore/NewItemsContext";
 import { ScheduleService } from "../../services/schedule.service";
@@ -9,12 +9,17 @@ import { ItemType } from "../../utils/constants";
 import { instanceOfEvent, instanceOfTask } from "../../utils/typeChecks";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 import "./NewItemsList.css";
+import Loading from "../../components/Loading/Loading";
+import MessageDialog from "../../components/MessageDialog/MessageDialog";
+import { serverError, USER_MESSAGES } from "../../utils/messages";
+import { useAppContext } from "../../contexts/AppContext";
 
 const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
     useNewItemsContext();
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
+  const { setLoading, setPopupMessage, popupMessage } = useAppContext();
 
   useEffect(() => {
     setToolbar("My New Added Tasks and Events", false);
@@ -29,16 +34,32 @@ const NewItemsList = () => {
       return { ...event, id: 0 };
     });
 
+    setLoading(true);
+
     ScheduleService.generateSchedule(taskToAdd, eventsToAdd)
-      .then(() => {
-        console.log("Items saved successfully");
-        refreshItems();
+      .then((data: any) => {
+        if (data?.notAssignedTasks && data?.notAssignedTasks.length > 0) {
+          setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE);
+        } else if (data?.assignedTasks && data?.assignedTasks.length > 0) {
+          setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
+        }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setPopupMessage(serverError(error?.response.data.errors[0]));
+      })
+      .finally(() => {
+        setLoading(false);
+        refreshItems();
+        navigate("/");
+      });
   };
 
   const onCancelClick = () => {
-    // TODO: Add 'are you sure...' question
+    setPopupMessage(USER_MESSAGES.NEW_ITEMS_CANCEL_MESSAGE);
+  };
+
+  const onCancelYesClick = () => {
+    setPopupMessage(undefined);
     refreshItems();
     navigate("/");
   };
@@ -109,6 +130,21 @@ const NewItemsList = () => {
           )}
         </>
       )}
+
+      <MessageDialog
+        open={popupMessage !== undefined}
+        onClose={() => {
+          setPopupMessage(undefined);
+        }}
+        title={popupMessage?.title}
+        message={popupMessage?.message}
+        extraMessage={popupMessage?.extraMessage}
+        primaryButtonText={popupMessage?.primaryButtonText}
+        secondaryButtonText={popupMessage?.secondaryButtonText}
+        icon={popupMessage?.icon}
+        primaryButtonAction={onCancelYesClick}
+        secondaryButtonAction={() => setPopupMessage(undefined)}
+      />
     </div>
   );
 };

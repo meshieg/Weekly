@@ -45,3 +45,24 @@ export interface IProfileAction {
   displayArrow?: boolean;
   route?: string;
 }
+
+export type UserMessage = {
+  title?: string;
+  message?: string | React.ReactNode;
+  extraMessage?: string | React.ReactNode;
+  primaryButtonText?: string;
+  primaryButtonAction?: () => void;
+  secondaryButtonText?: string;
+  secondaryButtonAction?: () => void;
+  icon?: JSX.Element;
+}
+
+export type UserMessages = {
+  [key: string]: UserMessage
+}
+
+export type ServerError = {
+  code: number;
+  message: string;
+  extraMessage?: string;
+}

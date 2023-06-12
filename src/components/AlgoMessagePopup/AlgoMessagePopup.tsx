@@ -1,6 +1,6 @@
 import React from "react";
 import ActionButtons from "../ActionButtons/ActionButtons";
-import GeneralMessageDialog from "../GeneralMessageDialog/GeneralMessageDialog";
+import GeneralDialog from "../GeneralDialog/GeneralDialog";
 import "./AlgoMessagePopup.css";
 
 interface IAlgoMessagePopupProps {
@@ -12,7 +12,7 @@ interface IAlgoMessagePopupProps {
 
 const AlgoMessagePopup: React.FC<IAlgoMessagePopupProps> = (props) => {
   return (
-    <GeneralMessageDialog open={props.open} onClose={props.onClose}>
+    <GeneralDialog open={props.open} onClose={props.onClose}>
       <div className="">
         <div className="algo-popup__text">
           We noticed that you updated data that could affect your schedule...
@@ -35,7 +35,7 @@ const AlgoMessagePopup: React.FC<IAlgoMessagePopupProps> = (props) => {
           </button>
         </div>
       </div>
-    </GeneralMessageDialog>
+    </GeneralDialog>
   );
 };
 

@@ -1,18 +1,18 @@
 import React from "react";
 import { Dialog, IconButton, Zoom } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import "./GeneralMessageDialog.css";
+import "./GeneralDialog.css";
 
 import { ReactComponent as WarningSign } from "../../assets/icons/warningSign.svg";
 
-interface IGeneralMessageDialogProps {
+interface IGeneralDialogProps {
   open: boolean;
   onClose: () => void;
   icon?: JSX.Element;
   children: React.ReactElement;
 }
 
-const GeneralMessageDialog: React.FC<IGeneralMessageDialogProps> = (props) => {
+const GeneralDialog: React.FC<IGeneralDialogProps> = (props) => {
   const { open, onClose, children, icon = <WarningSign /> } = props;
   return (
     <Dialog
@@ -44,4 +44,4 @@ const GeneralMessageDialog: React.FC<IGeneralMessageDialogProps> = (props) => {
   );
 };
 
-export default GeneralMessageDialog;
+export default GeneralDialog;

@@ -50,3 +50,7 @@
 .btn:active {
   background: var(--secondary-color);
 }
+
+.VerticalAppointment-textContainer {
+  display: none;
+}

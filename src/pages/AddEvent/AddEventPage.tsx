@@ -16,6 +16,8 @@ import useAlert from "../../customHooks/useAlert";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
 import { ScheduleService } from "../../services/schedule.service";
+import { useAppContext } from "../../contexts/AppContext";
+import { serverError, USER_MESSAGES } from "../../utils/messages";
 
 const fieldsToDisplayAlgoPopup = ["startTime", "endTime"];
 
@@ -41,6 +43,7 @@ const AddEventPage = () => {
   const { setAlert } = useAlert();
   const [algoPopupOpen, setAlgoPopupOpen] = useState(false);
   const [newEventState, setNewEventState] = useState<IEvent>();
+  const { setLoading, setPopupMessage } = useAppContext();
 
   const getScreenState = () => {
     if (eventToUpdate === undefined) {
@@ -173,14 +176,23 @@ const AddEventPage = () => {
 
   const generateSchedule = () => {
     if (newEventState) {
+      setLoading(true);
       ScheduleService.generateSchedule([], [newEventState])
-        .then(() => {
-          console.log("Items saved successfully");
-          navigate(-1);
+        .then((data: any) => {
+          if (data?.notAssignedTasks && data?.notAssignedTasks.length > 0) {
+            setPopupMessage(
+              USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE
+            );
+          } else if (data?.assignedTasks && data?.assignedTasks.length > 0) {
+            setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
+          }
         })
         .catch((error) => {
-          console.log(error);
-          //TODO: add error message to user
+          setPopupMessage(serverError(error?.response.data.errors[0]));
+        })
+        .finally(() => {
+          setLoading(false);
+          navigate("/");
         });
     }
   };
