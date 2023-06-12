@@ -53,7 +53,7 @@ export const routes: RouteType[] = [
   // },
   {
     path: "/day",
-    element: <DailySchedule date={new Date()} />, // TODO: maybe put the clicked date in a context?
+    element: <DailySchedule />,
     showBottomToolbar: true,
     showToolbar: true,
     showFab: true,
