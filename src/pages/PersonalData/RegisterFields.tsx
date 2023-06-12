@@ -4,13 +4,13 @@ export interface IInputs {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   beginDayHour: Date;
   endDayHour: Date;
 }
 
-type inputFields = {
+export type inputFields = {
   [id in keyof IInputs]: IField;
 };
 

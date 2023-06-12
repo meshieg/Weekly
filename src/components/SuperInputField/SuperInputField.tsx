@@ -31,6 +31,7 @@ interface IProps {
   required?: boolean;
   placeholder?: string;
   multiline?: boolean;
+  disabled? :boolean;
 }
 
 const SuperInputField: React.FC<IProps> = (props) => {
@@ -97,6 +98,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
               {...params}
               label={props.label}
               required={props.required}
+              disabled={props.disabled}
             />
           )}
         />
@@ -108,6 +110,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           key={props.id}
           className={`checkbox ${props.value && "selected"}`}
           onClick={handleInputChanged}
+          disabled={props.disabled}
         >
           {props.label}
         </button>
@@ -123,6 +126,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
             format="DD/MM/YYYY"
             onChange={handleInputChanged}
             disablePast={true}
+            disabled={props.disabled}
             slotProps={{
               textField: {
                 required: props.required,
@@ -169,6 +173,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
             ampm={false}
             views={["hours"]}
             closeOnSelect={true}
+            disabled={props.disabled}
             // minutesStep={60}
             // disablePast={true}
             slotProps={{
@@ -230,6 +235,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           placeholder={props.placeholder}
           multiline={props.multiline}
           maxRows={props.multiline ? 6 : 1}
+          disabled={props.disabled}
         />
       );
   }
