@@ -85,7 +85,8 @@ const DisplayTaskPage = () => {
         <>nothing to show</>
       ) : (
         <div className="pageContainer">
-          {taskToShow?.assignment === null && (
+          {(taskToShow?.assignment === null ||
+            taskToShow?.assignment === undefined) && (
             <Alert severity="info">This task has no assignment</Alert>
           )}
           <div className="fieldsContainer">
@@ -95,7 +96,6 @@ const DisplayTaskPage = () => {
               label="Title"
               variant="standard"
               sx={textFieldStyle}
-              // inputProps={{ style: { color: "black" } }}
             />
             <TextField
               value={taskToShow.location === "" ? " " : taskToShow.location}
