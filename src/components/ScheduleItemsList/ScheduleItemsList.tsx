@@ -19,19 +19,23 @@ const ScheduleItemsList: React.FC<IScheduleItemsListProps> = (props) => {
             id={item.id}
             title={item.title}
             date={
-              instanceOfTask(item) ? item.dueDate : 
-              instanceOfEvent(item) ? item.startTime :
-              new Date("")
+              instanceOfTask(item)
+                ? item.dueDate
+                : instanceOfEvent(item)
+                ? item.startTime
+                : new Date("")
             }
             tag={item.tag}
-            isDone={
-              instanceOfTask(item) ? item.isDone : undefined
-            }
+            isDone={instanceOfTask(item) ? item.isDone : undefined}
             displayTime={instanceOfTask(item) ? false : true}
             checkbox={props.onCheckedClick ? true : false}
             onCheckedClick={props.onCheckedClick}
             onClick={props.onItemClick}
             onDeleteClick={props.onDeleteClick}
+            infoIndication={
+              instanceOfTask(item) &&
+              (item.assignment === undefined || item.assignment === null)
+            }
           />
         );
       })}

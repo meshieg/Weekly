@@ -2,6 +2,7 @@ import { Checkbox, checkboxClasses, IconButton } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 // import EditIcon from "@mui/icons-material/Edit";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import React from "react";
 import Tag from "../Tag/Tag";
 import "./ScheduleItemRow.css";
@@ -17,6 +18,7 @@ interface IScheduleItemRowProps {
   onCheckedClick?: (id: number) => void;
   onClick?: (id: number) => void;
   onDeleteClick?: (id: number) => void;
+  infoIndication?: boolean;
 }
 
 const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
@@ -62,12 +64,8 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
           </span>
         </div>
       </div>
-      <div>
-        {/* {props.onEditClick && (
-          <IconButton onClick={() => props.onEditClick?.(props.id)}>
-            <EditIcon />
-          </IconButton>
-        )} */}
+      <div className="item__left-options">
+        {props.infoIndication && <InfoOutlinedIcon />}
         {props.onDeleteClick && (
           <IconButton
             onClick={(event) => {

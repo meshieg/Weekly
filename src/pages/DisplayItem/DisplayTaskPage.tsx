@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
+import { Alert, TextField } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import "./DisplayAssignment.css";
 import useToolbar from "../../customHooks/useToolbar";
@@ -85,6 +85,9 @@ const DisplayTaskPage = () => {
         <>nothing to show</>
       ) : (
         <div className="pageContainer">
+          {taskToShow?.assignment === null && (
+            <Alert severity="info">This task has no assignment</Alert>
+          )}
           <div className="fieldsContainer">
             <TextField
               value={taskToShow.title}
