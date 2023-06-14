@@ -25,7 +25,3 @@ const defaultValues: INewItemsContext = {
 export const NewItemsContext = createContext(defaultValues);
 export const useNewItemsContext = (): INewItemsContext =>
   useContext(NewItemsContext);
-
-export const NewItemsContext = createContext(defaultValues);
-export const useNewItemsContext = (): INewItemsContext =>
-  useContext(NewItemsContext);

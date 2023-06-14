@@ -82,10 +82,5 @@ export function validateEventInputs(event: IEvent) {
         return "End time must be after start time"
     }
 
-}
 
-
-if (user.confirmPassword && (user.password !== user.confirmPassword)) {
-    return "Please confirm your password correctly"
-}
 }
