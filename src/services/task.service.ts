@@ -43,7 +43,6 @@ export class TaskService {
     const url = `${taskPrefix}/all`;
     return await AxiosInstance.get(url)
       .then((res) => {
-        console.log(res.data);
         return res.data.map((task: ITask) => {
           return {
             ...task,
