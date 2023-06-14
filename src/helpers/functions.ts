@@ -84,3 +84,8 @@ export function validateEventInputs(event: IEvent) {
 
 }
 
+
+if (user.confirmPassword && (user.password !== user.confirmPassword)) {
+    return "Please confirm your password correctly"
+}
+}

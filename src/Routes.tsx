@@ -119,6 +119,6 @@ export const routes: RouteType[] = [
     showBottomToolbar: false,
     showToolbar: true,
     showFab: false,
-    allowedUserState: UserState.SIGNED
+    allowedUserState: UserState.SIGNED,
   },
 ];
