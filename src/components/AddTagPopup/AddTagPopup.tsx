@@ -3,6 +3,8 @@ import Colorful from "@uiw/react-color-colorful";
 import { Dialog, TextField } from "@mui/material";
 import "./AddTagPopup.css";
 import { TagService } from "../../services/tag.service";
+import GeneralDialog from "../GeneralDialog/GeneralDialog";
+import { ReactComponent as AddTaskIcon } from "../../assets/icons/AddTaskIcon.svg";
 
 interface IAddTagProps {
   open: boolean;
@@ -13,6 +15,7 @@ interface IAddTagProps {
 const AddTagPopup = (props: IAddTagProps) => {
   const [tagColor, setTagColor] = useState("#8A64D6");
   const [tagName, setTagName] = useState("");
+  // const icon: JSX.Element = <successIcon />;
 
   useEffect(() => {
     if (props.tag) {
@@ -37,7 +40,12 @@ const AddTagPopup = (props: IAddTagProps) => {
     props.onCancel();
   };
   return (
-    <Dialog open={props.open} fullWidth>
+    <GeneralDialog
+      open={props.open}
+      onClose={props.onCancel}
+      icon={<AddTaskIcon />}
+    >
+      {/* <Dialog open={props.open} fullWidth> */}
       <div className="addTagPageContainer">
         <Colorful
           color={tagColor}
@@ -69,7 +77,8 @@ const AddTagPopup = (props: IAddTagProps) => {
           </button>
         </div>
       </div>
-    </Dialog>
+      {/* </Dialog> */}
+    </GeneralDialog>
   );
 };
 

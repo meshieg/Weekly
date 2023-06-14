@@ -9,6 +9,6 @@
 
 .addTagButtonsContainer {
   display: flex;
-  width: 100%;
+  width: 140%;
   justify-content: space-around;
 }
