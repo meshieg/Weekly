@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { routes } from "./Routes";
 import BottomToolbar from "./components/BottomToolbar/BottomToolbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -9,40 +9,43 @@ import { AlertProvider } from "./contexts/AlertContext";
 import { NewItemsProvider } from "./contexts/NewItemsStore/NewItemsProvider";
 import FloatingActionButton from "./components/FloatingActionButton/FloatingActionButton";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { AppProvider, useAppContext } from "./contexts/AppContext";
 
 function App() {
   return (
     <div className="app">
-      <ToolbarProvider>
-        <AlertProvider>
-          <NewItemsProvider>
-            <BrowserRouter>
-              <Toolbar />
-              <div className="app__content">
-                <Routes>
-                  {routes.map((route) => (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <ProtectedRoute
-                          allowedUserState={route.allowedUserState}
-                        >
-                          {route.element}
-                        </ProtectedRoute>
-                      }
-                    />
-                  ))}
-                </Routes>
-              </div>
-              <FloatingActionButton />
-              <div className="app__bottom">
-                <BottomToolbar />
-              </div>
-            </BrowserRouter>
-          </NewItemsProvider>
-        </AlertProvider>
-      </ToolbarProvider>
+      <AppProvider>
+        <ToolbarProvider>
+          <AlertProvider>
+            <NewItemsProvider>
+              <BrowserRouter>
+                <Toolbar />
+                <div className="app__content">
+                  <Routes>
+                    {routes.map((route) => (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={
+                          <ProtectedRoute
+                            allowedUserState={route.allowedUserState}
+                          >
+                            {route.element}
+                          </ProtectedRoute>
+                        }
+                      />
+                    ))}
+                  </Routes>
+                </div>
+                <FloatingActionButton />
+                <div className="app__bottom">
+                  <BottomToolbar />
+                </div>
+              </BrowserRouter>
+            </NewItemsProvider>
+          </AlertProvider>
+        </ToolbarProvider>
+      </AppProvider>
     </div>
   );
 }

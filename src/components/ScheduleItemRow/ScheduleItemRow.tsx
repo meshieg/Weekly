@@ -35,7 +35,10 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
               },
             }}
             checked={props.isDone}
-            onClick={() => props.onCheckedClick?.(props.id)}
+            onClick={(event) => {
+              event.stopPropagation();
+              props.onCheckedClick?.(props.id);
+            }}
           />
         )}
         <Tag width="2.2rem" color={props.tag?.color} />
@@ -66,7 +69,12 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
           </IconButton>
         )} */}
         {props.onDeleteClick && (
-          <IconButton onClick={() => props.onDeleteClick?.(props.id)}>
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              props.onDeleteClick?.(props.id);
+            }}
+          >
             <DeleteOutlinedIcon />
           </IconButton>
         )}

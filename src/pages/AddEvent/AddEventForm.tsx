@@ -26,12 +26,6 @@ export const eventFields: inputFields = {
     type: fieldsTypes.TextField,
     placeholder: "Location",
   },
-  description: {
-    label: "Description",
-    type: fieldsTypes.TextField,
-    placeholder: "Description",
-    multiline: true,
-  },
   startDate: {
     label: "Start Date",
     type: fieldsTypes.DatePicker,
@@ -55,5 +49,11 @@ export const eventFields: inputFields = {
     type: fieldsTypes.TimePicker,
     required: true,
     placeholder: "End time",
+  },
+  description: {
+    label: "Description",
+    type: fieldsTypes.TextField,
+    placeholder: "Description",
+    multiline: true,
   },
 };

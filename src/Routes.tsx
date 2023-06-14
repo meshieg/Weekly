@@ -1,15 +1,16 @@
 import { ReactElement } from "react";
 import AddTaskPage from "./pages/AddTask/AddTaskPage";
-import Home from "./pages/Home/Home";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import WeeklySchedule from "./pages/WeeklySchedule/WeeklySchedule";
 import AddEventPage from "./pages/AddEvent/AddEventPage";
 import LogIn from "./pages/LogIn/LogIn";
-import Register from "./pages/Register/Register";
 import NewItemsList from "./pages/NewItemsList/NewItemsList";
 import DailySchedule from "./pages/DailySchedule/DailySchedule";
 import MyProfile from "./pages/MyProfile/MyProfile";
+import PersonalData from "./pages/PersonalData/PersonalData";
 import { UserState } from "./utils/constants";
+import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
+import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
 
 type RouteType = {
   path: string;
@@ -52,7 +53,7 @@ export const routes: RouteType[] = [
   // },
   {
     path: "/day",
-    element: <DailySchedule date={new Date()} />, // TODO: maybe put the clicked date in a context?
+    element: <DailySchedule />,
     showBottomToolbar: true,
     showToolbar: true,
     showFab: true,
@@ -75,7 +76,7 @@ export const routes: RouteType[] = [
   },
   {
     path: "/register",
-    element: <Register />,
+    element: <PersonalData />,
     showToolbar: false,
     showFab: false,
     allowedUserState: UserState.NOT_SIGNED,
@@ -89,9 +90,33 @@ export const routes: RouteType[] = [
     allowedUserState: UserState.SIGNED,
   },
   {
+    path: "/display-task",
+    element: <DisplayTaskPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
+    path: "/display-event",
+    element: <DisplayEventPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
     path: "/my-profile",
     element: <MyProfile />,
     showBottomToolbar: true,
+    showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
+    path: "/my-profile/personal-data",
+    element: <PersonalData />,
+    showBottomToolbar: false,
     showToolbar: true,
     showFab: false,
     allowedUserState: UserState.SIGNED,

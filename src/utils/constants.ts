@@ -38,3 +38,9 @@ export const defaultRoutes = {
   [UserState.SIGNED]: "/",
   [UserState.NOT_SIGNED]: "/login",
 };
+
+export enum EditScreensState {
+  ADD,
+  EDIT_LOCAL,
+  EDIT
+}

@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import "./MyProfile.css";
 import { useNavigate } from "react-router-dom";
 import ProfileActionsList from "../../components/ProfileActionsList/ProfileActionsList";

@@ -23,28 +23,14 @@ export class ScheduleService {
             });
     }
 
-    static generateSchedule = async (tasks: ITask[], events: IEvent[]): Promise<IScheduleEntity[] | void> => {
+    static generateSchedule = async (tasks?: ITask[], events?: IEvent[]): Promise<IScheduleEntity[] | void> => {
         const url = schedulePrefix;
-
-        // const tasksJson = tasks.map((task) => {
-        //     return JSON.stringify({
-        //         ...task,
-        //         dueDate: task.dueDate.toLocaleString("en-US")
-        //     })
-        // })
-
-        // const eventsJson = events.map((event) => {
-        //     return JSON.stringify({
-        //         ...event,
-        //         startTime: event.startTime.toISOString(),
-        //         endTime: event.endTime.toISOString()
-        //     })
-        // })
 
         return AxiosInstance.post(url, { tasks, events })
             .then(res => {
                 console.log("Schedule generated successfully");
                 console.log(res.data);
+                return res.data;
                 // return res.data.map((scheduleEntity: IScheduleEntity) => {
                 //     return {
                 //         ...scheduleEntity
@@ -53,6 +39,7 @@ export class ScheduleService {
             })
             .catch((err) => {
                 console.log(err);
+                throw err
             });
     }
 }

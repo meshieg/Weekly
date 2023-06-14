@@ -11,6 +11,7 @@ export type IScheduleEntity = {
   startTime: Date;
   endTime: Date;
   tag?: ITag;
+  isTask: boolean;
 };
 
 export type AppointmentModel = {
@@ -18,6 +19,7 @@ export type AppointmentModel = {
   startDate: Date;
   endDate: Date;
   color?: string;
+  isTask: boolean;
 };
 
 export type IUser = {
@@ -41,5 +43,26 @@ export interface IProfileAction {
   icon?: ReactElement;
   text: string;
   displayArrow?: boolean;
-  route?: string
+  route?: string;
+}
+
+export type UserMessage = {
+  title?: string;
+  message?: string | React.ReactNode;
+  extraMessage?: string | React.ReactNode;
+  primaryButtonText?: string;
+  primaryButtonAction?: () => void;
+  secondaryButtonText?: string;
+  secondaryButtonAction?: () => void;
+  icon?: JSX.Element;
+}
+
+export type UserMessages = {
+  [key: string]: UserMessage
+}
+
+export type ServerError = {
+  code: number;
+  message: string;
+  extraMessage?: string;
 }
