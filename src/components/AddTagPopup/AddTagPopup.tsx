@@ -33,11 +33,24 @@ const AddTagPopup = (props: IAddTagProps) => {
         id: props.tag.id,
         name: tagName,
         color: tagColor,
-      } as ITag);
+      } as ITag)
+        .then((data) => {})
+        .catch((err) => {
+          //TODO: add error alert
+        })
+        .finally(() => {
+          props.onCancel();
+        });
     } else {
-      TagService.addTag({ name: tagName, color: tagColor } as ITag);
+      TagService.addTag({ name: tagName, color: tagColor } as ITag)
+        .then((data) => {})
+        .catch((err) => {
+          //TODO: add error alert
+        })
+        .finally(() => {
+          props.onCancel();
+        });
     }
-    props.onCancel();
   };
   return (
     <GeneralDialog
