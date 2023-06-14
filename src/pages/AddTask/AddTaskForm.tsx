@@ -59,7 +59,7 @@ export const taskFields: inputFields = {
     options: [
       { id: Priority.HIGH, label: PriorityLabels[Priority.HIGH] },
       { id: Priority.MEDIUM, label: PriorityLabels[Priority.MEDIUM] },
-      { id: Priority.LOW, label: PriorityLabels[Priority.LOW] }, // TODO: Change to number field 1-10
+      { id: Priority.LOW, label: PriorityLabels[Priority.LOW] },
     ],
     required: true,
     placeholder: "Priority",
