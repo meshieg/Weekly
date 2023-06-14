@@ -7,6 +7,10 @@ import Tag from "../../components/Tag/Tag";
 import { PriorityLabels } from "../../utils/constants";
 import { EventService } from "../../services/event.service";
 import { instanceOfEvent } from "../../utils/typeChecks";
+import MessageDialog from "../../components/MessageDialog/MessageDialog";
+import { USER_MESSAGES } from "../../utils/messages";
+import { useAppContext } from "../../contexts/AppContext";
+import Loading from "../../components/Loading/Loading";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -22,14 +26,19 @@ const DisplayEventPage = () => {
   const { removeItem, getById } = useNewItemsContext();
   const [eventToShow, setEventToShow] = useState<IEvent | undefined>();
   const eventId: number = navLocation.state?.eventId;
+  const { setPopupMessage, popupMessage } = useAppContext();
+  const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
     console.log(navLocation.state);
     setToolbar("Event Details", true);
     if (navLocation.state?.isFromDB) {
-      EventService.getEventById(eventId).then((event) => {
-        setEventToShow(event as IEvent);
-      });
+      setDataLoading(true);
+      EventService.getEventById(eventId)
+        .then((event) => {
+          setEventToShow(event as IEvent);
+        })
+        .finally(() => setDataLoading(false));
     } else {
       const event = getById(eventId);
       if (event && instanceOfEvent(event)) setEventToShow(event as IEvent);
@@ -43,14 +52,30 @@ const DisplayEventPage = () => {
   };
 
   const deleteEvent = () => {
+    setPopupMessage(undefined);
     if (navLocation.state?.isFromDB) {
-      EventService.deleteEvent(eventId);
-      navigate(-1);
+      EventService.deleteEvent(eventId)
+        .then((deleted) => {
+          if (deleted) {
+            navigate(-1);
+          } else {
+            //TODO: add alert error message
+            console.log("failed to delete event");
+          }
+        })
+        .catch(() => {
+          //TODO: add alert error message
+          console.log("failed to delete event");
+        });
     } else {
       removeItem(eventId);
       navigate(-1);
     }
   };
+
+  if (dataLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -131,7 +156,9 @@ const DisplayEventPage = () => {
             </button>
             <button
               className="btn btn__primary display__button"
-              onClick={deleteEvent}
+              onClick={() =>
+                setPopupMessage(USER_MESSAGES.DELETE_CONFIRMATION_MESSAGE)
+              }
               style={{ background: "#d32f2f", border: "#d32f2f" }}
             >
               Delete
@@ -139,6 +166,21 @@ const DisplayEventPage = () => {
           </div>
         </div>
       )}
+
+      <MessageDialog
+        open={popupMessage !== undefined}
+        onClose={() => {
+          setPopupMessage(undefined);
+        }}
+        title={popupMessage?.title}
+        message={popupMessage?.message}
+        extraMessage={popupMessage?.extraMessage}
+        primaryButtonText={popupMessage?.primaryButtonText}
+        secondaryButtonText={popupMessage?.secondaryButtonText}
+        icon={popupMessage?.icon}
+        primaryButtonAction={deleteEvent}
+        secondaryButtonAction={() => setPopupMessage(undefined)}
+      />
     </>
   );
 };

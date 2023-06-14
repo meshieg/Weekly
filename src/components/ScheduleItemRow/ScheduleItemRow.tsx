@@ -35,7 +35,10 @@ const ScheduleItemRow: React.FC<IScheduleItemRowProps> = (props) => {
               },
             }}
             checked={props.isDone}
-            onClick={() => props.onCheckedClick?.(props.id)}
+            onClick={(event) => {
+              event.stopPropagation();
+              props.onCheckedClick?.(props.id);
+            }}
           />
         )}
         <Tag width="2.2rem" color={props.tag?.color} />

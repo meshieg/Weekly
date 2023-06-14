@@ -9,11 +9,22 @@ import moment from "moment";
 import Tag from "../../components/Tag/Tag";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import { TagService } from "../../services/tag.service";
-import { DEFAULT_TAG, Priority } from "../../utils/constants";
+import { DEFAULT_TAG, EditScreensState, Priority } from "../../utils/constants";
 import useToolbar from "../../customHooks/useToolbar";
 import { validateTaskInputs } from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
+import { ScheduleService } from "../../services/schedule.service";
+import { useAppContext } from "../../contexts/AppContext";
+import { serverError, USER_MESSAGES } from "../../utils/messages";
+
+const fieldsToDisplayAlgoPopup = [
+  "estTime",
+  "dueDate",
+  "priority",
+  "assignment",
+];
 
 const AddTaskPage = () => {
   const location = useLocation();
@@ -37,7 +48,21 @@ const AddTaskPage = () => {
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const { setToolbar } = useToolbar();
   const { setAlert } = useAlert();
-  // const [displayAlgoPopup, setDisplayAlgoPopup] = useState(false);
+  const [algoPopupOpen, setAlgoPopupOpen] = useState(false);
+  const [newTaskState, setNewTaskState] = useState<ITask>();
+  const { setLoading, setPopupMessage } = useAppContext();
+
+  const getScreenState = () => {
+    if (taskToUpdate === undefined) {
+      return EditScreensState.ADD;
+    }
+    if (location.state?.isFromDB) {
+      return EditScreensState.EDIT;
+    }
+    return EditScreensState.EDIT_LOCAL;
+  };
+
+  const screenState = getScreenState();
 
   useEffect(() => {
     setInputsValues(initialValues);
@@ -73,9 +98,9 @@ const AddTaskPage = () => {
       " " +
       moment(inputValues.dueTime).format("HH:00:00");
 
-    let assignemtDateAndTime: string | undefined = undefined;
+    let assignmentDateAndTime: string | undefined = undefined;
     if (inputValues.assignmentDate && initialValues.assignmentTime) {
-      assignemtDateAndTime =
+      assignmentDateAndTime =
         moment(inputValues.assignmentDate).format("YYYY-MM-DD") +
         " " +
         moment(inputValues.assignmentTime).format("HH:00:00");
@@ -90,10 +115,12 @@ const AddTaskPage = () => {
       description: inputValues.description,
       priority: inputValues.priority,
       tag: tag.id !== 0 ? tag : undefined,
-      assignment: assignemtDateAndTime
-        ? new Date(assignemtDateAndTime)
+      assignment: assignmentDateAndTime
+        ? new Date(assignmentDateAndTime)
         : undefined,
     };
+
+    setNewTaskState(newTask);
 
     // Validate inputs
     const alertMessage = validateTaskInputs(newTask);
@@ -102,14 +129,48 @@ const AddTaskPage = () => {
       return;
     }
 
-    if (taskToUpdate === undefined) {
+    // Save task
+    switch (screenState) {
       // add new task
-      addItem(newTask);
-      setInputsValues(initialValues);
-      navigate("/new-tasks");
-    } else if (location.state?.isFromDB) {
+      case EditScreensState.ADD:
+        addItem(newTask);
+        setInputsValues(initialValues);
+        navigate("/new-tasks");
+        break;
+
       // update task on DB
-      TaskService.updateTask(newTask)
+      case EditScreensState.EDIT:
+        if (displayAlgoPopup(newTask)) {
+          setAlgoPopupOpen(true);
+        } else {
+          updateTaskOnDB(newTask);
+        }
+        break;
+
+      // update local task
+      case EditScreensState.EDIT_LOCAL:
+        updateItem(newTask);
+        navigate(-1);
+        break;
+    }
+  };
+
+  const displayAlgoPopup = (newTask: ITask) => {
+    let changedFieldKey;
+    if (newTask) {
+      changedFieldKey = fieldsToDisplayAlgoPopup.find(
+        (fieldKey: string) =>
+          newTask[fieldKey as keyof ITask]?.toString() !==
+          taskToUpdate[fieldKey as keyof ITask]?.toString()
+      );
+    }
+
+    return changedFieldKey !== undefined;
+  };
+
+  const updateTaskOnDB = async (newTask: ITask) => {
+    if (newTask) {
+      return await TaskService.updateTask(newTask)
         .then((updatedTask) => {
           if (updatedTask) {
             navigate(-1);
@@ -120,10 +181,30 @@ const AddTaskPage = () => {
         .catch((err) => {
           setAlert("error", "failed to save task");
         });
-    } else {
-      // update local task
-      updateItem(newTask);
-      navigate(-1);
+    }
+  };
+
+  const generateSchedule = () => {
+    if (newTaskState) {
+      setLoading(true);
+
+      ScheduleService.generateSchedule([newTaskState])
+        .then((data: any) => {
+          if (data?.notAssignedTasks && data?.notAssignedTasks.length > 0) {
+            setPopupMessage(
+              USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE
+            );
+          } else if (data?.assignedTasks && data?.assignedTasks.length > 0) {
+            setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
+          }
+        })
+        .catch((error) => {
+          setPopupMessage(serverError(error?.response.data.errors[0]));
+        })
+        .finally(() => {
+          setLoading(false);
+          navigate("/");
+        });
     }
   };
 
@@ -151,7 +232,7 @@ const AddTaskPage = () => {
           // Display assignment field only in update task from DB
           if (
             (fieldKey === "assignmentDate" || fieldKey === "assignmentTime") &&
-            (!taskToUpdate || !location.state?.isFromDB)
+            screenState !== EditScreensState.EDIT
           ) {
             return <></>;
           }
@@ -187,17 +268,6 @@ const AddTaskPage = () => {
 
         <AlertPopup />
 
-        {/* <div className="colorPickerContainer">
-          <Colorful
-            color={tag.color}
-            onChange={(color) => {
-              console.log(color.hex);
-              setTag((prev) => ({ ...prev, color: color.hex }));
-            }}
-            disableAlpha={true}
-          />
-        </div> */}
-
         <div className="add-task_buttons">
           <button className="add-task__btn btn btn__primary" type="submit">
             Save
@@ -207,6 +277,13 @@ const AddTaskPage = () => {
           </button>
         </div>
       </form>
+
+      <AlgoMessagePopup
+        open={algoPopupOpen}
+        onClose={() => setAlgoPopupOpen(false)}
+        primaryAction={generateSchedule}
+        secondaryAction={() => newTaskState && updateTaskOnDB(newTaskState)}
+      />
     </div>
   );
 };

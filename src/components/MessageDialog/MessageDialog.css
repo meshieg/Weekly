@@ -1,0 +1,31 @@
+.message-dialog__title {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-top: 1rem;
+}
+
+/* .message-dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
+
+.message-dialog__message {
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  white-space: pre-wrap;
+}
+
+.message-dialog__extra-message {
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.message-dialog_btn {
+  width: 100%;
+  margin: 0.3rem 0;
+  height: 4.5vh;
+  border-radius: 10px;
+}

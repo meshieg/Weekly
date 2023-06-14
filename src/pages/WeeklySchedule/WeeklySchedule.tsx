@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import "./WeeklySchedule.css";
 import Paper from "@mui/material/Paper";
 import { ViewState } from "@devexpress/dx-react-scheduler";
 import {
@@ -9,12 +10,16 @@ import {
   Toolbar,
   DateNavigator,
   ViewSwitcher,
+  CurrentTimeIndicator,
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../customHooks/useUser";
+import MessageDialog from "../../components/MessageDialog/MessageDialog";
+import { useAppContext } from "../../contexts/AppContext";
+import Loading from "../../components/Loading/Loading";
 
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>([]);
@@ -22,11 +27,10 @@ const WeeklySchedule = () => {
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
   const { user } = useUser();
+  const { popupMessage, setPopupMessage } = useAppContext();
+  const [dataLoading, setDataLoading] = useState(false);
 
-  // TODO: Add on click - open the task/event to display and edit
   const onAppointmentClick = (id: number, isTask: boolean) => {
-    console.log("On click");
-    console.log("taskId:" + id);
     if (isTask) {
       navigate("/display-task", {
         state: {
@@ -57,7 +61,6 @@ const WeeklySchedule = () => {
         style={{
           backgroundColor: data.color || "undefined",
           borderRadius: "4px",
-          // width: "auto",
         }}
       >
         {children}
@@ -65,12 +68,17 @@ const WeeklySchedule = () => {
     );
   };
 
-  // TODO: specify the date in the day display
   const DayScaleCell = ({ ...restProps }: WeekView.DayScaleCellProps) => {
     return (
       <WeekView.DayScaleCell
         {...restProps}
-        onClick={(event: any) => navigate("/day")}
+        onClick={() =>
+          navigate("/day", {
+            state: {
+              date: restProps?.startDate,
+            },
+          })
+        }
       />
     );
   };
@@ -87,23 +95,30 @@ const WeeklySchedule = () => {
       });
     }
 
+    setDataLoading(true);
     ScheduleService.getSchedule(
       new Date("2023-01-01 00:00:00"),
       new Date("2050-12-31 00:00:00")
-    ).then((data) => {
-      const dataDisplay = data?.map((scheduleEntity) => {
-        return {
-          id: scheduleEntity.id,
-          title: scheduleEntity.title,
-          startDate: scheduleEntity.startTime,
-          endDate: scheduleEntity.endTime,
-          color: scheduleEntity.tag?.color,
-          isTask: scheduleEntity.isTask,
-        };
-      });
-      setScheduleData(dataDisplay);
-    });
+    )
+      .then((data) => {
+        const dataDisplay = data?.map((scheduleEntity) => {
+          return {
+            id: scheduleEntity.id,
+            title: scheduleEntity.title,
+            startDate: scheduleEntity.startTime,
+            endDate: scheduleEntity.endTime,
+            color: scheduleEntity.tag?.color,
+            isTask: scheduleEntity.isTask,
+          };
+        });
+        setScheduleData(dataDisplay);
+      })
+      .finally(() => setDataLoading(false));
   }, []);
+
+  if (dataLoading) {
+    return <Loading />;
+  }
 
   return (
     <Paper>
@@ -127,7 +142,21 @@ const WeeklySchedule = () => {
         <ViewSwitcher />
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
+        <CurrentTimeIndicator />
       </Scheduler>
+
+      <MessageDialog
+        open={popupMessage !== undefined}
+        onClose={() => {
+          setPopupMessage(undefined);
+        }}
+        title={popupMessage?.title}
+        message={popupMessage?.message}
+        extraMessage={popupMessage?.extraMessage}
+        primaryButtonText={popupMessage?.primaryButtonText}
+        icon={popupMessage?.icon}
+        primaryButtonAction={() => setPopupMessage(undefined)}
+      />
     </Paper>
   );
 };

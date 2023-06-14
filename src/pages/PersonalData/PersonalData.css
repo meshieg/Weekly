@@ -30,4 +30,7 @@
     margin-top: 2vh;
     width: 65%;
     align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
