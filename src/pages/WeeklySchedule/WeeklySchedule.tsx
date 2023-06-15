@@ -20,6 +20,7 @@ import useUser from "../../customHooks/useUser";
 import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import { useAppContext } from "../../contexts/AppContext";
 import Loading from "../../components/Loading/Loading";
+import { DEFAULT_TAG } from "../../utils/constants";
 
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>([]);
@@ -59,7 +60,7 @@ const WeeklySchedule = () => {
         onClick={() => onAppointmentClick(data?.id as number, data?.isTask)}
         data={data}
         style={{
-          backgroundColor: data.color || "undefined",
+          backgroundColor: data.color || DEFAULT_TAG.color,
           borderRadius: "4px",
         }}
       >

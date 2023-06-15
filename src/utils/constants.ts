@@ -27,7 +27,7 @@ export enum ItemType {
   EVENT = "EVENT",
 }
 
-export const DEFAULT_TAG: ITag = { id: 0, name: "None", color: "" };
+export const DEFAULT_TAG: ITag = { id: 0, name: "None", color: "#AFAFAF" };
 
 export enum UserState {
   SIGNED,

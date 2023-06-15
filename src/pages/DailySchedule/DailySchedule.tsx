@@ -12,6 +12,7 @@ import { ScheduleService } from "../../services/schedule.service";
 import useToolbar from "../../customHooks/useToolbar";
 import useUser from "../../customHooks/useUser";
 import { useLocation, useNavigate } from "react-router-dom";
+import { DEFAULT_TAG } from "../../utils/constants";
 
 const DailySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
@@ -53,7 +54,7 @@ const DailySchedule = () => {
         onClick={() => onAppointmentClick(data?.id as number, data?.isTask)}
         data={data}
         style={{
-          backgroundColor: data.color || "undefined",
+          backgroundColor: data.color || DEFAULT_TAG.color,
           borderRadius: "4px",
         }}
       >
