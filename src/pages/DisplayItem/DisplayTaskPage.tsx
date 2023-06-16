@@ -12,6 +12,7 @@ import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES } from "../../utils/messages";
 import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import Loading from "../../components/Loading/Loading";
+import useAlert from "../../customHooks/useAlert";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -29,14 +30,20 @@ const DisplayTaskPage = () => {
   const taskId = navLocation.state?.taskId;
   const { setPopupMessage, popupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setToolbar("Task Details", true);
     if (navLocation.state?.isFromDB) {
       setDataLoading(true);
+
       TaskService.getTaskById(taskId)
         .then((task) => {
           setTaskToShow(task as ITask);
+        })
+        .catch((err) => {
+          setAlert("error", "Something went wrong:( please try again later");
+          console.log(err);
         })
         .finally(() => setDataLoading(false));
     } else if (taskId !== undefined) {
@@ -60,13 +67,11 @@ const DisplayTaskPage = () => {
             if (deleted) {
               navigate(-1);
             } else {
-              //TODO: add alert error message
-              console.log("failed to delete task");
+              setAlert("error", "Failed to delete task");
             }
           })
           .catch(() => {
-            //TODO: add alert error message
-            console.log("failed to delete task");
+            setAlert("error", "Failed to delete task");
           });
       } else {
         removeItem(taskToShow.id);

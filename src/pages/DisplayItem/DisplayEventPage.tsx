@@ -11,6 +11,8 @@ import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import { USER_MESSAGES } from "../../utils/messages";
 import { useAppContext } from "../../contexts/AppContext";
 import Loading from "../../components/Loading/Loading";
+import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -28,6 +30,7 @@ const DisplayEventPage = () => {
   const eventId: number = navLocation.state?.eventId;
   const { setPopupMessage, popupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     console.log(navLocation.state);
@@ -57,15 +60,14 @@ const DisplayEventPage = () => {
       EventService.deleteEvent(eventId)
         .then((deleted) => {
           if (deleted) {
+            setAlert("success", "Event deleted successfully");
             navigate(-1);
           } else {
-            //TODO: add alert error message
-            console.log("failed to delete event");
+            setAlert("error", "Failed to delete event");
           }
         })
         .catch(() => {
-          //TODO: add alert error message
-          console.log("failed to delete event");
+          setAlert("error", "Failed to delete event");
         });
     } else {
       removeItem(eventId);

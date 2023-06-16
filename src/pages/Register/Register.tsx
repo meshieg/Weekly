@@ -67,7 +67,7 @@ const Register = () => {
         const currUser = {
           id: data.user.id,
           firstName: newUser.firstName,
-          lasrName: newUser.lastName,
+          lastName: newUser.lastName,
           email: newUser.email,
           beginDayHour: newUser.beginDayHour,
           endDayHour: newUser.endDayHour,
