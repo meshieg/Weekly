@@ -47,6 +47,7 @@ export function isValidDate(date: Date) {
 }
 
 export function validateTaskInputs(task: ITask) {
+    console.log(task)
     if (isNaN(task.estTime) || task.estTime % 1 !== 0) {
         return "Estimated time is not valid"
     }
@@ -65,7 +66,7 @@ export function validateTaskInputs(task: ITask) {
         }
 
         let endAssignment = new Date(task.assignment);
-        endAssignment.setHours(endAssignment.getHours() + task.estTime);
+        endAssignment.setHours(endAssignment.getHours() + parseInt(task.estTime.toString()));
 
         if (endAssignment > task.dueDate) {
             return "Assignment can't be after due date"
@@ -75,6 +76,7 @@ export function validateTaskInputs(task: ITask) {
 }
 
 export function validateEventInputs(event: IEvent) {
+    console.log(event)
     if (!isValidDate(event.startTime)) {
         return "Start date is not valid"
     }
@@ -91,5 +93,5 @@ export function validateEventInputs(event: IEvent) {
         return "End time must be after start time"
     }
 
-}
 
+}

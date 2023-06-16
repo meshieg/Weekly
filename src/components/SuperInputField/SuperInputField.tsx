@@ -31,7 +31,7 @@ interface IProps {
   required?: boolean;
   placeholder?: string;
   multiline?: boolean;
-  disabled? :boolean;
+  disabled?: boolean;
 }
 
 const SuperInputField: React.FC<IProps> = (props) => {

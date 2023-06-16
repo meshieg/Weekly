@@ -50,3 +50,9 @@
   animation-duration: 2s; */
   color: #00000078 !important;
 }
+
+.item__left-options {
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.54);
+}

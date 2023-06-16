@@ -11,6 +11,7 @@ import PersonalData from "./pages/PersonalData/PersonalData";
 import { UserState } from "./utils/constants";
 import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
 import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
+import MyTagsPage from "./pages/MyTags/MyTagsPage";
 
 type RouteType = {
   path: string;
@@ -114,11 +115,19 @@ export const routes: RouteType[] = [
     allowedUserState: UserState.SIGNED,
   },
   {
+    path: "/my-profile/my-tags",
+    element: <MyTagsPage />,
+    showBottomToolbar: false,
+    showToolbar: true,
+    showFab: false,
+    allowedUserState: UserState.SIGNED,
+  },
+  {
     path: "/my-profile/personal-data",
     element: <PersonalData />,
     showBottomToolbar: false,
     showToolbar: true,
     showFab: false,
-    allowedUserState: UserState.SIGNED
+    allowedUserState: UserState.SIGNED,
   },
 ];
