@@ -4,7 +4,7 @@ import { IScheduleEntity } from "../utils/types";
 const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule`;
 
 export class ScheduleService {
-    static getSchedule = async (minDate: Date, maxDate: Date): Promise<IScheduleEntity[]> => {
+    static getSchedule = async (minDate?: Date, maxDate?: Date): Promise<IScheduleEntity[]> => {
         const url = schedulePrefix + "/week";
         return await AxiosInstance.get(url, {
             params: {
