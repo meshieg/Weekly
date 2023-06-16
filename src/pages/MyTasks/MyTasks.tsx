@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { TaskService } from "../../services/task.service";
 import "./MyTasks.css";
+import React, { useEffect, useRef, useState } from "react";
+import { TaskService } from "../../services/task.service";
 import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 import { useNavigate } from "react-router-dom";
+import { FilterAltOutlined as FilterIcon } from '@mui/icons-material';
+import TagsList from "../../components/TagsList/TagsList";
+import { TagService } from "../../services/tag.service";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
+  const [isFilterListOpen, setFilterListOpen] = useState<boolean>(false);
+  const [isFilterSet, setFilterState] = useState<boolean>(false);
+  const [tagsList, setTagsList] = useState<ITag[]>([]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
@@ -22,6 +29,14 @@ const MyTasks: React.FC = () => {
         setAllTasks(
           tasks?.sort((t1, t2) => t1.dueDate.getTime() - t2.dueDate.getTime())
         );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    TagService.getAllTagsByUser()
+      .then((tags: ITag[]) => {
+        setTagsList(tags);
       })
       .catch((err) => {
         console.log(err);
@@ -53,6 +68,20 @@ const MyTasks: React.FC = () => {
     setDoneTasks(allTasks?.filter((task) => task.isDone === true));
   }, [allTasks]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if(!dropdownRef?.current?.contains(event.target)) {
+        setFilterListOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return() => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [dropdownRef]);
+
   const onTaskClick = (id: number) => {
     const item = allTasks.find((task) => task.id === id);
     if (item !== undefined) {
@@ -65,8 +94,39 @@ const MyTasks: React.FC = () => {
     }
   };
 
+  const setFilter = (tag?: ITag) => {
+    let filteredTasks = allTasks.filter(task => !task.isDone);
+    setFilterState(false);
+
+    if(tag) {    // State of: there is a tag to filter by
+      filteredTasks = allTasks.filter(task => task.tag?.id === tag.id && !task.isDone);
+      setFilterState(true);
+    }
+    
+    setNotDoneTasks(filteredTasks);
+    setFilterListOpen(false);
+  }
+
+  const onBtnClick = () => {
+    console.log(isFilterListOpen);
+    setFilterListOpen(!isFilterListOpen)
+    console.log(isFilterListOpen);
+  }
+
   return (
-    <div className="my-tasks">
+    <>
+      <div className="filter__container" ref={dropdownRef}>
+        <button className={`filter__button ${isFilterSet && 'active'}`} 
+                onClick={() => setFilterListOpen(!isFilterListOpen)}>
+          <FilterIcon /> 
+        </button>
+        <div className={`filter__list ${isFilterListOpen ? 'active' : 'inactive'}`}>
+          <TagsList
+              tags={tagsList} 
+              onTagClick={setFilter} />
+          <button className="btn btn__secondary" disabled={!isFilterSet} onClick={() => setFilter()}>clear filter</button>
+        </div> 
+      </div>
       <ScheduleItemsList
         items={notDoneTasks}
         onCheckedClick={onTaskCheckedClick}
@@ -78,7 +138,7 @@ const MyTasks: React.FC = () => {
           onCheckedClick={onTaskCheckedClick}
         />
       </CollapseHeader>
-    </div>
+    </>
   );
 };
 

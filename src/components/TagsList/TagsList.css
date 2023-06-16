@@ -1,0 +1,22 @@
+.tag-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem;
+    padding-right: 5%;
+    width: 100%;
+    align-items: center;
+}
+
+.tag-title {
+    margin-left: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tag-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
