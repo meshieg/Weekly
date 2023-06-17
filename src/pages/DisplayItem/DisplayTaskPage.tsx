@@ -126,14 +126,14 @@ const DisplayTaskPage = () => {
             />
             <div className="dateRowContainer">
               <TextField
-                value={taskToShow.dueDate.toLocaleDateString()}
+                value={taskToShow.dueDate.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="Due date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={taskToShow.dueDate.toLocaleTimeString()}
+                value={taskToShow.dueDate.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Due time"
                 variant="standard"
@@ -162,7 +162,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleDateString()
+                      ? taskToShow.assignment?.toLocaleDateString("en-GB")
                       : " "
                   }
                   disabled={true}
@@ -173,7 +173,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleTimeString()
+                      ? taskToShow.assignment?.toLocaleTimeString("he-IL")
                       : " "
                   }
                   disabled={true}
