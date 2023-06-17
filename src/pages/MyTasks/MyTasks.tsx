@@ -123,21 +123,25 @@ const MyTasks: React.FC = () => {
         <div className={`filter__list ${isFilterListOpen ? 'active' : 'inactive'}`}>
           <TagsList
               tags={tagsList} 
+              tagWidth="1.5rem"
               onTagClick={setFilter} />
           <button className="btn btn__secondary" disabled={!isFilterSet} onClick={() => setFilter()}>clear filter</button>
         </div> 
       </div>
+      { isFilterSet && notDoneTasks.length === 0 ?
+      <div className="no-tasks">No tasks to show</div> :
       <ScheduleItemsList
         items={notDoneTasks}
         onCheckedClick={onTaskCheckedClick}
         onItemClick={onTaskClick}
-      />
+      />}
+      { !isFilterSet ? 
       <CollapseHeader headerText="Done">
         <ScheduleItemsList
           items={doneTasks}
           onCheckedClick={onTaskCheckedClick}
         />
-      </CollapseHeader>
+      </CollapseHeader> : <></> }
     </>
   );
 };
