@@ -123,6 +123,7 @@ const NewItemsList = () => {
                 items={newTasks}
                 onDeleteClick={onDeleteItem}
                 onItemClick={onItemClick}
+                showNoAssignmentIndication={false}
               />
             </CollapseHeader>
           )}
