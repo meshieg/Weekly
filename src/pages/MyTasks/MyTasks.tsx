@@ -136,9 +136,9 @@ const MyTasks: React.FC = () => {
     // sortItems.find(currItem => item.title === currItem.title && item.direction !== currItem.direction ? currItem.active = false : null)
     // sortItems[item.key].active = !sortItems[item.key].active;
 
-    if(!item.active) {
-      sortItems.map(currItem => currItem.active = false);
-      sortItems[item.key].active = !sortItems[item.key].active;
+    sortItems[item.key].active = !sortItems[item.key].active;
+    if(item.active) {
+      sortItems.map(currItem => currItem.key !== item.key ? currItem.active = false : null);
 
       notDoneTasks.sort((a, b) => compareFunc(a, b, item));
       doneTasks.sort((a, b) => compareFunc(a, b, item));
