@@ -29,7 +29,7 @@ export function validateHours(beginDayHour: number, endDayHour: number) {
 }
 
 export function validateUserInputs(user: IUser) {
-    if (!validateEmail(user.email)) {
+    if (user.email && !validateEmail(user.email)) {
         return "Email address is not valid..."
     }
 

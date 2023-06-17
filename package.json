@@ -8,6 +8,7 @@
     "@devexpress/dx-react-scheduler-material-ui": "^4.0.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.15",
     "@mui/x-date-pickers": "^6.5.0",
     "@testing-library/jest-dom": "^5.16.5",
