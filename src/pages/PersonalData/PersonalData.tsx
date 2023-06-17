@@ -46,7 +46,7 @@ const PersonalData = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [displaySchedulePopup, setDisplayPopup] = useState<boolean>(false);
   const [screenState, setScreenState] = useState<number>(EditScreensState.ADD);
-  const { setPopupMessage } = useAppContext();
+  const { setLoading, setPopupMessage } = useAppContext();
 
   useEffect(() => {
     if (user) {
@@ -189,6 +189,7 @@ const PersonalData = () => {
   }
 
   const updateUserWithSchedule = async () => {
+    setLoading(true);
     const updatedUser: IUser = {
       id: user.id,
       firstName: inputValues.firstName,
@@ -202,13 +203,15 @@ const PersonalData = () => {
       .then((data) => {
         setUser(updatedUser);
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
-        navigate("/");
+
       })
       .catch((error) => {
         if (error?.response?.data?.errors[0]?.message) {
           setPopupMessage(serverError(error?.response.data.errors[0]));
-          navigate("/");
         }
+      }).finally(() => {
+          setLoading(false);
+          navigate("/");
       });
   };
 
