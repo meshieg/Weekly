@@ -158,7 +158,6 @@ const PersonalData = () => {
         .then((data) => {
           setUser(updatedUser);
           if (displaySchedulePopup) {
-            console.log("reschedule");
             generateSchedule();
           }
           setAlert("success", "Changes were saved successfully!");

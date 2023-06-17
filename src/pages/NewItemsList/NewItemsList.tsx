@@ -13,6 +13,8 @@ import Loading from "../../components/Loading/Loading";
 import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import { serverError, USER_MESSAGES } from "../../utils/messages";
 import { useAppContext } from "../../contexts/AppContext";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import useAlert from "../../customHooks/useAlert";
 
 const NewItemsList = () => {
   const { newTasks, newEvents, removeItem, refreshItems } =
@@ -20,6 +22,7 @@ const NewItemsList = () => {
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
   const { setLoading, setPopupMessage, popupMessage } = useAppContext();
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setToolbar("My New Added Tasks and Events", false);
@@ -85,6 +88,11 @@ const NewItemsList = () => {
     }
   };
 
+  const onDeleteItem = (itemId: number) => {
+    removeItem(itemId);
+    setAlert("success", "Item deleted successfully");
+  };
+
   return (
     <div className="new-items__container">
       {newTasks.length === 0 && newEvents.length === 0 ? (
@@ -113,7 +121,7 @@ const NewItemsList = () => {
             <CollapseHeader headerText="Tasks">
               <ScheduleItemsList
                 items={newTasks}
-                onDeleteClick={removeItem}
+                onDeleteClick={onDeleteItem}
                 onItemClick={onItemClick}
               />
             </CollapseHeader>
@@ -123,7 +131,7 @@ const NewItemsList = () => {
             <CollapseHeader headerText="Events">
               <ScheduleItemsList
                 items={newEvents}
-                onDeleteClick={removeItem}
+                onDeleteClick={onDeleteItem}
                 onItemClick={onItemClick}
               />
             </CollapseHeader>
@@ -131,6 +139,7 @@ const NewItemsList = () => {
         </>
       )}
 
+      <AlertPopup />
       <MessageDialog
         open={popupMessage !== undefined}
         onClose={() => {

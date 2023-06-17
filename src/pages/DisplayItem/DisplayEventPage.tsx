@@ -41,6 +41,12 @@ const DisplayEventPage = () => {
         .then((event) => {
           setEventToShow(event as IEvent);
         })
+        .catch((err) => {
+          setAlert(
+            "error",
+            "Something went wrong trying to get event data:( please try again later"
+          );
+        })
         .finally(() => setDataLoading(false));
     } else {
       const event = getById(eventId);
@@ -71,6 +77,7 @@ const DisplayEventPage = () => {
         });
     } else {
       removeItem(eventId);
+      setAlert("success", "Event deleted successfully");
       navigate(-1);
     }
   };
@@ -168,7 +175,7 @@ const DisplayEventPage = () => {
           </div>
         </div>
       )}
-
+      <AlertPopup />
       <MessageDialog
         open={popupMessage !== undefined}
         onClose={() => {

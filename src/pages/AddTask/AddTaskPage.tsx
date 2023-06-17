@@ -76,7 +76,6 @@ const AddTaskPage = () => {
         setTagsList(tags);
       })
       .catch((err) => {
-        setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
   }, []);

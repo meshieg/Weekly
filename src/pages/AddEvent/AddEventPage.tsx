@@ -70,7 +70,6 @@ const AddEventPage = () => {
       })
       .catch((err) => {
         console.log(err);
-        setAlert("error", "Something went wrong:( please try again later");
       });
     if (eventToUpdate !== undefined) {
       eventToUpdate.tag && onSelectTag(eventToUpdate.tag);

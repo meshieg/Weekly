@@ -6,7 +6,6 @@ import { TagService } from "../../services/tag.service";
 import GeneralDialog from "../GeneralDialog/GeneralDialog";
 import { ReactComponent as AddTaskIcon } from "../../assets/icons/AddTaskIcon.svg";
 import useAlert from "../../customHooks/useAlert";
-import AlertPopup from "../AlertPopup/AlertPopup";
 
 interface IAddTagProps {
   open: boolean;
@@ -41,7 +40,6 @@ const AddTagPopup = (props: IAddTagProps) => {
         } as ITag)
           .then((data) => {
             setAlert("success", "Tag updated successfully");
-            props.onCancel();
           })
           .catch((err) => {
             setAlert("error", "Could not update tag:( please try again later");
@@ -54,10 +52,12 @@ const AddTagPopup = (props: IAddTagProps) => {
         TagService.addTag({ name: tagName, color: tagColor } as ITag)
           .then((data) => {
             setAlert("success", "Tag added successfully");
-            props.onCancel();
           })
           .catch((err) => {
             setAlert("error", "Could not add tag:( please try again later");
+          })
+          .finally(() => {
+            props.onCancel();
           });
       }
     }
@@ -98,7 +98,6 @@ const AddTagPopup = (props: IAddTagProps) => {
             Cancel
           </button>
         </div>
-        <AlertPopup />
       </div>
     </GeneralDialog>
   );

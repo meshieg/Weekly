@@ -13,6 +13,7 @@ import { USER_MESSAGES } from "../../utils/messages";
 import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import Loading from "../../components/Loading/Loading";
 import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -42,7 +43,10 @@ const DisplayTaskPage = () => {
           setTaskToShow(task as ITask);
         })
         .catch((err) => {
-          setAlert("error", "Something went wrong:( please try again later");
+          setAlert(
+            "error",
+            "Something went wrong trying to get task data:( please try again later"
+          );
           console.log(err);
         })
         .finally(() => setDataLoading(false));
@@ -65,6 +69,7 @@ const DisplayTaskPage = () => {
         TaskService.deleteTask(taskToShow.id)
           .then((deleted) => {
             if (deleted) {
+              setAlert("success", "Task deleted successfully");
               navigate(-1);
             } else {
               setAlert("error", "Failed to delete task");
@@ -74,6 +79,7 @@ const DisplayTaskPage = () => {
             setAlert("error", "Failed to delete task");
           });
       } else {
+        setAlert("success", "Task deleted successfully");
         removeItem(taskToShow.id);
         navigate(-1);
       }
@@ -199,6 +205,7 @@ const DisplayTaskPage = () => {
               Delete
             </button>
           </div>
+          <AlertPopup />
         </div>
       )}
 

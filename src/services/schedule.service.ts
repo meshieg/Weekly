@@ -5,8 +5,8 @@ const schedulePrefix = `${process.env.REACT_APP_BACKEND_URL}/schedule`;
 
 export class ScheduleService {
   static getSchedule = async (
-    minDate: Date,
-    maxDate: Date
+    minDate?: Date,
+    maxDate?: Date
   ): Promise<IScheduleEntity[]> => {
     const url = schedulePrefix + "/week";
     return await AxiosInstance.get(url, {
@@ -24,6 +24,7 @@ export class ScheduleService {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -35,8 +36,6 @@ export class ScheduleService {
 
     return AxiosInstance.post(url, { tasks, events })
       .then((res) => {
-        console.log("Schedule generated successfully");
-        console.log(res.data);
         return res.data;
         // return res.data.map((scheduleEntity: IScheduleEntity) => {
         //     return {
