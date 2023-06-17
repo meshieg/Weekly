@@ -247,10 +247,12 @@ const PersonalData = () => {
         )}
       </form>
       {screenState === EditScreensState.ADD ? 
-        <CustomLink
-          text="back to log-in"
-          onPress={() => navigate("/login")}
-        /> : <></>}
+        <div className="login__link">
+          <CustomLink
+            text="Back to Login"
+            onPress={() => navigate("/login")}
+          />
+        </div> : <></>}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
