@@ -5,6 +5,7 @@ import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 import { useNavigate } from "react-router-dom";
+import useAlert from "../../customHooks/useAlert";
 import { FilterAltOutlined as FilterIcon,
          SwapVertOutlined as SortIcon } from '@mui/icons-material';
 import TagsList from "../../components/TagsList/TagsList";
@@ -17,6 +18,7 @@ const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
+  const { setAlert } = useAlert();
   const [isFilterListOpen, setFilterListOpen] = useState<boolean>(false);
   const [isFilterSet, setFilterState] = useState<boolean>(false);
   const [isSortSet, setSortState] = useState<boolean>(false);
@@ -38,7 +40,8 @@ const MyTasks: React.FC = () => {
         setAllTasks(tasks?.sort((t1, t2) => t1.id - t2.id));
       })
       .catch((err) => {
-        console.log(err);
+        setAlert("error", "Failed to fetch tasks");
+        console.log(err.message);
       });
 
     TagService.getAllTagsByUser()
@@ -46,7 +49,8 @@ const MyTasks: React.FC = () => {
         setTagsList(tags);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert("error", "Failed to fetch tasks");
+        console.log(err.message);
       });
   }, []);
 
@@ -61,11 +65,11 @@ const MyTasks: React.FC = () => {
               return task;
             }
           });
-
           setAllTasks(newTasks);
         }
       })
       .catch((err) => {
+        setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
   };

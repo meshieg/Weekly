@@ -18,6 +18,7 @@ import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup
 import { ScheduleService } from "../../services/schedule.service";
 import { useAppContext } from "../../contexts/AppContext";
 import { serverError, USER_MESSAGES } from "../../utils/messages";
+import useUser from "../../customHooks/useUser";
 
 const fieldsToDisplayAlgoPopup = [
   "estTime",
@@ -51,6 +52,7 @@ const AddTaskPage = () => {
   const [algoPopupOpen, setAlgoPopupOpen] = useState(false);
   const [newTaskState, setNewTaskState] = useState<ITask>();
   const { setLoading, setPopupMessage } = useAppContext();
+  const { user } = useUser();
 
   const getScreenState = () => {
     if (taskToUpdate === undefined) {
@@ -123,7 +125,11 @@ const AddTaskPage = () => {
     setNewTaskState(newTask);
 
     // Validate inputs
-    const alertMessage = validateTaskInputs(newTask);
+    const alertMessage = validateTaskInputs(
+      newTask,
+      user?.beginDayHour,
+      user?.endDayHour
+    );
     if (alertMessage) {
       setAlert("error", alertMessage);
       return;
@@ -174,12 +180,21 @@ const AddTaskPage = () => {
         .then((updatedTask) => {
           if (updatedTask) {
             navigate(-1);
+            // setAlert("success", "Task saved successfully");
           } else {
-            setAlert("error", "failed to save task");
+            setAlert("error", "Failed to save task");
           }
         })
         .catch((err) => {
-          setAlert("error", "failed to save task");
+          if (err?.response?.data?.errors[0]?.message) {
+            setAlert("error", err?.response?.data?.errors[0]?.message);
+          } else {
+            console.log(err.messages);
+            setAlert("error", "Failed to save task");
+          }
+        })
+        .finally(() => {
+          setAlgoPopupOpen(false);
         });
     }
   };
