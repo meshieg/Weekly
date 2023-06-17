@@ -23,6 +23,11 @@ export function validateEmail(email: string) {
     return (email.match(validRegex))
 }
 
+export function validateHours(beginDayHour: number, endDayHour: number) {
+    // Valid hours: 24/7 or the begin hour is before the end hour
+    return beginDayHour === endDayHour || beginDayHour < endDayHour
+}
+
 export function validateUserInputs(user: IUser) {
     if (!validateEmail(user.email)) {
         return "Email address is not valid..."
@@ -30,6 +35,10 @@ export function validateUserInputs(user: IUser) {
 
     if (user.confirmPassword && (user.password !== user.confirmPassword)) {
         return "Please confirm your password correctly"
+    }
+
+    if (user.beginDayHour && user.endDayHour && !validateHours(user.beginDayHour, user.endDayHour)) {
+        return "The day's beginning hour must be before the day's end hour"
     }
 }
 

@@ -99,10 +99,7 @@ const WeeklySchedule = () => {
     }
 
     setDataLoading(true);
-    ScheduleService.getSchedule(
-      new Date("2023-01-01 00:00:00"),
-      new Date("2050-12-31 00:00:00")
-    )
+    ScheduleService.getSchedule()
       .then((data) => {
         const dataDisplay = data?.map((scheduleEntity) => {
           return {

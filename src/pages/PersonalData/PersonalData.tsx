@@ -105,7 +105,7 @@ const PersonalData = () => {
   };
 
   const handleRegister = async () => {
-    const newUser: IUser = {
+    let newUser: IUser = {
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
       email: inputValues.email,
@@ -113,6 +113,11 @@ const PersonalData = () => {
       beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
+
+    // When the user basically works 24/7
+    if (newUser.beginDayHour === newUser.endDayHour) {
+      newUser = { ...newUser, beginDayHour: 0, endDayHour: 0 };
+    }
 
     const alertMessage = validateUserInputs({
       ...newUser,
