@@ -1,13 +1,13 @@
-import { Logout, 
-         PersonOutline as Person,
+import { Logout as LogoutIcon, 
+         PersonOutline as PersonIcon,
         //  NotificationsNone as Notifications,
-         LabelOutlined as Tag } from '@mui/icons-material';
+         LabelOutlined as TagIcon } from '@mui/icons-material';
 import { IProfileAction } from '../../utils/types';
 
 export const navActions: IProfileAction[] = [
     {
         id: 0,
-        icon: <Person/>,
+        icon: <PersonIcon/>,
         text: "Personal Information",
         route: "./personal-data"
     },
@@ -19,7 +19,7 @@ export const navActions: IProfileAction[] = [
     // },
     {
         id: 1,
-        icon: <Tag/>,
+        icon: <TagIcon/>,
         text: "My Tags",
         route: "./my-tags"
     }
@@ -27,7 +27,7 @@ export const navActions: IProfileAction[] = [
 
 export const logout: IProfileAction = {
     id: 0,
-    icon: <Logout/>,
+    icon: <LogoutIcon/>,
     text: "Logout",
     displayArrow: false
 }

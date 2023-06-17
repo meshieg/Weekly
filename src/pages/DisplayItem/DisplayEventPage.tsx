@@ -110,14 +110,14 @@ const DisplayEventPage = () => {
             />
             <div className="dateRowContainer">
               <TextField
-                value={eventToShow.startTime.toLocaleDateString()}
+                value={eventToShow.startTime.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="Start date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.startTime.toLocaleTimeString()}
+                value={eventToShow.startTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Start time"
                 variant="standard"
@@ -126,14 +126,14 @@ const DisplayEventPage = () => {
             </div>
             <div className="dateRowContainer">
               <TextField
-                value={eventToShow.endTime.toLocaleDateString()}
+                value={eventToShow.endTime.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="End date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.endTime.toLocaleTimeString()}
+                value={eventToShow.endTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="End time"
                 variant="standard"

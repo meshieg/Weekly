@@ -87,16 +87,16 @@ const WeeklySchedule = () => {
   };
 
   useEffect(() => {
-    // Set to a restricted display when the user's day takes place within the 24 hours.
-    // When the user's day takes place within two different days - the display won't be rectricted.
-    if (user?.endDayHour === 0) {
-      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    } else if (user?.beginDayHour <= user?.endDayHour) {
-      setDayHours({
-        beginDayHour: user?.beginDayHour,
-        endDayHour: user?.endDayHour,
-      });
-    }
+    // // Set to a restricted display when the user's day takes place within the 24 hours.
+    // // When the user's day takes place within two different days - the display won't be rectricted.
+    // if (user?.endDayHour === 0) {
+    //   setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    // } else if (user?.beginDayHour <= user?.endDayHour) {
+    //   setDayHours({
+    //     beginDayHour: user?.beginDayHour,
+    //     endDayHour: user?.endDayHour,
+    //   });
+    // }
 
     setDataLoading(true);
     ScheduleService.getSchedule()
@@ -124,8 +124,8 @@ const WeeklySchedule = () => {
   }
 
   return (
-    <Paper>
-      <Scheduler data={scheduleData}>
+    <Paper style={{ height: "100%" }}>
+      <Scheduler data={scheduleData} height={"auto"}>
         <ViewState
           defaultCurrentDate={currDate}
           defaultCurrentViewName="Week"
