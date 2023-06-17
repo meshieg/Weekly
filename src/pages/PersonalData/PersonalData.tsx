@@ -34,7 +34,7 @@ const initialValues: IInputs = {
   password: "",
   confirmPassword: "",
   beginDayHour: new Date(0, 0, 0, 9, 0, 0),
-  endDayHour: new Date(0, 0, 0, 0, 17, 0),
+  endDayHour: new Date(0, 0, 0, 17, 0, 0),
 };
 
 const PersonalData = () => {
