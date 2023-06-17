@@ -180,6 +180,7 @@ const AddTaskPage = () => {
         .then((updatedTask) => {
           if (updatedTask) {
             navigate(-1);
+            // setAlert("success", "Task saved successfully");
           } else {
             setAlert("error", "Failed to save task");
           }

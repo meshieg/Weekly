@@ -163,6 +163,7 @@ const AddEventPage = () => {
         .then((updatedEvent) => {
           if (updatedEvent) {
             navigate(-1);
+            // setAlert("success", "Event saved successfully");
           } else {
             setAlert("error", "Failed to save event");
           }
