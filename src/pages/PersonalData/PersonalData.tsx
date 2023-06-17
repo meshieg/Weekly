@@ -46,7 +46,6 @@ const PersonalData = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [displaySchedulePopup, setDisplayPopup] = useState<boolean>(false);
   const [screenState, setScreenState] = useState<number>(EditScreensState.ADD);
-  const [updatedUser, setUpdatedUser] = useState<IUser>(user);
   const { setPopupMessage } = useAppContext();
 
   useEffect(() => {
@@ -143,8 +142,8 @@ const PersonalData = () => {
       });
   };
 
-  const handleUpdateUser = () => {
-    const currUpdatedUser: IUser = {
+  const handleUpdateUser = async () => {
+    const updatedUser: IUser = {
       id: user.id,
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
@@ -153,35 +152,32 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    setUpdatedUser(currUpdatedUser);
-
-    if(checkTimeChanged()) {
+    if(checkTimeChanged(updatedUser)) {
       if(displaySchedulePopup) {
-        console.log("save without generating");
-        // updateUserWithoutSchedule();
+        await updateUserWithoutSchedule(updatedUser);
       }
       
       setDisplayPopup(!displaySchedulePopup);
-    } else if(CheckNameChanged()) {
-      updateUserWithoutSchedule();
+    } else if(checkNameChanged(updatedUser)) {
+      await updateUserWithoutSchedule(updatedUser);
     } else {
       setScreenState(EditScreensState.EDIT_LOCAL);
     }
   };
 
-  const checkTimeChanged = () => {
+  const checkTimeChanged = (updatedUser: IUser) => {
     return user.beginDayHour !== updatedUser.beginDayHour ||
            user.endDayHour !== updatedUser.endDayHour;
   }
 
-  const CheckNameChanged = () => {
+  const checkNameChanged = (updatedUser: IUser) => {
     return user.firstName !== updatedUser.firstName ||
            user.lastName !== updatedUser.lastName;
   }
 
-  const updateUserWithoutSchedule = async () => {
+  const updateUserWithoutSchedule = async (updatedUser: IUser) => {
     await UserService.updateUser(updatedUser, false)
-      .then((data) => {
+      .then(() => {
         setUser(updatedUser);
         setAlert("success", "Changes were saved successfully!");
       })
@@ -193,16 +189,25 @@ const PersonalData = () => {
   }
 
   const updateUserWithSchedule = async () => {
+    const updatedUser: IUser = {
+      id: user.id,
+      firstName: inputValues.firstName,
+      lastName: inputValues.lastName,
+      email: inputValues.email,
+      beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
+      endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
+    };
+
     await UserService.updateUser(updatedUser, true)
       .then((data) => {
         setUser(updatedUser);
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
-        setDisplayPopup(false);
-        setScreenState(EditScreensState.EDIT_LOCAL);
+        navigate("/");
       })
       .catch((error) => {
         if (error?.response?.data?.errors[0]?.message) {
           setPopupMessage(serverError(error?.response.data.errors[0]));
+          navigate("/");
         }
       });
   };
