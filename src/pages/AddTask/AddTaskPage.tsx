@@ -11,7 +11,10 @@ import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import { TagService } from "../../services/tag.service";
 import { DEFAULT_TAG, EditScreensState, Priority } from "../../utils/constants";
 import useToolbar from "../../customHooks/useToolbar";
-import { validateTaskInputs } from "../../helpers/functions";
+import {
+  roundToNearestHour,
+  validateTaskInputs,
+} from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
@@ -35,7 +38,7 @@ const AddTaskPage = () => {
     location: taskToUpdate?.location ?? "",
     estTime: taskToUpdate?.estTime ?? 1,
     dueDate: taskToUpdate?.dueDate ?? new Date(),
-    dueTime: taskToUpdate?.dueDate ?? new Date(0, 0, 0, 9, 0, 0),
+    dueTime: taskToUpdate?.dueDate ?? roundToNearestHour(new Date()),
     description: taskToUpdate?.description ?? "",
     priority: taskToUpdate?.priority ?? Priority.LOW,
     assignmentDate: taskToUpdate?.assignment ?? undefined,

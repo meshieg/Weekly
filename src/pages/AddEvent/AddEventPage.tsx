@@ -11,7 +11,11 @@ import { TagService } from "../../services/tag.service";
 import TagsListPopup from "../../components/TagsListPopup/TagsListPopup";
 import useToolbar from "../../customHooks/useToolbar";
 import { EventService } from "../../services/event.service";
-import { validateEventInputs } from "../../helpers/functions";
+import {
+  roundToNearestHour,
+  roundToNextNearestHour,
+  validateEventInputs,
+} from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 import AlertPopup from "../../components/AlertPopup/AlertPopup";
 import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
@@ -27,8 +31,8 @@ const AddEventPage = () => {
   const initialValues: IInputs = {
     title: eventToUpdate?.title ?? "",
     location: eventToUpdate?.location ?? "",
-    startTime: eventToUpdate?.startTime ?? new Date(0, 0, 0, 8, 0, 0),
-    endTime: eventToUpdate?.endTime ?? new Date(0, 0, 0, 0, 9, 0),
+    startTime: eventToUpdate?.startTime ?? roundToNearestHour(new Date()),
+    endTime: eventToUpdate?.endTime ?? roundToNextNearestHour(new Date()),
     startDate: eventToUpdate?.startTime ?? new Date(),
     endDate: eventToUpdate?.endTime ?? new Date(),
     description: eventToUpdate?.description ?? "",
