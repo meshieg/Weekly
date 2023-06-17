@@ -161,15 +161,15 @@ const AddEventPage = () => {
     if (newEvent) {
       return await EventService.updateEvent(newEvent)
         .then((updatedEvent) => {
-          console.log(updatedEvent);
           if (updatedEvent) {
             navigate(-1);
           } else {
-            setAlert("error", "failed to save event");
+            setAlert("error", "Failed to save event");
           }
         })
-        .catch(() => {
-          setAlert("error", "failed to save event");
+        .catch((err) => {
+          console.log(err.messages);
+          setAlert("error", "Failed to update event");
         });
     }
   };

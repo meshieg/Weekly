@@ -5,11 +5,13 @@ import useToolbar from "../../customHooks/useToolbar";
 import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsList";
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 import { useNavigate } from "react-router-dom";
+import useAlert from "../../customHooks/useAlert";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
+  const { setAlert } = useAlert();
 
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
@@ -24,7 +26,8 @@ const MyTasks: React.FC = () => {
         );
       })
       .catch((err) => {
-        console.log(err);
+        setAlert("error", "Failed to fetch tasks");
+        console.log(err.message);
       });
   }, []);
 
@@ -39,11 +42,11 @@ const MyTasks: React.FC = () => {
               return task;
             }
           });
-
           setAllTasks(newTasks);
         }
       })
       .catch((err) => {
+        setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
   };
