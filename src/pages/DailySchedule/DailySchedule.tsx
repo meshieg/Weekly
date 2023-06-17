@@ -66,16 +66,16 @@ const DailySchedule = () => {
   useEffect(() => {
     setToolbar("", true);
 
-    // Set to a restricted display when the user's day takes place within the 24 hours.
-    // When the user's day takes place within two different days - the display won't be rectricted.
-    if (user?.endDayHour === 0) {
-      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    } else if (user?.beginDayHour <= user?.endDayHour) {
-      setDayHours({
-        beginDayHour: user?.beginDayHour,
-        endDayHour: user?.endDayHour,
-      });
-    }
+    // // Set to a restricted display when the user's day takes place within the 24 hours.
+    // // When the user's day takes place within two different days - the display won't be rectricted.
+    // if (user?.endDayHour === 0) {
+    //   setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    // } else if (user?.beginDayHour <= user?.endDayHour) {
+    //   setDayHours({
+    //     beginDayHour: user?.beginDayHour,
+    //     endDayHour: user?.endDayHour,
+    //   });
+    // }
 
     // TODO: arrange the dates according to the clicked date
     ScheduleService.getSchedule(
@@ -115,8 +115,8 @@ const DailySchedule = () => {
   }, []);
 
   return (
-    <Paper>
-      <Scheduler data={scheduleData}>
+    <Paper style={{ height: "100%" }}>
+      <Scheduler data={scheduleData} height={"auto"}>
         <ViewState currentDate={date} />
         <DayView
           startDayHour={dayHours.beginDayHour}
