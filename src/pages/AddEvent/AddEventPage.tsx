@@ -163,13 +163,21 @@ const AddEventPage = () => {
         .then((updatedEvent) => {
           if (updatedEvent) {
             navigate(-1);
+            // setAlert("success", "Event saved successfully");
           } else {
             setAlert("error", "Failed to save event");
           }
         })
         .catch((err) => {
-          console.log(err.messages);
-          setAlert("error", "Failed to update event");
+          if (err?.response?.data?.errors[0]?.message) {
+            setAlert("error", err?.response?.data?.errors[0]?.message);
+          } else {
+            console.log(err.messages);
+            setAlert("error", "Failed to save event");
+          }
+        })
+        .finally(() => {
+          setAlgoPopupOpen(false);
         });
     }
   };
