@@ -57,6 +57,7 @@ const MyTagsPage = () => {
       {" "}
       <TagsList tags={tagsList} 
                 tagWidth="2rem"
+                displayEmptyTag={false}
                 onTagClick={onTagClick} 
                 onTagDelete={onTagDelete} />
       <div

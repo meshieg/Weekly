@@ -21,10 +21,10 @@ const TagsListPopup: React.FC<TagsListPopupProps> = (props) => {
       sx={{ "& .MuiPaper-root": { maxHeight: "40%" } }}
     >
       <TagsList tags={props.tags} tagWidth="1.5rem" onTagClick={props.onTagClick} />
-      <div className="tag__row" onClick={() => props.onTagClick?.(DEFAULT_TAG)}>
+      {/* <div className="tag__row" onClick={() => props.onTagClick?.(DEFAULT_TAG)}>
         <Tag width="1.5rem" color={DEFAULT_TAG.color} />
         <span className="tag__title">{DEFAULT_TAG.name}</span>
-      </div>
+      </div> */}
     </Dialog>
   );
 };

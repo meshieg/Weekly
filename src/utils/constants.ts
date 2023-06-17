@@ -44,3 +44,8 @@ export enum EditScreensState {
   EDIT_LOCAL,
   EDIT
 }
+
+export enum Direction {
+  ASC = "ASC",
+  DESC = "DESC"
+}
