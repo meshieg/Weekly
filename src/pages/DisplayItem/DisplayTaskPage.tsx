@@ -96,10 +96,11 @@ const DisplayTaskPage = () => {
         <>nothing to show</>
       ) : (
         <div className="pageContainer">
-          {(taskToShow?.assignment === null ||
-            taskToShow?.assignment === undefined) && (
-            <Alert severity="info">This task has no assignment</Alert>
-          )}
+          {navLocation.state?.isFromDB &&
+            (taskToShow?.assignment === null ||
+              taskToShow?.assignment === undefined) && (
+              <Alert severity="info">This task has no assignment</Alert>
+            )}
           <div className="fieldsContainer">
             <TextField
               value={taskToShow.title}
