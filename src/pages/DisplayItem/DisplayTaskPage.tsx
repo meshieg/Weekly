@@ -12,6 +12,8 @@ import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES } from "../../utils/messages";
 import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import Loading from "../../components/Loading/Loading";
+import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -29,14 +31,23 @@ const DisplayTaskPage = () => {
   const taskId = navLocation.state?.taskId;
   const { setPopupMessage, popupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setToolbar("Task Details", true);
     if (navLocation.state?.isFromDB) {
       setDataLoading(true);
+
       TaskService.getTaskById(taskId)
         .then((task) => {
           setTaskToShow(task as ITask);
+        })
+        .catch((err) => {
+          setAlert(
+            "error",
+            "Something went wrong trying to get task data:( please try again later"
+          );
+          console.log(err);
         })
         .finally(() => setDataLoading(false));
     } else if (taskId !== undefined) {
@@ -58,17 +69,17 @@ const DisplayTaskPage = () => {
         TaskService.deleteTask(taskToShow.id)
           .then((deleted) => {
             if (deleted) {
+              setAlert("success", "Task deleted successfully");
               navigate(-1);
             } else {
-              //TODO: add alert error message
-              console.log("failed to delete task");
+              setAlert("error", "Failed to delete task");
             }
           })
           .catch(() => {
-            //TODO: add alert error message
-            console.log("failed to delete task");
+            setAlert("error", "Failed to delete task");
           });
       } else {
+        setAlert("success", "Task deleted successfully");
         removeItem(taskToShow.id);
         navigate(-1);
       }
@@ -85,10 +96,11 @@ const DisplayTaskPage = () => {
         <>nothing to show</>
       ) : (
         <div className="pageContainer">
-          {(taskToShow?.assignment === null ||
-            taskToShow?.assignment === undefined) && (
-            <Alert severity="info">This task has no assignment</Alert>
-          )}
+          {navLocation.state?.isFromDB &&
+            (taskToShow?.assignment === null ||
+              taskToShow?.assignment === undefined) && (
+              <Alert severity="info">This task has no assignment</Alert>
+            )}
           <div className="fieldsContainer">
             <TextField
               value={taskToShow.title}
@@ -114,14 +126,14 @@ const DisplayTaskPage = () => {
             />
             <div className="dateRowContainer">
               <TextField
-                value={taskToShow.dueDate.toLocaleDateString()}
+                value={taskToShow.dueDate.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="Due date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={taskToShow.dueDate.toLocaleTimeString()}
+                value={taskToShow.dueDate.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Due time"
                 variant="standard"
@@ -150,7 +162,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleDateString()
+                      ? taskToShow.assignment?.toLocaleDateString("en-GB")
                       : " "
                   }
                   disabled={true}
@@ -161,7 +173,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleTimeString()
+                      ? taskToShow.assignment?.toLocaleTimeString("he-IL")
                       : " "
                   }
                   disabled={true}
@@ -194,6 +206,7 @@ const DisplayTaskPage = () => {
               Delete
             </button>
           </div>
+          <AlertPopup />
         </div>
       )}
 

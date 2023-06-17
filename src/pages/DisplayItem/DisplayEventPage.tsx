@@ -11,6 +11,8 @@ import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import { USER_MESSAGES } from "../../utils/messages";
 import { useAppContext } from "../../contexts/AppContext";
 import Loading from "../../components/Loading/Loading";
+import useAlert from "../../customHooks/useAlert";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
 
 const textFieldStyle = {
   margin: "1rem 0",
@@ -28,6 +30,7 @@ const DisplayEventPage = () => {
   const eventId: number = navLocation.state?.eventId;
   const { setPopupMessage, popupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     console.log(navLocation.state);
@@ -37,6 +40,12 @@ const DisplayEventPage = () => {
       EventService.getEventById(eventId)
         .then((event) => {
           setEventToShow(event as IEvent);
+        })
+        .catch((err) => {
+          setAlert(
+            "error",
+            "Something went wrong trying to get event data:( please try again later"
+          );
         })
         .finally(() => setDataLoading(false));
     } else {
@@ -57,18 +66,18 @@ const DisplayEventPage = () => {
       EventService.deleteEvent(eventId)
         .then((deleted) => {
           if (deleted) {
+            setAlert("success", "Event deleted successfully");
             navigate(-1);
           } else {
-            //TODO: add alert error message
-            console.log("failed to delete event");
+            setAlert("error", "Failed to delete event");
           }
         })
         .catch(() => {
-          //TODO: add alert error message
-          console.log("failed to delete event");
+          setAlert("error", "Failed to delete event");
         });
     } else {
       removeItem(eventId);
+      setAlert("success", "Event deleted successfully");
       navigate(-1);
     }
   };
@@ -101,14 +110,14 @@ const DisplayEventPage = () => {
             />
             <div className="dateRowContainer">
               <TextField
-                value={eventToShow.startTime.toLocaleDateString()}
+                value={eventToShow.startTime.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="Start date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.startTime.toLocaleTimeString()}
+                value={eventToShow.startTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Start time"
                 variant="standard"
@@ -117,14 +126,14 @@ const DisplayEventPage = () => {
             </div>
             <div className="dateRowContainer">
               <TextField
-                value={eventToShow.endTime.toLocaleDateString()}
+                value={eventToShow.endTime.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="End date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.endTime.toLocaleTimeString()}
+                value={eventToShow.endTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="End time"
                 variant="standard"
@@ -166,7 +175,7 @@ const DisplayEventPage = () => {
           </div>
         </div>
       )}
-
+      <AlertPopup />
       <MessageDialog
         open={popupMessage !== undefined}
         onClose={() => {

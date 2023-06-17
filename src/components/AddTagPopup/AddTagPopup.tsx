@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Colorful from "@uiw/react-color-colorful";
-import { Dialog, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import "./AddTagPopup.css";
 import { TagService } from "../../services/tag.service";
 import GeneralDialog from "../GeneralDialog/GeneralDialog";
 import { ReactComponent as AddTaskIcon } from "../../assets/icons/AddTaskIcon.svg";
+import useAlert from "../../customHooks/useAlert";
 
 interface IAddTagProps {
   open: boolean;
@@ -15,7 +16,7 @@ interface IAddTagProps {
 const AddTagPopup = (props: IAddTagProps) => {
   const [tagColor, setTagColor] = useState("#8A64D6");
   const [tagName, setTagName] = useState("");
-  // const icon: JSX.Element = <successIcon />;
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     if (props.tag) {
@@ -28,37 +29,46 @@ const AddTagPopup = (props: IAddTagProps) => {
   }, [props.open]);
 
   const onSaveTag = () => {
-    if (props.tag) {
-      TagService.updateTag({
-        id: props.tag.id,
-        name: tagName,
-        color: tagColor,
-      } as ITag)
-        .then((data) => {})
-        .catch((err) => {
-          //TODO: add error alert
-        })
-        .finally(() => {
-          props.onCancel();
-        });
+    if (tagName === undefined || tagName === "" || tagName === " ") {
+      setAlert("error", "Please enter tag name");
     } else {
-      TagService.addTag({ name: tagName, color: tagColor } as ITag)
-        .then((data) => {})
-        .catch((err) => {
-          //TODO: add error alert
-        })
-        .finally(() => {
-          props.onCancel();
-        });
+      if (props.tag) {
+        TagService.updateTag({
+          id: props.tag.id,
+          name: tagName,
+          color: tagColor,
+        } as ITag)
+          .then((data) => {
+            setAlert("success", "Tag updated successfully");
+          })
+          .catch((err) => {
+            setAlert("error", "Could not update tag:( please try again later");
+          })
+          .finally(() => {
+            props.onCancel();
+          });
+      } else {
+        console.log("test");
+        TagService.addTag({ name: tagName, color: tagColor } as ITag)
+          .then((data) => {
+            setAlert("success", "Tag added successfully");
+          })
+          .catch((err) => {
+            setAlert("error", "Could not add tag:( please try again later");
+          })
+          .finally(() => {
+            props.onCancel();
+          });
+      }
     }
   };
+
   return (
     <GeneralDialog
       open={props.open}
       onClose={props.onCancel}
       icon={<AddTaskIcon />}
     >
-      {/* <Dialog open={props.open} fullWidth> */}
       <div className="addTagPageContainer">
         <Colorful
           color={tagColor}
@@ -71,7 +81,6 @@ const AddTagPopup = (props: IAddTagProps) => {
           label="Tag name"
           value={tagName}
           onChange={(text) => setTagName(text.target.value)}
-          //   sx={styles.field}
           required={true}
           placeholder="Tag name"
         />
@@ -90,7 +99,6 @@ const AddTagPopup = (props: IAddTagProps) => {
           </button>
         </div>
       </div>
-      {/* </Dialog> */}
     </GeneralDialog>
   );
 };

@@ -21,6 +21,7 @@ import MessageDialog from "../../components/MessageDialog/MessageDialog";
 import { useAppContext } from "../../contexts/AppContext";
 import Loading from "../../components/Loading/Loading";
 import { DEFAULT_TAG } from "../../utils/constants";
+import useAlert from "../../customHooks/useAlert";
 
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>([]);
@@ -30,6 +31,7 @@ const WeeklySchedule = () => {
   const { user } = useUser();
   const { popupMessage, setPopupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
+  const { setAlert } = useAlert();
 
   const onAppointmentClick = (id: number, isTask: boolean) => {
     if (isTask) {
@@ -97,10 +99,7 @@ const WeeklySchedule = () => {
     }
 
     setDataLoading(true);
-    ScheduleService.getSchedule(
-      new Date("2023-01-01 00:00:00"),
-      new Date("2050-12-31 00:00:00")
-    )
+    ScheduleService.getSchedule()
       .then((data) => {
         const dataDisplay = data?.map((scheduleEntity) => {
           return {
@@ -114,6 +113,9 @@ const WeeklySchedule = () => {
         });
         setScheduleData(dataDisplay);
       })
+      .catch((err) => {
+        setAlert("error", "Something went wrong:( pleas try again later");
+      })
       .finally(() => setDataLoading(false));
   }, []);
 
@@ -122,8 +124,8 @@ const WeeklySchedule = () => {
   }
 
   return (
-    <Paper>
-      <Scheduler data={scheduleData}>
+    <Paper style={{height: "100%"}}>
+      <Scheduler data={scheduleData} height={"auto"}>
         <ViewState
           defaultCurrentDate={currDate}
           defaultCurrentViewName="Week"
