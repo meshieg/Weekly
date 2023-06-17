@@ -13,6 +13,7 @@ import useToolbar from "../../customHooks/useToolbar";
 import useUser from "../../customHooks/useUser";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DEFAULT_TAG } from "../../utils/constants";
+import useAlert from "../../customHooks/useAlert";
 
 const DailySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
@@ -22,10 +23,9 @@ const DailySchedule = () => {
   const navLocation = useLocation();
   const date = navLocation.state?.date;
   const navigate = useNavigate();
+  const { setAlert } = useAlert();
 
   const onAppointmentClick = (id: number, isTask: boolean) => {
-    console.log("On click");
-    console.log("taskId:" + id);
     if (isTask) {
       navigate("/display-task", {
         state: {
@@ -95,19 +95,23 @@ const DailySchedule = () => {
         0,
         0
       )
-    ).then((data) => {
-      const dataDisplay = data?.map((scheduleEntity) => {
-        return {
-          id: scheduleEntity.id,
-          title: scheduleEntity.title,
-          startDate: scheduleEntity.startTime,
-          endDate: scheduleEntity.endTime,
-          color: scheduleEntity.tag?.color,
-          isTask: scheduleEntity.isTask,
-        };
+    )
+      .then((data) => {
+        const dataDisplay = data?.map((scheduleEntity) => {
+          return {
+            id: scheduleEntity.id,
+            title: scheduleEntity.title,
+            startDate: scheduleEntity.startTime,
+            endDate: scheduleEntity.endTime,
+            color: scheduleEntity.tag?.color,
+            isTask: scheduleEntity.isTask,
+          };
+        });
+        setScheduleData(dataDisplay);
+      })
+      .catch((err) => {
+        setAlert("error", "Something went wrong:( pleas try again later");
       });
-      setScheduleData(dataDisplay);
-    });
   }, []);
 
   return (
