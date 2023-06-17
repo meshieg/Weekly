@@ -17,7 +17,6 @@ import weeklyLogo from "../../assets/images/weekly_logo.svg";
 import useToolbar from "../../customHooks/useToolbar";
 import { ModeEditOutlineOutlined as EditIcon } from "@mui/icons-material";
 import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
-import { ScheduleService } from "../../services/schedule.service";
 import { EditScreensState } from "../../utils/constants";
 import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES, serverError } from "../../utils/messages";
@@ -47,6 +46,7 @@ const PersonalData = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [displaySchedulePopup, setDisplayPopup] = useState<boolean>(false);
   const [screenState, setScreenState] = useState<number>(EditScreensState.ADD);
+  const [updatedUser, setUpdatedUser] = useState<IUser>(user);
   const { setPopupMessage } = useAppContext();
 
   useEffect(() => {
@@ -143,8 +143,8 @@ const PersonalData = () => {
       });
   };
 
-  const handleUpdateUser = async () => {
-    const updatedUser = {
+  const handleUpdateUser = () => {
+    const currUpdatedUser: IUser = {
       id: user.id,
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
@@ -153,47 +153,57 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    if (checkChangedFields(updatedUser)) {
-      await UserService.updateUser(updatedUser)
-        .then((data) => {
-          setUser(updatedUser);
-          if (displaySchedulePopup) {
-            generateSchedule();
-          }
-          setAlert("success", "Changes were saved successfully!");
-        })
-        .catch((error) => {
-          if (error?.response?.data?.errors[0]?.message) {
-            setAlert("error", error?.response.data.errors[0].message);
-          }
-        });
+    setUpdatedUser(currUpdatedUser);
+
+    if(checkTimeChanged()) {
+      if(displaySchedulePopup) {
+        console.log("save without generating");
+        // updateUserWithoutSchedule();
+      }
+      
+      setDisplayPopup(!displaySchedulePopup);
+    } else if(CheckNameChanged()) {
+      updateUserWithoutSchedule();
     } else {
       setScreenState(EditScreensState.EDIT_LOCAL);
     }
   };
 
-  const checkChangedFields = (updatedUser: IUser) => {
-    const timeChanged =
-      user.beginDayHour !== updatedUser.beginDayHour ||
-      user.endDayHour !== updatedUser.endDayHour;
-    const nameChanged =
-      user.firstName !== updatedUser.firstName ||
-      user.lastName !== updatedUser.lastName;
+  const checkTimeChanged = () => {
+    return user.beginDayHour !== updatedUser.beginDayHour ||
+           user.endDayHour !== updatedUser.endDayHour;
+  }
 
-    setDisplayPopup(timeChanged);
-    return nameChanged || timeChanged;
-  };
+  const CheckNameChanged = () => {
+    return user.firstName !== updatedUser.firstName ||
+           user.lastName !== updatedUser.lastName;
+  }
 
-  const generateSchedule = async () => {
-    await ScheduleService.generateSchedule([])
-      .then((res) => {
+  const updateUserWithoutSchedule = async () => {
+    await UserService.updateUser(updatedUser, false)
+      .then((data) => {
+        setUser(updatedUser);
+        setAlert("success", "Changes were saved successfully!");
+      })
+      .catch((error) => {
+        if (error?.response?.data?.errors[0]?.message) {
+          setAlert("error", error?.response.data.errors[0].message);
+        }
+      });
+  }
+
+  const updateUserWithSchedule = async () => {
+    await UserService.updateUser(updatedUser, true)
+      .then((data) => {
+        setUser(updatedUser);
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
         setDisplayPopup(false);
         setScreenState(EditScreensState.EDIT_LOCAL);
       })
       .catch((error) => {
-        console.log(error);
-        setPopupMessage(serverError(error?.response.data.errors[0]));
+        if (error?.response?.data?.errors[0]?.message) {
+          setPopupMessage(serverError(error?.response.data.errors[0]));
+        }
       });
   };
 
@@ -249,8 +259,8 @@ const PersonalData = () => {
       <AlgoMessagePopup
         open={displaySchedulePopup}
         onClose={() => setDisplayPopup(false)}
-        primaryAction={generateSchedule}
-        secondaryAction={() => setDisplayPopup(false)}
+        primaryAction={updateUserWithSchedule}
+        secondaryAction={handleUpdateUser}
       />
     </div>
   );
