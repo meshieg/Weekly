@@ -21,6 +21,7 @@ import { ScheduleService } from "../../services/schedule.service";
 import { EditScreensState } from "../../utils/constants";
 import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES, serverError } from "../../utils/messages";
+import CustomLink from "../../components/CustomLink/CustomLink";
 
 // const fieldsToDisplayAlgoPopup = [
 //   "beginDayHour",
@@ -245,6 +246,11 @@ const PersonalData = () => {
           </button>
         )}
       </form>
+      {screenState === EditScreensState.ADD ? 
+        <CustomLink
+          text="back to log-in"
+          onPress={() => navigate("/login")}
+        /> : <></>}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
