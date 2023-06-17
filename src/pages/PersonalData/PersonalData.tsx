@@ -19,6 +19,8 @@ import { ModeEditOutlineOutlined as EditIcon } from "@mui/icons-material";
 import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
 import { ScheduleService } from "../../services/schedule.service";
 import { EditScreensState } from "../../utils/constants";
+import { useAppContext } from "../../contexts/AppContext";
+import { USER_MESSAGES, serverError } from "../../utils/messages";
 
 // const fieldsToDisplayAlgoPopup = [
 //   "beginDayHour",
@@ -45,6 +47,7 @@ const PersonalData = () => {
   const [inputValues, setInputsValues] = useState<IInputs>(initialValues);
   const [displaySchedulePopup, setDisplayPopup] = useState<boolean>(false);
   const [screenState, setScreenState] = useState<number>(EditScreensState.ADD);
+  const { setPopupMessage } = useAppContext();
 
   useEffect(() => {
     if (user) {
@@ -155,7 +158,6 @@ const PersonalData = () => {
         .then((data) => {
           setUser(updatedUser);
           if (displaySchedulePopup) {
-            console.log("reschedule");
             generateSchedule();
           }
           setAlert("success", "Changes were saved successfully!");
@@ -182,20 +184,16 @@ const PersonalData = () => {
     return nameChanged || timeChanged;
   };
 
-  // TODO: bug
   const generateSchedule = async () => {
     await ScheduleService.generateSchedule([])
       .then((res) => {
-        setAlert("success", "Schedule generated successfully");
+        setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
         setDisplayPopup(false);
         setScreenState(EditScreensState.EDIT_LOCAL);
       })
       .catch((error) => {
         console.log(error);
-        setAlert(
-          "error",
-          "Error while generating the schedule. Try again later"
-        );
+        setPopupMessage(serverError(error?.response.data.errors[0]));
       });
   };
 

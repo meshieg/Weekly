@@ -6,12 +6,15 @@ import AddTagPopup from "../../components/AddTagPopup/AddTagPopup";
 import add_tag from "../../assets/images/add_tag.svg";
 import { IconButton } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import AlertPopup from "../../components/AlertPopup/AlertPopup";
+import useAlert from "../../customHooks/useAlert";
 
 const MyTagsPage = () => {
   const { setToolbar } = useToolbar();
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const [openAddEditPopup, setOpenAddEditPopup] = useState<boolean>(false);
   const [tagToUpdate, setTagToUpdate] = useState<ITag | undefined>();
+  const { setAlert } = useAlert();
 
   useEffect(() => {
     setToolbar("My Tags", true);
@@ -21,6 +24,7 @@ const MyTagsPage = () => {
         setTagsList(tags);
       })
       .catch((err) => {
+        setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
   }, [tagsList, openAddEditPopup]);
@@ -76,19 +80,19 @@ const MyTagsPage = () => {
     setTagToUpdate(tag);
     setOpenAddEditPopup(true);
   };
+
   const onTagDelete = (tagId: number) => {
     TagService.deleteTag(tagId)
       .then((deleted) => {
         if (deleted) {
           setTagsList(tagsList.filter((tag) => tag.id === tagId));
         } else {
-          //TODO: add alert error message
-          console.log("failed to delete tag");
+          setAlert("error", "Failed to delete tag");
         }
       })
-      .catch(() => {
-        //TODO: add alert error message
-        console.log("failed to delete tag");
+      .catch((err) => {
+        setAlert("error", "Failed to delete tag");
+        console.log(err);
       });
   };
 
@@ -120,6 +124,7 @@ const MyTagsPage = () => {
         onCancel={onClosePopup}
         tag={tagToUpdate}
       />
+      <AlertPopup />
     </div>
   );
 };

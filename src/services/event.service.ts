@@ -1,7 +1,6 @@
 import { AxiosInstance } from "../config/axios";
 
 const eventPrefix = `${process.env.REACT_APP_BACKEND_URL}/event`;
-
 export class EventService {
   static getEventById = async (eventId: number): Promise<IEvent | void> => {
     const url = `${eventPrefix}/${eventId}`;
@@ -15,6 +14,7 @@ export class EventService {
       })
       .catch((err) => {
         console.log(err);
+        throw err;
       });
   };
 
@@ -41,7 +41,6 @@ export class EventService {
     return AxiosInstance.put(url)
       .then((res) => {
         if (res.data) {
-          console.log("event deleted successfully");
           return true;
         } else {
           return false;

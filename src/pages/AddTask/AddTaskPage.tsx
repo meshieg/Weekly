@@ -181,14 +181,15 @@ const AddTaskPage = () => {
           if (updatedTask) {
             navigate(-1);
           } else {
-            setAlert("error", "failed to save task");
+            setAlert("error", "Failed to save task");
           }
         })
         .catch((err) => {
           if (err?.response?.data?.errors[0]?.message) {
             setAlert("error", err?.response?.data?.errors[0]?.message);
           } else {
-            setAlert("error", "failed to save task");
+            console.log(err.messages);
+            setAlert("error", "Failed to save task");
           }
         })
         .finally(() => {
