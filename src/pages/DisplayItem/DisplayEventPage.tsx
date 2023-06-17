@@ -117,7 +117,7 @@ const DisplayEventPage = () => {
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.startTime.toLocaleTimeString("en-GB")}
+                value={eventToShow.startTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Start time"
                 variant="standard"
@@ -133,7 +133,7 @@ const DisplayEventPage = () => {
                 sx={textFieldStyle}
               />
               <TextField
-                value={eventToShow.endTime.toLocaleTimeString()}
+                value={eventToShow.endTime.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="End time"
                 variant="standard"

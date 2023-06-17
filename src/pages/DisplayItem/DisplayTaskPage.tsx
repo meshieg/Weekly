@@ -133,7 +133,7 @@ const DisplayTaskPage = () => {
                 sx={textFieldStyle}
               />
               <TextField
-                value={taskToShow.dueDate.toLocaleTimeString()}
+                value={taskToShow.dueDate.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Due time"
                 variant="standard"
@@ -173,7 +173,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleTimeString()
+                      ? taskToShow.assignment?.toLocaleTimeString("he-IL")
                       : " "
                   }
                   disabled={true}
