@@ -7,6 +7,7 @@ interface IScheduleItemsListProps {
   onCheckedClick?: (taskId: number) => void;
   onItemClick?: (taskId: number) => void;
   onDeleteClick?: (taskId: number) => void;
+  showNoAssignmentIndication?: boolean;
 }
 
 const ScheduleItemsList: React.FC<IScheduleItemsListProps> = (props) => {
@@ -33,6 +34,7 @@ const ScheduleItemsList: React.FC<IScheduleItemsListProps> = (props) => {
             onClick={props.onItemClick}
             onDeleteClick={props.onDeleteClick}
             infoIndication={
+              props.showNoAssignmentIndication &&
               instanceOfTask(item) &&
               (item.assignment === undefined || item.assignment === null)
             }

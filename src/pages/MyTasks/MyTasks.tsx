@@ -215,6 +215,7 @@ const MyTasks: React.FC = () => {
           items={notDoneTasks}
           onCheckedClick={onTaskCheckedClick}
           onItemClick={onTaskClick}
+          showNoAssignmentIndication={true}
         />
         <CollapseHeader headerText="Done">
           <ScheduleItemsList
