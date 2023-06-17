@@ -46,8 +46,7 @@ export function isValidDate(date: Date) {
     return (date instanceof Date && !isNaN(date.getTime()))
 }
 
-export function validateTaskInputs(task: ITask) {
-    console.log(task)
+export function validateTaskInputs(task: ITask, beginDayHour: number, endDayHour: number) {
     if (isNaN(task.estTime) || task.estTime % 1 !== 0) {
         return "Estimated time is not valid"
     }
@@ -58,6 +57,10 @@ export function validateTaskInputs(task: ITask) {
 
     if (task.dueDate < new Date()) {
         return "Past due date is not allowed"
+    }
+
+    if (endDayHour !== beginDayHour && task.estTime > endDayHour - beginDayHour) {
+        return "Estimated time can't be longer than day hours"
     }
 
     if (task.assignment) {
