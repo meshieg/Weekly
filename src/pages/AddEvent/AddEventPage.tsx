@@ -27,8 +27,8 @@ const AddEventPage = () => {
   const initialValues: IInputs = {
     title: eventToUpdate?.title ?? "",
     location: eventToUpdate?.location ?? "",
-    startTime: eventToUpdate?.startTime ?? new Date(0, 0, 0, 0, 0, 0),
-    endTime: eventToUpdate?.endTime ?? new Date(0, 0, 0, 0, 0, 0),
+    startTime: eventToUpdate?.startTime ?? new Date(0, 0, 0, 8, 0, 0),
+    endTime: eventToUpdate?.endTime ?? new Date(0, 0, 0, 0, 9, 0),
     startDate: eventToUpdate?.startTime ?? new Date(),
     endDate: eventToUpdate?.endTime ?? new Date(),
     description: eventToUpdate?.description ?? "",

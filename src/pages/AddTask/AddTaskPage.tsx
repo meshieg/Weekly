@@ -34,7 +34,7 @@ const AddTaskPage = () => {
     location: taskToUpdate?.location ?? "",
     estTime: taskToUpdate?.estTime ?? 1,
     dueDate: taskToUpdate?.dueDate ?? new Date(),
-    dueTime: taskToUpdate?.dueDate ?? new Date(0, 0, 0, 0, 0, 0),
+    dueTime: taskToUpdate?.dueDate ?? new Date(0, 0, 0, 9, 0, 0),
     description: taskToUpdate?.description ?? "",
     priority: taskToUpdate?.priority ?? Priority.LOW,
     assignmentDate: taskToUpdate?.assignment ?? undefined,

@@ -168,7 +168,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           <MobileTimePicker
             key={props.id}
             label={props.label}
-            value={props.value ? moment(props.value) : null}
+            value={props.value ? moment(props.value) : moment(8, "HH")}
             onChange={handleInputChanged}
             ampm={false}
             views={["hours"]}
