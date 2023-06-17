@@ -12,6 +12,7 @@ import { UserState } from "./utils/constants";
 import DisplayTaskPage from "./pages/DisplayItem/DisplayTaskPage";
 import DisplayEventPage from "./pages/DisplayItem/DisplayEventPage";
 import MyTagsPage from "./pages/MyTags/MyTagsPage";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 type RouteType = {
   path: string;
@@ -78,6 +79,13 @@ export const routes: RouteType[] = [
   {
     path: "/register",
     element: <PersonalData />,
+    showToolbar: false,
+    showFab: false,
+    allowedUserState: UserState.NOT_SIGNED,
+  },
+  {
+    path: "/resetPassword",
+    element: <ResetPassword />,
     showToolbar: false,
     showFab: false,
     allowedUserState: UserState.NOT_SIGNED,

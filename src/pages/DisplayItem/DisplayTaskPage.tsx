@@ -96,10 +96,11 @@ const DisplayTaskPage = () => {
         <>nothing to show</>
       ) : (
         <div className="pageContainer">
-          {(taskToShow?.assignment === null ||
-            taskToShow?.assignment === undefined) && (
-            <Alert severity="info">This task has no assignment</Alert>
-          )}
+          {navLocation.state?.isFromDB &&
+            (taskToShow?.assignment === null ||
+              taskToShow?.assignment === undefined) && (
+              <Alert severity="info">This task has no assignment</Alert>
+            )}
           <div className="fieldsContainer">
             <TextField
               value={taskToShow.title}
@@ -125,14 +126,14 @@ const DisplayTaskPage = () => {
             />
             <div className="dateRowContainer">
               <TextField
-                value={taskToShow.dueDate.toLocaleDateString()}
+                value={taskToShow.dueDate.toLocaleDateString("en-GB")}
                 disabled={true}
                 label="Due date"
                 variant="standard"
                 sx={textFieldStyle}
               />
               <TextField
-                value={taskToShow.dueDate.toLocaleTimeString()}
+                value={taskToShow.dueDate.toLocaleTimeString("he-IL")}
                 disabled={true}
                 label="Due time"
                 variant="standard"
@@ -161,7 +162,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleDateString()
+                      ? taskToShow.assignment?.toLocaleDateString("en-GB")
                       : " "
                   }
                   disabled={true}
@@ -172,7 +173,7 @@ const DisplayTaskPage = () => {
                 <TextField
                   value={
                     taskToShow.assignment
-                      ? taskToShow.assignment?.toLocaleTimeString()
+                      ? taskToShow.assignment?.toLocaleTimeString("he-IL")
                       : " "
                   }
                   disabled={true}
