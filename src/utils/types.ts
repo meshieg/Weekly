@@ -26,11 +26,12 @@ export type IUser = {
   id?: number;
   firstName?: string;
   lastName?: string;
-  email: string;
+  email?: string;
   password?: string;
   confirmPassword?: string;
   beginDayHour?: number;
   endDayHour?: number;
+  resetToken?: string;
 };
 
 export type IUserResponse = {

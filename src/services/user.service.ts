@@ -12,9 +12,9 @@ export class UserService {
                 email, password
             }
         })
-            .then(res => {
-                return res.data;
-            })
+        .then(res => {
+            return res.data;
+        })
     }
 
     static register = async (user: IUser): Promise<IUserResponse> => {
@@ -25,10 +25,54 @@ export class UserService {
             })
     }
 
-    static updateUser = async (user: IUser): Promise<IInputs> => {
-        return await AxiosInstance.put(userPrefix, { user })
+    static updateUser = async (user: IUser, generateAlgo: boolean): Promise<IInputs> => {
+        return await AxiosInstance.put(userPrefix, { user, generateAlgo })
             .then(res => {
                 return res.data;
             })
+    }
+
+    static sendEmail = async (email: string): Promise<IUser> => {
+        const url = userPrefix + "/resetPassword";
+        return await AxiosInstance.post(url, {
+            params: {
+                email
+            }
+        })
+        .then(res => {
+            return res.data.user;
+        })
+    }
+
+    static validateToken = async (userId: number, resetToken: string) => {
+        const url = userPrefix + "/validateToken";
+        return await AxiosInstance.post(url, {
+            params: {
+                id: userId, resetToken
+            }
+        })
+        .then(res => {
+            return res.data;
+        })
+    }
+
+    static updatePassword = async (id: number, password: string): Promise<IUserResponse> => {
+        const url = userPrefix + "/updatePassword";
+        return await AxiosInstance.put(url, {
+            params: {
+                id, password
+            }
+        })
+        .then(res => {
+            return res.data;
+        })
+    }
+
+    static logInGoogle = async (user: IUser): Promise<IUserResponse> => {
+        const url = userPrefix + "/logInGoogle";
+        return await AxiosInstance.post(url, { user })
+        .then(res => {
+            return res.data
+        })
     }
 }
