@@ -25,8 +25,8 @@ export class UserService {
             })
     }
 
-    static updateUser = async (user: IUser): Promise<IInputs> => {
-        return await AxiosInstance.put(userPrefix, { user })
+    static updateUser = async (user: IUser, generateAlgo: boolean): Promise<IInputs> => {
+        return await AxiosInstance.put(userPrefix, { user, generateAlgo })
             .then(res => {
                 return res.data;
             })
