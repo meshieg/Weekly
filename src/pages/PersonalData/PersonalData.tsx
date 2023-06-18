@@ -20,6 +20,7 @@ import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup
 import { EditScreensState } from "../../utils/constants";
 import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES, serverError } from "../../utils/messages";
+import CustomLink from "../../components/CustomLink/CustomLink";
 
 // const fieldsToDisplayAlgoPopup = [
 //   "beginDayHour",
@@ -263,6 +264,13 @@ const PersonalData = () => {
           </button>
         )}
       </form>
+      {screenState === EditScreensState.ADD ? 
+        <div className="login__link">
+          <CustomLink
+            text="Back to Login"
+            onPress={() => navigate("/login")}
+          />
+        </div> : <></>}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
