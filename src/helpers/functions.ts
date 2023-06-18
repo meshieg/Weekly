@@ -1,3 +1,4 @@
+import useUser from "../customHooks/useUser";
 import { IUser } from "../utils/types";
 
 export const getTokenFromStorage = () => {
@@ -31,7 +32,7 @@ export function validateHours(beginDayHour: number, endDayHour: number) {
 
 export function validateUserInputs(user: IUser) {
   if (user.email && !validateEmail(user.email)) {
-    return "Email address is not valid..."
+    return "Email address is not valid...";
   }
 
   if (user.confirmPassword && user.password !== user.confirmPassword) {
@@ -89,7 +90,7 @@ export function validateTaskInputs(
 }
 
 export function validateEventInputs(event: IEvent) {
-  console.log(event);
+  const { user } = useUser();
   if (!isValidDate(event.startTime)) {
     return "Start date is not valid";
   }
@@ -104,6 +105,9 @@ export function validateEventInputs(event: IEvent) {
 
   if (event.endTime <= event.startTime) {
     return "End time must be after start time";
+  }
+  if (event.endTime > user.endDayHour || event.startTime < user.beginDayHour) {
+    return "Event must be in your work time";
   }
 }
 
