@@ -136,7 +136,7 @@ const LogIn = () => {
             <span className="line_text">or</span>
           </div>
           <GoogleLogin
-            onSuccess={(credentialResponse) =>
+            onSuccess={(credentialResponse: any) =>
               handleGoogleLogin(credentialResponse)
             }
             onError={errorGoogleLogin}
