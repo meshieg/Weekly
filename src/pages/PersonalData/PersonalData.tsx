@@ -135,7 +135,7 @@ const PersonalData = () => {
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
-          setAlert("error", err?.response.data.errors[0].message);
+          setAlert("error", err?.response.data.errors[0]);
         }
       });
   };
@@ -197,7 +197,7 @@ const PersonalData = () => {
 
     } catch(error) {
       if (error instanceof AxiosError) {
-        setPopupMessage(serverError(error.response?.data.errors[0].message));
+        setPopupMessage(serverError(error.response?.data.errors[0]));
       }
     } finally {
       setLoading(false);
