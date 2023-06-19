@@ -38,11 +38,11 @@ const MyTagsPage = () => {
         if (deleted) {
           setTagsList(tagsList.filter((tag) => tag.id === tagId));
         } else {
-          setAlert("error", "Failed to delete tag");
+          setAlert("error", "This tag cannot be deleted");
         }
       })
       .catch((err) => {
-        setAlert("error", "Failed to delete tag");
+        setAlert("error", "You cannot delete a used tag");
         console.log(err);
       });
   };
@@ -59,11 +59,13 @@ const MyTagsPage = () => {
       }}
     >
       {" "}
-      <TagsList tags={tagsList} 
-                tagWidth="2rem"
-                displayEmptyTag={false}
-                onTagClick={onTagClick} 
-                onTagDelete={onTagDelete} />
+      <TagsList
+        tags={tagsList}
+        tagWidth="2rem"
+        displayEmptyTag={false}
+        onTagClick={onTagClick}
+        onTagDelete={onTagDelete}
+      />
       <div
         className="tag__row"
         onClick={() => {

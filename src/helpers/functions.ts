@@ -31,7 +31,7 @@ export function validateHours(beginDayHour: number, endDayHour: number) {
 
 export function validateUserInputs(user: IUser) {
     if (user.email && !validateEmail(user.email)) {
-        return "Email address is not valid..."
+        return "Email address is not valid...";
     }
 
     if (user.confirmPassword && user.password !== user.confirmPassword) {
@@ -68,7 +68,10 @@ export function validateTaskInputs(
         return "Past due date is not allowed";
     }
 
-    if (endDayHour !== beginDayHour && task.estTime > calcNumOfDayHours(beginDayHour, endDayHour)) {
+    if (
+        endDayHour !== beginDayHour &&
+        task.estTime > calcNumOfDayHours(beginDayHour, endDayHour)
+    ) {
         return "Estimated time can't exceed the day's hours";
     }
 
@@ -78,7 +81,6 @@ export function validateTaskInputs(
 }
 
 export function validateEventInputs(event: IEvent) {
-    console.log(event);
     if (!isValidDate(event.startTime)) {
         return "Start date is not valid";
     }
