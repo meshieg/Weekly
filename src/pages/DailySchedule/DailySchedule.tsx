@@ -18,7 +18,6 @@ import useAlert from "../../customHooks/useAlert";
 
 const DailySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>();
-  const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const { setToolbar } = useToolbar();
   const { user } = useUser();
   const navLocation = useLocation();
@@ -64,17 +63,38 @@ const DailySchedule = () => {
     );
   };
 
+  const colorCell = (time: Date | undefined) => {
+    if (!time) {
+      return false;
+    }
+
+    if (user.beginDayHour === user.endDayHour) {
+      return true;
+    }
+
+    if (user.beginDayHour < user.endDayHour) {
+      return (
+        time.getHours() >= user.beginDayHour &&
+        time.getHours() <= user.endDayHour
+      );
+    }
+
+    if (user.beginDayHour > user.endDayHour) {
+      return (
+        time.getHours() >= user.beginDayHour ||
+        time.getHours() <= user.endDayHour
+      );
+    }
+  };
+
   const TimeScaleLabel = ({ ...restProps }: DayView.TimeScaleLabelProps) => {
     return (
       <DayView.TimeScaleLabel
         {...restProps}
         style={{
-          backgroundColor:
-            restProps.time &&
-            restProps.time?.getHours() > dayHours.beginDayHour &&
-            restProps.time?.getHours() < dayHours.endDayHour
-              ? "var( --secondary-color)"
-              : "white",
+          backgroundColor: colorCell(restProps.time)
+            ? "var( --secondary-color)"
+            : "white",
         }}
       />
     );
@@ -83,35 +103,10 @@ const DailySchedule = () => {
   useEffect(() => {
     setToolbar("", true);
 
-    // Set to a restricted display when the user's day takes place within the 24 hours.
-    // When the user's day takes place within two different days - the display won't be rectricted.
-    if (user?.endDayHour === 0) {
-      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    } else if (user?.beginDayHour <= user?.endDayHour) {
-      setDayHours({
-        beginDayHour: user?.beginDayHour,
-        endDayHour: user?.endDayHour,
-      });
-    }
-
     // TODO: arrange the dates according to the clicked date
     ScheduleService.getSchedule(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        dayHours?.beginDayHour,
-        0,
-        0
-      ),
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        dayHours?.endDayHour,
-        0,
-        0
-      )
+      new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0),
+      new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 0, 0, 0)
     )
       .then((data) => {
         const dataDisplay = data?.map((scheduleEntity) => {
@@ -139,6 +134,7 @@ const DailySchedule = () => {
           startDayHour={0}
           endDayHour={24}
           timeScaleLabelComponent={TimeScaleLabel}
+          cellDuration={60}
         />
         <Appointments appointmentComponent={Appointment} />
         <CurrentTimeIndicator

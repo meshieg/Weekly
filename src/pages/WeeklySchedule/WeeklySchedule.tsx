@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./WeeklySchedule.css";
 import Paper from "@mui/material/Paper";
 import { ViewState } from "@devexpress/dx-react-scheduler";
@@ -27,7 +27,6 @@ import useAlert from "../../customHooks/useAlert";
 const WeeklySchedule = () => {
   const [scheduleData, setScheduleData] = useState<AppointmentModel[]>([]);
   const [currDate, setCurrDate] = useState(new Date());
-  const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
   const { user } = useUser();
   const { popupMessage, setPopupMessage } = useAppContext();
@@ -87,34 +86,44 @@ const WeeklySchedule = () => {
     );
   };
 
+  const colorCell = (time: Date | undefined) => {
+    if (!time) {
+      return false;
+    }
+
+    if (user.beginDayHour === user.endDayHour) {
+      return true;
+    }
+
+    if (user.beginDayHour < user.endDayHour) {
+      return (
+        time.getHours() >= user.beginDayHour &&
+        time.getHours() <= user.endDayHour
+      );
+    }
+
+    if (user.beginDayHour > user.endDayHour) {
+      return (
+        time.getHours() >= user.beginDayHour ||
+        time.getHours() <= user.endDayHour
+      );
+    }
+  };
+
   const TimeScaleLabel = ({ ...restProps }: WeekView.TimeScaleLabelProps) => {
     return (
       <WeekView.TimeScaleLabel
         {...restProps}
         style={{
-          backgroundColor:
-            restProps.time &&
-            restProps.time?.getHours() > dayHours.beginDayHour &&
-            restProps.time?.getHours() < dayHours.endDayHour
-              ? "var( --secondary-color)"
-              : "white",
+          backgroundColor: colorCell(restProps.time)
+            ? "var( --secondary-color)"
+            : "white",
         }}
       />
     );
   };
 
   useEffect(() => {
-    // Set to a restricted display when the user's day takes place within the 24 hours.
-    // When the user's day takes place within two different days - the display won't be rectricted.
-    if (user?.endDayHour === 0) {
-      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    } else if (user?.beginDayHour <= user?.endDayHour) {
-      setDayHours({
-        beginDayHour: user?.beginDayHour,
-        endDayHour: user?.endDayHour,
-      });
-    }
-
     setDataLoading(true);
     ScheduleService.getSchedule()
       .then((data) => {
@@ -152,12 +161,14 @@ const WeeklySchedule = () => {
           startDayHour={0}
           endDayHour={24}
           timeScaleLabelComponent={TimeScaleLabel}
+          cellDuration={60}
         />
         <WeekView
           startDayHour={0}
           endDayHour={24}
           dayScaleCellComponent={DayScaleCell}
           timeScaleLabelComponent={TimeScaleLabel}
+          cellDuration={60}
         />
 
         <Toolbar />
