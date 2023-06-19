@@ -31,17 +31,12 @@ export class ScheduleService {
   static generateSchedule = async (
     tasks?: ITask[],
     events?: IEvent[]
-  ): Promise<IScheduleEntity[] | void> => {
+  ): Promise<any> => {
     const url = schedulePrefix;
 
     return AxiosInstance.post(url, { tasks, events })
       .then((res) => {
         return res.data;
-        // return res.data.map((scheduleEntity: IScheduleEntity) => {
-        //     return {
-        //         ...scheduleEntity
-        //     } as IScheduleEntity;
-        // })
       })
       .catch((err) => {
         console.log(err);
