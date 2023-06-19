@@ -18,7 +18,6 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { fieldsTypes } from "../../utils/constants";
 import moment from "moment";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { roundToNearestHour } from "../../helpers/functions";
 
 // import "moment-timezone";
 
@@ -59,7 +58,6 @@ const SuperInputField: React.FC<IProps> = (props) => {
         changeValue = moment(event)
           .set({ minute: 0, second: 0, millisecond: 0 })
           .format();
-        console.log(changeValue);
         break;
 
       // case fieldsTypes.FileUpload:
@@ -169,11 +167,7 @@ const SuperInputField: React.FC<IProps> = (props) => {
           <MobileTimePicker
             key={props.id}
             label={props.label}
-            value={
-              props.value
-                ? moment(props.value)
-                : roundToNearestHour(new Date()).getHours()
-            }
+            value={props.value ? moment(props.value) : null}
             onChange={handleInputChanged}
             ampm={false}
             views={["hours"]}
