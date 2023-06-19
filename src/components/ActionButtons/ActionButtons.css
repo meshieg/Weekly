@@ -7,5 +7,5 @@
 .buttons_panel {
   display: flex;
   justify-content: space-evenly;
-  /* margin: 2rem; */
+  padding-top: 2rem;
 }

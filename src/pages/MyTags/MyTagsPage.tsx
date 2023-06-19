@@ -56,6 +56,7 @@ const MyTagsPage = () => {
     <div
       style={{
         margin: "3%",
+        width: "100%"
       }}
     >
       {" "}
