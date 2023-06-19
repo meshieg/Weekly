@@ -175,7 +175,7 @@ const WeeklySchedule = () => {
         <ViewSwitcher />
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
-        <CurrentTimeIndicator />
+        <CurrentTimeIndicator shadePreviousCells={true} shadePreviousAppointments={true} />
         <AllDayPanel />
       </Scheduler>
 
