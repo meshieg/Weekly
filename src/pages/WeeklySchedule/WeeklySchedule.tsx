@@ -87,38 +87,6 @@ const WeeklySchedule = () => {
     );
   };
 
-  // const StyledWeekViewTimeTableCell = styled(WeekView.TimeTableCell)(({ theme }) => ({
-  //   [`&.${"todayCell"}`]: {
-  //     backgroundColor: alpha(theme.palette.primary.main, 0.1),
-  //     '&:hover': {
-  //       backgroundColor: alpha(theme.palette.primary.main, 0.14),
-  //     },
-  //     '&:focus': {
-  //       backgroundColor: alpha(theme.palette.primary.main, 0.16),
-  //     },
-  //   },
-  //   [`&.${"weekendCell"}`]: {
-  //     backgroundColor: alpha(theme.palette.action.disabledBackground, 0.04),
-  //     '&:hover': {
-  //       backgroundColor: alpha(theme.palette.action.disabledBackground, 0.04),
-  //     },
-  //     '&:focus': {
-  //       backgroundColor: alpha(theme.palette.action.disabledBackground, 0.04),
-  //     },
-  //   },
-  // }));
-
-  // const TimeTableCell = (props: any) => {
-  //   const { startDate } = props;
-  //   const date = new Date(startDate);
-
-  //   if (date.getDate() === new Date().getDate()) {
-  //     return <StyledWeekViewTimeTableCell {...props} className={"todayCell"} />;
-  //   } if (date.getDay() === 0 || date.getDay() === 6) {
-  //     return <StyledWeekViewTimeTableCell {...props} className={"weekendCell"} />;
-  //   } return <StyledWeekViewTimeTableCell {...props} />;
-  // };
-
   useEffect(() => {
     // // Set to a restricted display when the user's day takes place within the 24 hours.
     // // When the user's day takes place within two different days - the display won't be rectricted.
@@ -171,7 +139,6 @@ const WeeklySchedule = () => {
         <WeekView
           startDayHour={dayHours.beginDayHour}
           endDayHour={dayHours.endDayHour}
-          // timeTableCellComponent={TimeTableCell}
           dayScaleCellComponent={DayScaleCell}
         />
 
