@@ -1,4 +1,3 @@
-import useUser from "../customHooks/useUser";
 import { IUser } from "../utils/types";
 
 export const getTokenFromStorage = () => {
@@ -90,7 +89,6 @@ export function validateTaskInputs(
 }
 
 export function validateEventInputs(event: IEvent) {
-  const { user } = useUser();
   if (!isValidDate(event.startTime)) {
     return "Start date is not valid";
   }
@@ -105,9 +103,6 @@ export function validateEventInputs(event: IEvent) {
 
   if (event.endTime <= event.startTime) {
     return "End time must be after start time";
-  }
-  if (event.endTime > user.endDayHour || event.startTime < user.beginDayHour) {
-    return "Event must be in your work time";
   }
 }
 
