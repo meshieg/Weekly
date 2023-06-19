@@ -13,6 +13,7 @@ import { IUser } from "../../utils/types";
 import { validateUserInputs } from "../../helpers/functions";
 import useAlert from "../../customHooks/useAlert";
 import useUser from "../../customHooks/useUser";
+import CustomLink from "../../components/CustomLink/CustomLink";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -151,8 +152,11 @@ const ResetPassword = () => {
         <button className="btn btn__primary reset_form_btn" type="submit">
           {buttonText}
         </button>
-        <AlertPopup />
       </form>
+      <AlertPopup />
+      <div className="login__link">
+        <CustomLink text="Back to Login" onPress={() => navigate("/login")} />
+      </div>
     </div>
   );
 };
