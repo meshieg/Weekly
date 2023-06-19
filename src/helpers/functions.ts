@@ -65,7 +65,7 @@ export function validateTaskInputs(
     }
 
     if (task.dueDate < new Date()) {
-        return "Past due date is not allowed";
+        return "Your task's due date set to the past, are you a time traveler?";
     }
 
     if (
@@ -75,9 +75,16 @@ export function validateTaskInputs(
         return "Estimated time can't exceed the day's hours";
     }
 
-    if (task.assignment && !isValidDate(task.assignment)) {
-        return "Assignment is not valid";
+    if (task.assignment) {
+        if (!isValidDate(task.assignment)) {
+            return "Assignment is not valid";
+        }
+
+        if (task.assignment < new Date()) {
+            return "Your task's asignment set to the past, are you a time traveler?";
+        }
     }
+
 }
 
 export function validateEventInputs(event: IEvent) {
@@ -90,7 +97,7 @@ export function validateEventInputs(event: IEvent) {
     }
 
     if (event.startTime < new Date()) {
-        return "Past start time is not allowed";
+        return "Your event's start time set to the past, are you a time traveler?";
     }
 
     if (event.endTime <= event.startTime) {
