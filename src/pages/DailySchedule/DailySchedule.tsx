@@ -6,6 +6,7 @@ import {
   DayView,
   Appointments,
   CurrentTimeIndicator,
+  AllDayPanel,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { AppointmentModel } from "../../utils/types";
 import { ScheduleService } from "../../services/schedule.service";
@@ -63,19 +64,35 @@ const DailySchedule = () => {
     );
   };
 
+  const TimeScaleLabel = ({ ...restProps }: DayView.TimeScaleLabelProps) => {
+    return (
+      <DayView.TimeScaleLabel
+        {...restProps}
+        style={{
+          backgroundColor:
+            restProps.time &&
+            restProps.time?.getHours() > dayHours.beginDayHour &&
+            restProps.time?.getHours() < dayHours.endDayHour
+              ? "var( --secondary-color)"
+              : "white",
+        }}
+      />
+    );
+  };
+
   useEffect(() => {
     setToolbar("", true);
 
-    // // Set to a restricted display when the user's day takes place within the 24 hours.
-    // // When the user's day takes place within two different days - the display won't be rectricted.
-    // if (user?.endDayHour === 0) {
-    //   setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    // } else if (user?.beginDayHour <= user?.endDayHour) {
-    //   setDayHours({
-    //     beginDayHour: user?.beginDayHour,
-    //     endDayHour: user?.endDayHour,
-    //   });
-    // }
+    // Set to a restricted display when the user's day takes place within the 24 hours.
+    // When the user's day takes place within two different days - the display won't be rectricted.
+    if (user?.endDayHour === 0) {
+      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    } else if (user?.beginDayHour <= user?.endDayHour) {
+      setDayHours({
+        beginDayHour: user?.beginDayHour,
+        endDayHour: user?.endDayHour,
+      });
+    }
 
     // TODO: arrange the dates according to the clicked date
     ScheduleService.getSchedule(
@@ -119,11 +136,16 @@ const DailySchedule = () => {
       <Scheduler data={scheduleData} height={"auto"}>
         <ViewState currentDate={date} />
         <DayView
-          startDayHour={dayHours.beginDayHour}
-          endDayHour={dayHours.endDayHour}
+          startDayHour={0}
+          endDayHour={24}
+          timeScaleLabelComponent={TimeScaleLabel}
         />
         <Appointments appointmentComponent={Appointment} />
-        <CurrentTimeIndicator />
+        <CurrentTimeIndicator
+          shadePreviousCells={true}
+          shadePreviousAppointments={true}
+        />
+        <AllDayPanel />
       </Scheduler>
     </Paper>
   );

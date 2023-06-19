@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./WeeklySchedule.css";
 import Paper from "@mui/material/Paper";
 import { ViewState } from "@devexpress/dx-react-scheduler";
@@ -29,6 +29,7 @@ const WeeklySchedule = () => {
   const [currDate, setCurrDate] = useState(new Date());
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
+  const { user } = useUser();
   const { popupMessage, setPopupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
   const { setAlert } = useAlert();
@@ -86,17 +87,33 @@ const WeeklySchedule = () => {
     );
   };
 
+  const TimeScaleLabel = ({ ...restProps }: WeekView.TimeScaleLabelProps) => {
+    return (
+      <WeekView.TimeScaleLabel
+        {...restProps}
+        style={{
+          backgroundColor:
+            restProps.time &&
+            restProps.time?.getHours() > dayHours.beginDayHour &&
+            restProps.time?.getHours() < dayHours.endDayHour
+              ? "var( --secondary-color)"
+              : "white",
+        }}
+      />
+    );
+  };
+
   useEffect(() => {
-    // // Set to a restricted display when the user's day takes place within the 24 hours.
-    // // When the user's day takes place within two different days - the display won't be rectricted.
-    // if (user?.endDayHour === 0) {
-    //   setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
-    // } else if (user?.beginDayHour <= user?.endDayHour) {
-    //   setDayHours({
-    //     beginDayHour: user?.beginDayHour,
-    //     endDayHour: user?.endDayHour,
-    //   });
-    // }
+    // Set to a restricted display when the user's day takes place within the 24 hours.
+    // When the user's day takes place within two different days - the display won't be rectricted.
+    if (user?.endDayHour === 0) {
+      setDayHours({ beginDayHour: user?.beginDayHour, endDayHour: 24 });
+    } else if (user?.beginDayHour <= user?.endDayHour) {
+      setDayHours({
+        beginDayHour: user?.beginDayHour,
+        endDayHour: user?.endDayHour,
+      });
+    }
 
     setDataLoading(true);
     ScheduleService.getSchedule()
@@ -112,13 +129,6 @@ const WeeklySchedule = () => {
           };
         });
         setScheduleData(dataDisplay);
-
-        // if (
-        //   (!dataDisplay || dataDisplay.length === 0) &&
-        //   popupMessage === undefined
-        // ) {
-        //   setPopupMessage(USER_MESSAGES.EMPTY_SCHEDULE_MESSAGE);
-        // }
       })
       .catch((err) => {
         setAlert("error", "Something went wrong:( pleas try again later");
@@ -139,20 +149,22 @@ const WeeklySchedule = () => {
         />
 
         <DayView
-          startDayHour={dayHours.beginDayHour}
-          endDayHour={dayHours.endDayHour}
+          startDayHour={0}
+          endDayHour={24}
+          timeScaleLabelComponent={TimeScaleLabel}
         />
         <WeekView
-          startDayHour={dayHours.beginDayHour}
-          endDayHour={dayHours.endDayHour}
+          startDayHour={0}
+          endDayHour={24}
           dayScaleCellComponent={DayScaleCell}
+          timeScaleLabelComponent={TimeScaleLabel}
         />
 
         <Toolbar />
         <ViewSwitcher />
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
-        <CurrentTimeIndicator shadePreviousCells={true} shadePreviousAppointments={true} />
+        <CurrentTimeIndicator />
         <AllDayPanel />
       </Scheduler>
 
