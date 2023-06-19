@@ -217,7 +217,7 @@ const AddTaskPage = () => {
           }
         })
         .catch((error) => {
-          setPopupMessage(serverError(error?.response.data.errors[0]));
+          setPopupMessage(serverError(error?.response?.data?.errors[0]));
         })
         .finally(() => {
           setLoading(false);
