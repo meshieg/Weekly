@@ -153,10 +153,10 @@ const ResetPassword = () => {
           {buttonText}
         </button>
       </form>
-      <AlertPopup />
       <div className="login__link">
         <CustomLink text="Back to Login" onPress={() => navigate("/login")} />
       </div>
+      <AlertPopup />
     </div>
   );
 };
