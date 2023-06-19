@@ -25,11 +25,10 @@ export class UserService {
             })
     }
 
-    static updateUser = async (user: IUser, generateAlgo: boolean): Promise<IInputs> => {
-        return await AxiosInstance.put(userPrefix, { user, generateAlgo })
-            .then(res => {
-                return res.data;
-            })
+    static updateUser = async (user: IUser): Promise<IInputs> => {
+        const response = await AxiosInstance.put(userPrefix, { user });
+
+        return response.data;
     }
 
     static sendEmail = async (email: string): Promise<IUser> => {
@@ -68,11 +67,11 @@ export class UserService {
         })
     }
 
-    static logInGoogle = async (user: IUser): Promise<IUserResponse> => {
-        const url = userPrefix + "/logInGoogle";
-        return await AxiosInstance.post(url, { user })
-        .then(res => {
-            return res.data
-        })
-    }
+    // static logInGoogle = async (user: IUser): Promise<IUserResponse> => {
+    //     const url = userPrefix + "/logInGoogle";
+    //     return await AxiosInstance.post(url, { user })
+    //     .then(res => {
+    //         return res.data
+    //     })
+    // }
 }

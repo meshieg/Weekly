@@ -21,6 +21,8 @@ import { EditScreensState } from "../../utils/constants";
 import { useAppContext } from "../../contexts/AppContext";
 import { USER_MESSAGES, serverError } from "../../utils/messages";
 import CustomLink from "../../components/CustomLink/CustomLink";
+import { ScheduleService } from "../../services/schedule.service";
+import { AxiosError } from "axios";
 
 // const fieldsToDisplayAlgoPopup = [
 //   "beginDayHour",
@@ -114,11 +116,6 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    // When the user basically works 24/7
-    if (newUser.beginDayHour === newUser.endDayHour) {
-      newUser = { ...newUser, beginDayHour: 0, endDayHour: 0 };
-    }
-
     const alertMessage = validateUserInputs({
       ...newUser,
       confirmPassword: inputValues.confirmPassword,
@@ -135,10 +132,13 @@ const PersonalData = () => {
 
         setUser(data?.user);
         navigate("/");
+        setPopupMessage(USER_MESSAGES.FIRST_TIME_MESSAGE);
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
-          setAlert("error", err?.response.data.errors[0].message);
+          setAlert("error", err?.response?.data?.errors[0]?.message);
+        } else {
+          setAlert("error", "Register failed");
         }
       });
   };
@@ -153,67 +153,62 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    if(checkTimeChanged(updatedUser)) {
-      if(displaySchedulePopup) {
-        await updateUserWithoutSchedule(updatedUser);
-      }
-      
-      setDisplayPopup(!displaySchedulePopup);
-    } else if(checkNameChanged(updatedUser)) {
-      await updateUserWithoutSchedule(updatedUser);
-    } else {
+    if (!checkNameChanged(updatedUser) && !checkTimeChanged(updatedUser)) {
       setScreenState(EditScreensState.EDIT_LOCAL);
+      return;
+    }
+
+    try {
+      await UserService.updateUser(updatedUser);
+
+      setUser(updatedUser);
+      setAlert("success", "Changes were saved successfully!");
+
+      if (checkTimeChanged(updatedUser)) {
+        setDisplayPopup(true);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setAlert("error", error?.response?.data?.errors[0]?.message);
+      } else {
+        setAlert("error", "Update user failed");
+      }
     }
   };
 
   const checkTimeChanged = (updatedUser: IUser) => {
-    return user.beginDayHour !== updatedUser.beginDayHour ||
-           user.endDayHour !== updatedUser.endDayHour;
-  }
+    return (
+      user.beginDayHour !== updatedUser.beginDayHour ||
+      user.endDayHour !== updatedUser.endDayHour
+    );
+  };
 
   const checkNameChanged = (updatedUser: IUser) => {
-    return user.firstName !== updatedUser.firstName ||
-           user.lastName !== updatedUser.lastName;
-  }
+    return (
+      user.firstName !== updatedUser.firstName ||
+      user.lastName !== updatedUser.lastName
+    );
+  };
 
-  const updateUserWithoutSchedule = async (updatedUser: IUser) => {
-    await UserService.updateUser(updatedUser, false)
-      .then(() => {
-        setUser(updatedUser);
-        setAlert("success", "Changes were saved successfully!");
-      })
-      .catch((error) => {
-        if (error?.response?.data?.errors[0]?.message) {
-          setAlert("error", error?.response.data.errors[0].message);
-        }
-      });
-  }
-
-  const updateUserWithSchedule = async () => {
+  const updateSchedule = async () => {
     setLoading(true);
-    const updatedUser: IUser = {
-      id: user.id,
-      firstName: inputValues.firstName,
-      lastName: inputValues.lastName,
-      email: inputValues.email,
-      beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
-      endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
-    };
 
-    await UserService.updateUser(updatedUser, true)
-      .then((data) => {
-        setUser(updatedUser);
+    try {
+      const res = await ScheduleService.generateSchedule([]);
+
+      if (res?.notAssignedTasks && res?.notAssignedTasks.length > 0) {
+        setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE);
+      } else if (res?.assignedTasks && res?.assignedTasks.length > 0) {
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
-
-      })
-      .catch((error) => {
-        if (error?.response?.data?.errors[0]?.message) {
-          setPopupMessage(serverError(error?.response.data.errors[0]));
-        }
-      }).finally(() => {
-          setLoading(false);
-          navigate("/");
-      });
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setPopupMessage(serverError(error?.response?.data?.errors[0]));
+      }
+    } finally {
+      setLoading(false);
+      navigate("/");
+    }
   };
 
   return (
@@ -264,19 +259,19 @@ const PersonalData = () => {
           </button>
         )}
       </form>
-      {screenState === EditScreensState.ADD ? 
+      {screenState === EditScreensState.ADD ? (
         <div className="login__link">
-          <CustomLink
-            text="Back to Login"
-            onPress={() => navigate("/login")}
-          />
-        </div> : <></>}
+          <CustomLink text="Back to Login" onPress={() => navigate("/login")} />
+        </div>
+      ) : (
+        <></>
+      )}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
         onClose={() => setDisplayPopup(false)}
-        primaryAction={updateUserWithSchedule}
-        secondaryAction={handleUpdateUser}
+        primaryAction={updateSchedule}
+        secondaryAction={() => setDisplayPopup(false)}
       />
     </div>
   );

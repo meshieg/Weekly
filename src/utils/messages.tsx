@@ -1,11 +1,17 @@
 import { ReactComponent as SuccessIcon } from "../assets/icons/successIcon.svg";
 import { ReactComponent as WarningSign } from "../assets/icons/warningSign.svg";
 import { ServerError, UserMessage, UserMessages } from "./types";
+import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 
 const icons = {
   error: <WarningSign />,
   success: <SuccessIcon />,
   info: <WarningSign />,
+  start: (
+    <CalendarMonthTwoToneIcon
+      sx={{ color: "var(--primary-color)", fontSize: "1.8rem" }}
+    />
+  ),
 };
 
 export const USER_MESSAGES: UserMessages = {
@@ -58,6 +64,14 @@ export const USER_MESSAGES: UserMessages = {
     icon: icons["info"],
     primaryButtonText: "Yes",
     secondaryButtonText: "Cancel",
+  },
+  FIRST_TIME_MESSAGE: {
+    title: "Welcome to Weekly!",
+    message: "The best place to optimize your day ⭐",
+    extraMessage:
+      "Add your tasks and events, and let us do our generation magic!",
+    icon: icons["start"],
+    primaryButtonText: "Ok",
   },
 };
 
