@@ -14,7 +14,8 @@ const FloatingActionButton = () => {
         const route = routes.find((route) => route.path === location.pathname);
         setDisplay(
             route?.showFab !== undefined ? route?.showFab : false
-            );
+        );
+        setIsOpen(false);
     }, [location.pathname]);
 
     const onButtonClick = (route: string) => {

@@ -239,6 +239,7 @@ const PersonalData = () => {
             );
           })}
         </div>
+        <AlertPopup />
         {screenState === EditScreensState.ADD ? (
           <button className="btn btn__primary reg_form_btn" type="submit">
             Lets start planning!
@@ -254,7 +255,7 @@ const PersonalData = () => {
           </div>
         ) : (
           <button className="btn btn__primary reg_form_btn" type="submit">
-            <EditIcon />
+            <EditIcon className="edit-icon" />
             Edit
           </button>
         )}
@@ -266,7 +267,6 @@ const PersonalData = () => {
       ) : (
         <></>
       )}
-      <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
         onClose={() => setDisplayPopup(false)}

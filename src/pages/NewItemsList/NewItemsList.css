@@ -1,5 +1,5 @@
 .new-items__container {
-  padding: 1rem 0;
+  padding: 2rem 0;
 }
 
 .new-items__message {
@@ -11,5 +11,5 @@
 }
 
 .new-items__return-button {
-  margin-top: 5vh;
+  margin-top: 5dvh;
 }
