@@ -82,7 +82,6 @@ const AddEventPage = () => {
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
-    console.log(newValue);
     if (key === "startDate") {
       setInputsValues((prev) => {
         return {
@@ -91,7 +90,6 @@ const AddEventPage = () => {
         };
       });
     } else if (key === "startTime") {
-      console.log(moment(newValue).hour());
       setInputsValues((prev) => {
         return {
           ...prev,
