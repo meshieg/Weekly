@@ -67,11 +67,11 @@ export class UserService {
         })
     }
 
-    static logInGoogle = async (user: IUser): Promise<IUserResponse> => {
-        const url = userPrefix + "/logInGoogle";
-        return await AxiosInstance.post(url, { user })
-        .then(res => {
-            return res.data
-        })
-    }
+    // static logInGoogle = async (user: IUser): Promise<IUserResponse> => {
+    //     const url = userPrefix + "/logInGoogle";
+    //     return await AxiosInstance.post(url, { user })
+    //     .then(res => {
+    //         return res.data
+    //     })
+    // }
 }

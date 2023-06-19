@@ -82,6 +82,21 @@ const AddEventPage = () => {
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
+    if (key === "startDate") {
+      setInputsValues((prev) => {
+        return {
+          ...prev,
+          ["endDate"]: newValue,
+        };
+      });
+    } else if (key === "startTime") {
+      setInputsValues((prev) => {
+        return {
+          ...prev,
+          ["endTime"]: new Date(0, 0, 0, moment(newValue).hour() + 1, 0, 0),
+        };
+      });
+    }
     setInputsValues((prev) => {
       return {
         ...prev,

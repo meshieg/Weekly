@@ -116,11 +116,6 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    // When the user basically works 24/7
-    if (newUser.beginDayHour === newUser.endDayHour) {
-      newUser = { ...newUser, beginDayHour: 0, endDayHour: 0 };
-    }
-
     const alertMessage = validateUserInputs({
       ...newUser,
       confirmPassword: inputValues.confirmPassword,
