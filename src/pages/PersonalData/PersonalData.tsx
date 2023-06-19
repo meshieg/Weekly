@@ -132,6 +132,7 @@ const PersonalData = () => {
 
         setUser(data?.user);
         navigate("/");
+        setPopupMessage(USER_MESSAGES.FIRST_TIME_MESSAGE);
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
@@ -168,7 +169,9 @@ const PersonalData = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        setAlert("error", error.response?.data?.errors[0]?.message);
+        setAlert("error", error?.response?.data?.errors[0]?.message);
+      } else {
+        setAlert("error", "Update user failed");
       }
     }
   };
