@@ -135,7 +135,9 @@ const PersonalData = () => {
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
-          setAlert("error", err?.response.data.errors[0]);
+          setAlert("error", err?.response?.data?.errors[0]?.message);
+        } else {
+          setAlert("error", "Register failed");
         }
       });
   };
@@ -150,7 +152,7 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    if(!checkNameChanged(updatedUser) && !checkTimeChanged(updatedUser)) {
+    if (!checkNameChanged(updatedUser) && !checkTimeChanged(updatedUser)) {
       setScreenState(EditScreensState.EDIT_LOCAL);
       return;
     }
@@ -161,25 +163,29 @@ const PersonalData = () => {
       setUser(updatedUser);
       setAlert("success", "Changes were saved successfully!");
 
-      if(checkTimeChanged(updatedUser)) {
+      if (checkTimeChanged(updatedUser)) {
         setDisplayPopup(true);
       }
-    } catch(error) {
+    } catch (error) {
       if (error instanceof AxiosError) {
-        setAlert("error", error.response?.data.errors[0].message);
+        setAlert("error", error.response?.data?.errors[0]?.message);
       }
     }
   };
 
   const checkTimeChanged = (updatedUser: IUser) => {
-    return user.beginDayHour !== updatedUser.beginDayHour ||
-           user.endDayHour !== updatedUser.endDayHour;
-  }
+    return (
+      user.beginDayHour !== updatedUser.beginDayHour ||
+      user.endDayHour !== updatedUser.endDayHour
+    );
+  };
 
   const checkNameChanged = (updatedUser: IUser) => {
-    return user.firstName !== updatedUser.firstName ||
-           user.lastName !== updatedUser.lastName;
-  }
+    return (
+      user.firstName !== updatedUser.firstName ||
+      user.lastName !== updatedUser.lastName
+    );
+  };
 
   const updateSchedule = async () => {
     setLoading(true);
@@ -188,22 +194,19 @@ const PersonalData = () => {
       const res = await ScheduleService.generateSchedule([]);
 
       if (res?.notAssignedTasks && res?.notAssignedTasks.length > 0) {
-        setPopupMessage(
-          USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE
-        );
+        setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE);
       } else if (res?.assignedTasks && res?.assignedTasks.length > 0) {
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
       }
-
-    } catch(error) {
+    } catch (error) {
       if (error instanceof AxiosError) {
-        setPopupMessage(serverError(error.response?.data.errors[0]));
+        setPopupMessage(serverError(error?.response?.data?.errors[0]));
       }
     } finally {
       setLoading(false);
       navigate("/");
     }
-  }
+  };
 
   return (
     <div className="reg_pageContainer">
@@ -253,13 +256,13 @@ const PersonalData = () => {
           </button>
         )}
       </form>
-      {screenState === EditScreensState.ADD ? 
+      {screenState === EditScreensState.ADD ? (
         <div className="login__link">
-          <CustomLink
-            text="Back to Login"
-            onPress={() => navigate("/login")}
-          />
-        </div> : <></>}
+          <CustomLink text="Back to Login" onPress={() => navigate("/login")} />
+        </div>
+      ) : (
+        <></>
+      )}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
