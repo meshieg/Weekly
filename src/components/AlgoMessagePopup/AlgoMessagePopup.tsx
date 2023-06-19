@@ -22,13 +22,13 @@ const AlgoMessagePopup: React.FC<IAlgoMessagePopupProps> = (props) => {
         </div>
         <div className="algo-popup__buttons">
           <button
-            className="btn btn__primary"
+            className="btn btn__primary algo-popup_bt"
             onClick={props.primaryAction}
           >
             Yes, regenerate!
           </button>
           <button
-            className="btn btn__secondary"
+            className="btn btn__secondary algo-popup_btn"
             onClick={props.secondaryAction}
           >
             No, I'll do it myself

@@ -30,9 +30,9 @@ export function validateHours(beginDayHour: number, endDayHour: number) {
 }
 
 export function validateUserInputs(user: IUser) {
-  if (user.email && !validateEmail(user.email)) {
-    return "Email address is not valid..."
-  }
+    if (user.email && !validateEmail(user.email)) {
+        return "Email address is not valid...";
+    }
 
     if (user.confirmPassword && user.password !== user.confirmPassword) {
         return "Please confirm your password correctly";
@@ -64,43 +64,41 @@ export function validateTaskInputs(
         return "Due date is not valid";
     }
 
-  if (task.dueDate < new Date()) {
-    return "Past due date is not allowed";
-  }
+    if (task.dueDate < new Date()) {
+        return "Your task's due date set to the past, are you a time traveler?";
+    }
 
-  if (endDayHour !== beginDayHour && task.estTime > endDayHour - beginDayHour) {
-    return "Estimated time can't be longer than day hours";
-  }
+    if (
+        endDayHour !== beginDayHour &&
+        task.estTime > calcNumOfDayHours(beginDayHour, endDayHour)
+    ) {
+        return "Estimated time can't exceed the day's hours";
+    }
 
     if (task.assignment) {
         if (!isValidDate(task.assignment)) {
             return "Assignment is not valid";
         }
 
-    let endAssignment = new Date(task.assignment);
-    endAssignment.setHours(
-      endAssignment.getHours() + parseInt(task.estTime.toString())
-    );
-
-    if (endAssignment > task.dueDate) {
-      return "Assignment can't be after due date";
+        if (task.assignment < new Date()) {
+            return "Your task's asignment set to the past, are you a time traveler?";
+        }
     }
-  }
+
 }
 
 export function validateEventInputs(event: IEvent) {
-  console.log(event);
-  if (!isValidDate(event.startTime)) {
-    return "Start date is not valid";
-  }
+    if (!isValidDate(event.startTime)) {
+        return "Start date is not valid";
+    }
 
     if (!isValidDate(event.endTime)) {
         return "End date is not valid";
     }
 
-  if (event.startTime < new Date()) {
-    return "Past start time is not allowed";
-  }
+    if (event.startTime < new Date()) {
+        return "Your event's start time set to the past, are you a time traveler?";
+    }
 
     if (event.endTime <= event.startTime) {
         return "End time must be after start time";
@@ -118,4 +116,13 @@ export function roundToNearestHour(date: Date) {
 export function roundToNextNearestHour(date: Date) {
     const nearestHour = roundToNearestHour(date);
     return nearestHour.setHours(date.getHours() + 1);
+}
+
+export function calcNumOfDayHours(begin: number, end: number) {
+    let difference = end - begin;
+    if (difference < 0) {
+        difference += 24; // Add 24 hours to handle wrapping to the next day
+    }
+
+    return difference;
 }
