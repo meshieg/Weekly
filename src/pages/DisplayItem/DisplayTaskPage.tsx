@@ -69,7 +69,6 @@ const DisplayTaskPage = () => {
         TaskService.deleteTask(taskToShow.id)
           .then((deleted) => {
             if (deleted) {
-              setAlert("success", "Task deleted successfully");
               navigate(-1);
             } else {
               setAlert("error", "Failed to delete task");
@@ -79,7 +78,6 @@ const DisplayTaskPage = () => {
             setAlert("error", "Failed to delete task");
           });
       } else {
-        setAlert("success", "Task deleted successfully");
         removeItem(taskToShow.id);
         navigate(-1);
       }

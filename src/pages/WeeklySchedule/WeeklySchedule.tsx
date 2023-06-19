@@ -112,6 +112,13 @@ const WeeklySchedule = () => {
           };
         });
         setScheduleData(dataDisplay);
+
+        // if (
+        //   (!dataDisplay || dataDisplay.length === 0) &&
+        //   popupMessage === undefined
+        // ) {
+        //   setPopupMessage(USER_MESSAGES.EMPTY_SCHEDULE_MESSAGE);
+        // }
       })
       .catch((err) => {
         setAlert("error", "Something went wrong:( pleas try again later");

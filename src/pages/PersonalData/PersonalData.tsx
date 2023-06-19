@@ -130,6 +130,7 @@ const PersonalData = () => {
 
         setUser(data?.user);
         navigate("/");
+        setPopupMessage(USER_MESSAGES.FIRST_TIME_MESSAGE);
       })
       .catch((err) => {
         if (err?.response?.data?.errors[0]?.message) {
@@ -148,13 +149,13 @@ const PersonalData = () => {
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };
 
-    if(checkTimeChanged(updatedUser)) {
-      if(displaySchedulePopup) {
+    if (checkTimeChanged(updatedUser)) {
+      if (displaySchedulePopup) {
         await updateUserWithoutSchedule(updatedUser);
       }
-      
+
       setDisplayPopup(!displaySchedulePopup);
-    } else if(checkNameChanged(updatedUser)) {
+    } else if (checkNameChanged(updatedUser)) {
       await updateUserWithoutSchedule(updatedUser);
     } else {
       setScreenState(EditScreensState.EDIT_LOCAL);
@@ -162,14 +163,18 @@ const PersonalData = () => {
   };
 
   const checkTimeChanged = (updatedUser: IUser) => {
-    return user.beginDayHour !== updatedUser.beginDayHour ||
-           user.endDayHour !== updatedUser.endDayHour;
-  }
+    return (
+      user.beginDayHour !== updatedUser.beginDayHour ||
+      user.endDayHour !== updatedUser.endDayHour
+    );
+  };
 
   const checkNameChanged = (updatedUser: IUser) => {
-    return user.firstName !== updatedUser.firstName ||
-           user.lastName !== updatedUser.lastName;
-  }
+    return (
+      user.firstName !== updatedUser.firstName ||
+      user.lastName !== updatedUser.lastName
+    );
+  };
 
   const updateUserWithoutSchedule = async (updatedUser: IUser) => {
     await UserService.updateUser(updatedUser, false)
@@ -182,7 +187,7 @@ const PersonalData = () => {
           setAlert("error", error?.response.data.errors[0].message);
         }
       });
-  }
+  };
 
   const updateUserWithSchedule = async () => {
     setLoading(true);
@@ -199,15 +204,15 @@ const PersonalData = () => {
       .then((data) => {
         setUser(updatedUser);
         setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
-
       })
       .catch((error) => {
         if (error?.response?.data?.errors[0]?.message) {
           setPopupMessage(serverError(error?.response.data.errors[0]));
         }
-      }).finally(() => {
-          setLoading(false);
-          navigate("/");
+      })
+      .finally(() => {
+        setLoading(false);
+        navigate("/");
       });
   };
 
@@ -259,13 +264,13 @@ const PersonalData = () => {
           </button>
         )}
       </form>
-      {screenState === EditScreensState.ADD ? 
+      {screenState === EditScreensState.ADD ? (
         <div className="login__link">
-          <CustomLink
-            text="Back to Login"
-            onPress={() => navigate("/login")}
-          />
-        </div> : <></>}
+          <CustomLink text="Back to Login" onPress={() => navigate("/login")} />
+        </div>
+      ) : (
+        <></>
+      )}
       <AlertPopup />
       <AlgoMessagePopup
         open={displaySchedulePopup}
