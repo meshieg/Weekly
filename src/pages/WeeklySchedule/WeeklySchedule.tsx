@@ -29,7 +29,6 @@ const WeeklySchedule = () => {
   const [currDate, setCurrDate] = useState(new Date());
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
-  const { user } = useUser();
   const { popupMessage, setPopupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
   const { setAlert } = useAlert();
@@ -125,7 +124,7 @@ const WeeklySchedule = () => {
   }
 
   return (
-    <Paper style={{ height: "100%" }}>
+    <Paper style={{ height: "100%", width: "100%"}}>
       <Scheduler data={scheduleData} height={"auto"}>
         <ViewState
           defaultCurrentDate={currDate}
