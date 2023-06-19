@@ -30,10 +30,10 @@ export const taskFields: inputFields = {
     placeholder: "Location",
   },
   estTime: {
-    label: "Estimated Time",
+    label: "Estimated Time in Hours",
     type: fieldsTypes.TextField,
     required: true,
-    placeholder: "Estimated Time",
+    placeholder: "Estimated Time in Hours",
   },
   dueDate: {
     label: "Due Date",

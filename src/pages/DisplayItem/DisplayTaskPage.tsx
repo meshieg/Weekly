@@ -117,7 +117,7 @@ const DisplayTaskPage = () => {
             <TextField
               value={taskToShow.estTime}
               disabled={true}
-              label="Estimated time"
+              label="Estimated time in Hours"
               variant="standard"
               type="number"
               sx={textFieldStyle}

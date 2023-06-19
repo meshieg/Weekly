@@ -11,6 +11,7 @@ import {
   DateNavigator,
   ViewSwitcher,
   CurrentTimeIndicator,
+  AllDayPanel,
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 import { AppointmentModel } from "../../utils/types";
@@ -28,7 +29,6 @@ const WeeklySchedule = () => {
   const [currDate, setCurrDate] = useState(new Date());
   const [dayHours, setDayHours] = useState({ beginDayHour: 0, endDayHour: 24 });
   const navigate = useNavigate();
-  const { user } = useUser();
   const { popupMessage, setPopupMessage } = useAppContext();
   const [dataLoading, setDataLoading] = useState(false);
   const { setAlert } = useAlert();
@@ -152,7 +152,8 @@ const WeeklySchedule = () => {
         <ViewSwitcher />
         <DateNavigator />
         <Appointments appointmentComponent={Appointment} />
-        <CurrentTimeIndicator />
+        <CurrentTimeIndicator shadePreviousCells={true} shadePreviousAppointments={true} />
+        <AllDayPanel />
       </Scheduler>
 
       <MessageDialog
