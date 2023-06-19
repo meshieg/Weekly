@@ -124,7 +124,7 @@ const WeeklySchedule = () => {
   }
 
   return (
-    <Paper style={{ height: "100%"}}>
+    <Paper style={{ height: "100%" }}>
       <Scheduler data={scheduleData} height={"auto"}>
         <ViewState
           defaultCurrentDate={currDate}
