@@ -56,7 +56,7 @@ export function validateTaskInputs(
     beginDayHour: number,
     endDayHour: number
 ) {
-    if (isNaN(task.estTime) || task.estTime % 1 !== 0) {
+    if (isNaN(task.estTime) || task.estTime % 1 !== 0 || parseInt(task.estTime.toString()) === 0) {
         return "Estimated time is not valid";
     }
 
