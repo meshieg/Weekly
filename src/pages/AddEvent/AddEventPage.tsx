@@ -82,14 +82,14 @@ const AddEventPage = () => {
 
   const setValues = (objKey: string, newValue: any) => {
     const key = objKey as keyof IInputs;
-    if (key === "startDate") {
+    if (key === "startDate" && screenState === EditScreensState.ADD) {
       setInputsValues((prev) => {
         return {
           ...prev,
           ["endDate"]: newValue,
         };
       });
-    } else if (key === "startTime") {
+    } else if (key === "startTime" && screenState === EditScreensState.ADD) {
       setInputsValues((prev) => {
         return {
           ...prev,
