@@ -6,13 +6,19 @@ import ScheduleItemsList from "../../components/ScheduleItemsList/ScheduleItemsL
 import CollapseHeader from "../../components/CollapseHeader/CollapseHeader";
 import { useNavigate } from "react-router-dom";
 import useAlert from "../../customHooks/useAlert";
-import { FilterAltOutlined as FilterIcon,
-         SwapVertOutlined as SortIcon } from '@mui/icons-material';
+import {
+  FilterAltOutlined as FilterIcon,
+  SwapVertOutlined as SortIcon,
+} from "@mui/icons-material";
 import TagsList from "../../components/TagsList/TagsList";
 import { TagService } from "../../services/tag.service";
 import SortList from "../../components/SortList/SortList";
 import { DEFAULT_TAG, Direction } from "../../utils/constants";
 import { ISortItem, sortItems } from "./SortListItems";
+import AlgoMessagePopup from "../../components/AlgoMessagePopup/AlgoMessagePopup";
+import { ScheduleService } from "../../services/schedule.service";
+import { serverError, USER_MESSAGES } from "../../utils/messages";
+import { useAppContext } from "../../contexts/AppContext";
 
 const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
@@ -25,6 +31,8 @@ const MyTasks: React.FC = () => {
   const [isSortListOpen, setSortListOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [algoPopupOpen, setAlgoPopupOpen] = useState(false);
+  const { setLoading, setPopupMessage } = useAppContext();
 
   const { setToolbar } = useToolbar();
   const navigate = useNavigate();
@@ -66,6 +74,10 @@ const MyTasks: React.FC = () => {
             }
           });
           setAllTasks(newTasks);
+
+          if (newTask.isDone === false) {
+            setAlgoPopupOpen(true);
+          }
         }
       })
       .catch((err) => {
@@ -77,7 +89,7 @@ const MyTasks: React.FC = () => {
   const sortDoneTasks = (tasks: ITask[]) => {
     setNotDoneTasks(tasks?.filter((task) => task.isDone === false));
     setDoneTasks(tasks?.filter((task) => task.isDone === true));
-  }
+  };
 
   useEffect(() => {
     sortDoneTasks(allTasks);
@@ -85,17 +97,17 @@ const MyTasks: React.FC = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
-      if(!dropdownRef?.current?.contains(event.target)) {
+      if (!dropdownRef?.current?.contains(event.target)) {
         setFilterListOpen(false);
         setSortListOpen(false);
       }
-    }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return() => {
+    return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-    }
+    };
   }, [dropdownRef]);
 
   const onTaskClick = (id: number) => {
@@ -114,22 +126,21 @@ const MyTasks: React.FC = () => {
     let filteredTasks = allTasks;
     setFilterState(false);
 
-    if(tag) {    // State of: there is a tag to filter by
-      filteredTasks = allTasks.filter(task => 
-        {
-          if(task.tag?.id === undefined) {
-            return tag.id === DEFAULT_TAG.id;
-          }
-          
-          return task.tag?.id === tag.id;
-          }
-        );
+    if (tag) {
+      // State of: there is a tag to filter by
+      filteredTasks = allTasks.filter((task) => {
+        if (task.tag?.id === undefined) {
+          return tag.id === DEFAULT_TAG.id;
+        }
+
+        return task.tag?.id === tag.id;
+      });
       setFilterState(true);
     }
-    
+
     sortDoneTasks(filteredTasks);
     setFilterListOpen(false);
-  }
+  };
 
   // TODO: Make it a generic func
   const setSort = (item: ISortItem) => {
@@ -137,8 +148,10 @@ const MyTasks: React.FC = () => {
     // sortItems[item.key].active = !sortItems[item.key].active;
 
     sortItems[item.key].active = !sortItems[item.key].active;
-    if(item.active) {
-      sortItems.map(currItem => currItem.key !== item.key ? currItem.active = false : null);
+    if (item.active) {
+      sortItems.map((currItem) =>
+        currItem.key !== item.key ? (currItem.active = false) : null
+      );
 
       notDoneTasks.sort((a, b) => compareFunc(a, b, item));
       doneTasks.sort((a, b) => compareFunc(a, b, item));
@@ -149,81 +162,128 @@ const MyTasks: React.FC = () => {
     }
 
     setSortListOpen(false);
-  }
+  };
 
   const compareFunc = (a: ITask, b: ITask, details: ISortItem) => {
     let returnVal = 0;
 
-    switch(details.title) {
+    switch (details.title) {
       case "due date":
         returnVal = a.dueDate.getTime() - b.dueDate.getTime();
         break;
 
       case "title":
-        returnVal = a.title.toLocaleLowerCase() > b.title.toLocaleLowerCase() ? 1 : -1;
+        returnVal =
+          a.title.toLocaleLowerCase() > b.title.toLocaleLowerCase() ? 1 : -1;
         break;
     }
 
-    if(details.direction === Direction.DESC) {
-      returnVal = returnVal * (-1);
+    if (details.direction === Direction.DESC) {
+      returnVal = returnVal * -1;
     }
     return returnVal;
-  }
+  };
 
   const openList = (key: string) => {
     switch (key) {
-      case 'SORT':
+      case "SORT":
         setSortListOpen(!isSortListOpen);
         setFilterListOpen(false);
         break;
 
-      case 'FILTER':
+      case "FILTER":
         setFilterListOpen(!isFilterListOpen);
         setSortListOpen(false);
         break;
     }
-  }
+  };
+
+  const generateSchedule = () => {
+    setLoading(true);
+
+    ScheduleService.generateSchedule()
+      .then((data: any) => {
+        if (data?.notAssignedTasks && data?.notAssignedTasks.length > 0) {
+          setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS_WITH_MESSAGE);
+        } else if (data?.assignedTasks && data?.assignedTasks.length > 0) {
+          setPopupMessage(USER_MESSAGES.SCHEDULE_GENERATE_SUCCESS);
+        }
+      })
+      .catch((error) => {
+        setPopupMessage(serverError(error?.response?.data?.errors[0]));
+      })
+      .finally(() => {
+        navigate("/");
+        setLoading(false);
+      });
+  };
 
   return (
     <>
       <div className="filter__container" ref={dropdownRef}>
-        <button className={`filter__button ${isFilterSet && 'active'}`} 
-                onClick={() => openList('FILTER')}>
-          <FilterIcon /> 
+        <button
+          className={`filter__button ${isFilterSet && "active"}`}
+          onClick={() => openList("FILTER")}
+        >
+          <FilterIcon />
         </button>
-        <div className={`list filter__list ${isFilterListOpen ? 'active' : 'inactive'}`}>
-          <TagsList
-              tags={tagsList} 
-              tagWidth="1.5rem"
-              onTagClick={setFilter} />
-          <button className="btn btn__secondary" disabled={!isFilterSet} onClick={() => setFilter()}>clear filter</button>
-        </div> 
-        <button className={`filter__button ${isSortSet && 'active'}`} 
-                onClick={() => openList('SORT')}>
+        <div
+          className={`list filter__list ${
+            isFilterListOpen ? "active" : "inactive"
+          }`}
+        >
+          <TagsList tags={tagsList} tagWidth="1.5rem" onTagClick={setFilter} />
+          <button
+            className="btn btn__secondary"
+            disabled={!isFilterSet}
+            onClick={() => setFilter()}
+          >
+            clear filter
+          </button>
+        </div>
+        <button
+          className={`filter__button ${isSortSet && "active"}`}
+          onClick={() => openList("SORT")}
+        >
           <SortIcon />
         </button>
-        <div className={`list sort__list ${isSortListOpen ? 'active' : 'inactive'}`}>
-          <SortList
-              sortItems={sortItems}
-              onRowClick={setSort} />
-        </div> 
+        <div
+          className={`list sort__list ${
+            isSortListOpen ? "active" : "inactive"
+          }`}
+        >
+          <SortList sortItems={sortItems} onRowClick={setSort} />
+        </div>
       </div>
-      {notDoneTasks.length === 0 && doneTasks.length === 0 ? 
-      <div className="no-tasks">No tasks to show<br/>Try removing the filter :)</div> :
-      <>
-        <ScheduleItemsList
-          items={notDoneTasks}
-          onCheckedClick={onTaskCheckedClick}
-          onItemClick={onTaskClick}
-          showNoAssignmentIndication={true}
-        />
-        <CollapseHeader headerText="Done">
+      {notDoneTasks.length === 0 && doneTasks.length === 0 ? (
+        <div className="no-tasks">
+          No tasks to show
+          <br />
+          Try removing the filter :)
+        </div>
+      ) : (
+        <>
           <ScheduleItemsList
-            items={doneTasks}
+            items={notDoneTasks}
             onCheckedClick={onTaskCheckedClick}
+            onItemClick={onTaskClick}
+            showNoAssignmentIndication={true}
           />
-        </CollapseHeader>
-      </> }
+          <CollapseHeader headerText="Done">
+            <ScheduleItemsList
+              items={doneTasks}
+              onCheckedClick={onTaskCheckedClick}
+            />
+          </CollapseHeader>
+        </>
+      )}
+
+      <AlgoMessagePopup
+        open={algoPopupOpen}
+        onClose={() => setAlgoPopupOpen(false)}
+        primaryAction={generateSchedule}
+        secondaryAction={() => setAlgoPopupOpen(false)}
+      />
     </>
   );
 };
