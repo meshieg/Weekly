@@ -72,19 +72,8 @@ export function validateTaskInputs(
         return "Estimated time can't exceed the day's hours";
     }
 
-    if (task.assignment) {
-        if (!isValidDate(task.assignment)) {
-            return "Assignment is not valid";
-        }
-
-        let endAssignment = new Date(task.assignment);
-        endAssignment.setHours(
-            endAssignment.getHours() + parseInt(task.estTime.toString())
-        );
-
-        if (endAssignment > task.dueDate) {
-            return "Assignment can't be after due date";
-        }
+    if (task.assignment && !isValidDate(task.assignment)) {
+        return "Assignment is not valid";
     }
 }
 
