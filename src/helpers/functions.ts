@@ -38,13 +38,13 @@ export function validateUserInputs(user: IUser) {
     return "Please confirm your password correctly";
   }
 
-  if (
-    user.beginDayHour &&
-    user.endDayHour &&
-    !validateHours(user.beginDayHour, user.endDayHour)
-  ) {
-    return "The day's begin hour must be before the day's end hour";
-  }
+  // if (
+  //     user.beginDayHour &&
+  //     user.endDayHour &&
+  //     !validateHours(user.beginDayHour, user.endDayHour)
+  // ) {
+  //     return "The day's begin hour must be before the day's end hour";
+  // }
 }
 
 export function isValidDate(date: Date) {
@@ -68,8 +68,11 @@ export function validateTaskInputs(
     return "Past due date is not allowed";
   }
 
-  if (endDayHour !== beginDayHour && task.estTime > endDayHour - beginDayHour) {
-    return "Estimated time can't be longer than day hours";
+  if (
+    endDayHour !== beginDayHour &&
+    task.estTime > calcNumOfDayHours(beginDayHour, endDayHour)
+  ) {
+    return "Estimated time can't exceed the day's hours";
   }
 
   if (task.assignment) {
@@ -117,4 +120,13 @@ export function roundToNearestHour(date: Date) {
 export function roundToNextNearestHour(date: Date) {
   const nearestHour = roundToNearestHour(date);
   return nearestHour.setHours(date.getHours() + 1);
+}
+
+export function calcNumOfDayHours(begin: number, end: number) {
+  let difference = end - begin;
+  if (difference < 0) {
+    difference += 24; // Add 24 hours to handle wrapping to the next day
+  }
+
+  return difference;
 }
