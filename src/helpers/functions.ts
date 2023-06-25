@@ -37,14 +37,6 @@ export function validateUserInputs(user: IUser) {
     if (user.confirmPassword && user.password !== user.confirmPassword) {
         return "Please confirm your password correctly";
     }
-
-    // if (
-    //     user.beginDayHour &&
-    //     user.endDayHour &&
-    //     !validateHours(user.beginDayHour, user.endDayHour)
-    // ) {
-    //     return "The day's begin hour must be before the day's end hour";
-    // }
 }
 
 export function isValidDate(date: Date) {
@@ -56,7 +48,7 @@ export function validateTaskInputs(
     beginDayHour: number,
     endDayHour: number
 ) {
-    if (isNaN(task.estTime) || task.estTime % 1 !== 0) {
+    if (isNaN(task.estTime) || task.estTime % 1 !== 0 || parseInt(task.estTime.toString()) === 0) {
         return "Estimated time is not valid";
     }
 
@@ -65,7 +57,7 @@ export function validateTaskInputs(
     }
 
     if (task.dueDate < new Date()) {
-        return "Past due date is not allowed";
+        return "Your task's due date set to the past, are you a time traveler?";
     }
 
     if (
@@ -75,9 +67,16 @@ export function validateTaskInputs(
         return "Estimated time can't exceed the day's hours";
     }
 
-    if (task.assignment && !isValidDate(task.assignment)) {
-        return "Assignment is not valid";
+    if (task.assignment) {
+        if (!isValidDate(task.assignment)) {
+            return "Assignment is not valid";
+        }
+
+        // if (task.assignment < new Date()) {
+        //     return "Your task's asignment set to the past, are you a time traveler?";
+        // }
     }
+
 }
 
 export function validateEventInputs(event: IEvent) {
@@ -89,9 +88,9 @@ export function validateEventInputs(event: IEvent) {
         return "End date is not valid";
     }
 
-    if (event.startTime < new Date()) {
-        return "Past start time is not allowed";
-    }
+    // if (event.startTime < new Date()) {
+    //     return "Your event's start time set to the past, are you a time traveler?";
+    // }
 
     if (event.endTime <= event.startTime) {
         return "End time must be after start time";

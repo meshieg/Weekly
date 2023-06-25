@@ -1,15 +1,12 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  padding: 3vh 12%;
-  height: 100%;
+  margin: 2rem;
 }
 
 .fieldsContainer {
   display: flex;
   flex-direction: column;
-  /* align-items: center;
-  height: 80%; */
   justify-content: space-between;
 }
 
@@ -20,14 +17,11 @@
 
 .btnContainer {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  align-self: center;
-  margin-top: 7vh;
+  justify-content: space-evenly;
+  padding-top: 2rem;
 }
 
 .display__button {
   width: 45%;
-  height: 4vh;
+  min-width: max-content;
 }

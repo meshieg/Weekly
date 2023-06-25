@@ -2,9 +2,10 @@
     flex-direction: column;
     display: flex;
     justify-content: space-between;
-    margin-top: 7vh;
-    margin-right: 7vw;
-    margin-left: 7vw
+    margin-top: 3dvh;
+    margin-right: 7dvw;
+    margin-left: 7dvw;
+    margin-bottom: 7dvw;
 }
 
 .reg_image {
@@ -27,12 +28,13 @@
 }
 
 .reg_form_btn {
-    margin-top: 2vh;
-    width: 65%;
+    margin-top: 2rem;
+    width: 70%;
     align-self: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+}
+
+.edit-icon {
+    margin-right: 1%;
 }
 
 .login__link {

@@ -37,8 +37,8 @@ function App() {
                     ))}
                   </Routes>
                 </div>
-                <FloatingActionButton />
                 <div className="app__bottom">
+                  <FloatingActionButton />
                   <BottomToolbar />
                 </div>
               </BrowserRouter>

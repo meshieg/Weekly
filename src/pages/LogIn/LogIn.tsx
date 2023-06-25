@@ -123,7 +123,7 @@ const LogIn = () => {
         </div>
         <div className="login_form_buttons">
           <button className="btn btn__primary login_form_btn" type="submit">
-            Log in
+            Log In
           </button>
           <div className="text">
             Not signed in yet?&nbsp;

@@ -1,26 +1,19 @@
 .add-task__pageContainer {
-  /* display: flex;
-  justify-content: center; */
-  padding: 10%;
-  height: 100%;
+  margin: 2rem;
 }
 
 .add-task__form {
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .add-task_buttons {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-self: center;
-  margin-top: 5vh;
+  justify-content: space-evenly;
+  padding-top: 2rem;
 }
 
 .add-task__btn {
   width: 45%;
-  height: 5vh;
-  font-size: 1.2rem !important;
+  min-width: max-content;
 }

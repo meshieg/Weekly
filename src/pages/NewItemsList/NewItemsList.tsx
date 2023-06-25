@@ -94,7 +94,7 @@ const NewItemsList = () => {
   };
 
   return (
-    <div className="new-items__container">
+    <>
       {newTasks.length === 0 && newEvents.length === 0 ? (
         <div className="new-items__message">
           <h3>
@@ -154,7 +154,7 @@ const NewItemsList = () => {
         primaryButtonAction={onCancelYesClick}
         secondaryButtonAction={() => setPopupMessage(undefined)}
       />
-    </div>
+    </>
   );
 };
 
