@@ -42,7 +42,10 @@ const MyTagsPage = () => {
         }
       })
       .catch((err) => {
-        setAlert("error", "You cannot delete a used tag");
+        setAlert(
+          "error",
+          "You cannot delete a used tag, you should delete first all the tasks and events that use this tag"
+        );
         console.log(err);
       });
   };
@@ -56,7 +59,7 @@ const MyTagsPage = () => {
     <div
       style={{
         margin: "3%",
-        width: "100%"
+        width: "100%",
       }}
     >
       {" "}
