@@ -6,7 +6,6 @@ import { TagService } from "../../services/tag.service";
 import GeneralDialog from "../GeneralDialog/GeneralDialog";
 import { ReactComponent as AddTaskIcon } from "../../assets/icons/AddTaskIcon.svg";
 import useAlert from "../../customHooks/useAlert";
-import AlertPopup from "../AlertPopup/AlertPopup";
 
 interface IAddTagProps {
   open: boolean;
