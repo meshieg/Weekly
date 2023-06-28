@@ -40,7 +40,7 @@ const LogIn = () => {
     event.preventDefault();
 
     const newUser: IUser = {
-      email: inputValues.email,
+      email: inputValues.email.toLowerCase(),
       password: inputValues.password,
     };
 
@@ -51,7 +51,10 @@ const LogIn = () => {
       return;
     }
 
-    await UserService.logIn(inputValues.email, inputValues.password)
+    await UserService.logIn(
+      inputValues.email.toLowerCase(),
+      inputValues.password
+    )
       .then((data) => {
         setToken(data?.token);
         setUser(data?.user);
