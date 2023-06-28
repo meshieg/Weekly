@@ -49,7 +49,7 @@ const ResetPassword = () => {
     event.preventDefault();
 
     const user: IUser = {
-      email: inputValues.email,
+      email: inputValues.email.toLowerCase(),
     };
 
     const alertMessage = validateUserInputs(user);
@@ -59,7 +59,7 @@ const ResetPassword = () => {
       return;
     }
 
-    await UserService.sendEmail(inputValues.email)
+    await UserService.sendEmail(inputValues.email.toLowerCase())
       .then((data) => {
         setUser(data);
         setEmailStatus(200);
