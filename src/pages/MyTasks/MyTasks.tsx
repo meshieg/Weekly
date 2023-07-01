@@ -24,10 +24,12 @@ const MyTasks: React.FC = () => {
   const [notDoneTasks, setNotDoneTasks] = useState<ITask[]>([]);
   const [doneTasks, setDoneTasks] = useState<ITask[]>([]);
   const [allTasks, setAllTasks] = useState<ITask[]>([]);
+  const [displayTasks, setDisplayTasks] = useState<ITask[]>([]);
   const { setAlert } = useAlert();
   const [isFilterListOpen, setFilterListOpen] = useState<boolean>(false);
   const [isFilterSet, setFilterState] = useState<boolean>(false);
   const [isSortSet, setSortState] = useState<boolean>(false);
+  const [currSortItem, setCurrSortItem] = useState<ISortItem>();
   const [isSortListOpen, setSortListOpen] = useState<boolean>(false);
   const [tagsList, setTagsList] = useState<ITag[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,8 @@ const MyTasks: React.FC = () => {
         //   tasks?.sort((t1, t2) => t1.dueDate.getTime() - t2.dueDate.getTime())
         // );
         setAllTasks(tasks?.sort((t1, t2) => t1.id - t2.id));
+        // The tasks that are actually displayed - after filtering and/or sorting
+        setDisplayTasks(tasks?.sort((t1, t2) => t1.id - t2.id));
       })
       .catch((err) => {
         setAlert("error", "Failed to fetch tasks");
@@ -60,6 +64,9 @@ const MyTasks: React.FC = () => {
         setAlert("error", "Failed to fetch tasks");
         console.log(err.message);
       });
+
+    // Initialize the sort items
+    sortItems.map((item) => (item.active = false));
   }, []);
 
   const onTaskCheckedClick = (taskId: number) => {
@@ -75,6 +82,17 @@ const MyTasks: React.FC = () => {
           });
           setAllTasks(newTasks);
 
+          const currTasks = [...notDoneTasks, ...doneTasks];
+          const displayNewTasks = currTasks.map((task) => {
+            if (task.id === newTask.id) {
+              return newTask;
+            } else {
+              return task;
+            }
+          });
+
+          setDisplayTasks(displayNewTasks);
+
           if (newTask.isDone === false) {
             setAlgoPopupOpen(true);
           }
@@ -87,13 +105,21 @@ const MyTasks: React.FC = () => {
   };
 
   const sortDoneTasks = (tasks: ITask[]) => {
-    setNotDoneTasks(tasks?.filter((task) => task.isDone === false));
-    setDoneTasks(tasks?.filter((task) => task.isDone === true));
+    let newNotDone = tasks?.filter((task) => task.isDone === false);
+    let newDone = tasks?.filter((task) => task.isDone === true);
+    if (currSortItem && currSortItem.active) {
+      newNotDone.sort((a, b) => compareFunc(a, b, currSortItem));
+      newDone.sort((a, b) => compareFunc(a, b, currSortItem));
+    }
+    setNotDoneTasks(newNotDone);
+    setDoneTasks(newDone);
+    // setNotDoneTasks(tasks?.filter((task) => task.isDone === false));
+    // setDoneTasks(tasks?.filter((task) => task.isDone === true));
   };
 
   useEffect(() => {
-    sortDoneTasks(allTasks);
-  }, [allTasks]);
+    sortDoneTasks(displayTasks);
+  }, [displayTasks]);
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -155,9 +181,11 @@ const MyTasks: React.FC = () => {
 
       notDoneTasks.sort((a, b) => compareFunc(a, b, item));
       doneTasks.sort((a, b) => compareFunc(a, b, item));
+      setCurrSortItem(item);
       setSortState(true);
     } else {
-      sortDoneTasks(allTasks);
+      setCurrSortItem(undefined);
+      sortDoneTasks(displayTasks);
       setSortState(false);
     }
 
