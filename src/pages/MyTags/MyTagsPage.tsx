@@ -25,7 +25,7 @@ const MyTagsPage = () => {
         setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
-  }, [tagsList, openAddEditPopup]);
+  }, [openAddEditPopup]);
 
   const onTagClick = (tag: ITag) => {
     setTagToUpdate(tag);
@@ -36,7 +36,7 @@ const MyTagsPage = () => {
     TagService.deleteTag(tagId)
       .then((deleted) => {
         if (deleted) {
-          setTagsList(tagsList.filter((tag) => tag.id === tagId));
+          setTagsList(tagsList.filter((tag) => tag.id !== tagId));
         } else {
           setAlert("error", "This tag cannot be deleted");
         }
