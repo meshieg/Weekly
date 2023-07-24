@@ -67,31 +67,31 @@ const LogIn = () => {
       });
   };
 
-  const handleGoogleLogin = async (credentialResponse: any) => {
-    const userData: any = jwt(credentialResponse.credential);
+  // const handleGoogleLogin = async (credentialResponse: any) => {
+  //   const userData: any = jwt(credentialResponse.credential);
 
-    const user: IUser = {
-      firstName: userData.given_name,
-      lastName: userData.family_name,
-      email: userData.email,
-    };
+  //   const user: IUser = {
+  //     firstName: userData.given_name,
+  //     lastName: userData.family_name,
+  //     email: userData.email,
+  //   };
 
-    await UserService.logInGoogle(user)
-      .then((data) => {
-        setToken(data?.token);
-        setUser(data?.user);
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err?.response?.data?.errors[0]?.message) {
-          setAlert("error", err?.response.data.errors[0].message);
-        }
-      });
-  };
+  //   await UserService.logInGoogle(user)
+  //     .then((data) => {
+  //       setToken(data?.token);
+  //       setUser(data?.user);
+  //       navigate("/");
+  //     })
+  //     .catch((err) => {
+  //       if (err?.response?.data?.errors[0]?.message) {
+  //         setAlert("error", err?.response.data.errors[0].message);
+  //       }
+  //     });
+  // };
 
-  const errorGoogleLogin = () => {
-    setAlert("error", "Error logging in with Google");
-  };
+  // const errorGoogleLogin = () => {
+  //   setAlert("error", "Error logging in with Google");
+  // };
 
   return (
     <div className="login_pageContainer">
@@ -135,7 +135,7 @@ const LogIn = () => {
               onPress={() => navigate("/register")}
             />
           </div>
-          <div className="line">
+          {/* <div className="line">
             <span className="line_text">or</span>
           </div>
           <GoogleLogin
@@ -143,7 +143,7 @@ const LogIn = () => {
               handleGoogleLogin(credentialResponse)
             }
             onError={errorGoogleLogin}
-          />
+          /> */}
         </div>
         <AlertPopup />
       </form>
