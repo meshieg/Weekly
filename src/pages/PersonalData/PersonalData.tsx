@@ -110,7 +110,7 @@ const PersonalData = () => {
     let newUser: IUser = {
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
-      email: inputValues.email,
+      email: inputValues.email.toLowerCase(),
       password: inputValues.password,
       beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
@@ -148,7 +148,7 @@ const PersonalData = () => {
       id: user.id,
       firstName: inputValues.firstName,
       lastName: inputValues.lastName,
-      email: inputValues.email,
+      email: inputValues.email.toLowerCase(),
       beginDayHour: parseInt(moment(inputValues.beginDayHour).format("HH")),
       endDayHour: parseInt(moment(inputValues.endDayHour).format("HH")),
     };

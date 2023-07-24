@@ -28,10 +28,9 @@ const AddTagPopup = (props: IAddTagProps) => {
     }
   }, [props.open]);
 
-  const onSaveTag = () => {
-    if (tagName === undefined || tagName === "" || tagName === " ") {
-      setAlert("error", "Please enter tag name");
-    } else {
+  const onSaveTag = (event: any) => {
+    event.preventDefault();
+    if (tagName !== undefined && tagName !== "" && tagName !== " ") {
       if (props.tag) {
         TagService.updateTag({
           id: props.tag.id,
@@ -48,7 +47,6 @@ const AddTagPopup = (props: IAddTagProps) => {
             props.onCancel();
           });
       } else {
-        console.log("test");
         TagService.addTag({ name: tagName, color: tagColor } as ITag)
           .then((data) => {
             setAlert("success", "Tag added successfully");
@@ -69,36 +67,49 @@ const AddTagPopup = (props: IAddTagProps) => {
       onClose={props.onCancel}
       icon={<AddTaskIcon />}
     >
-      <div className="addTagPageContainer">
-        <Colorful
-          color={tagColor}
-          onChange={(color) => {
-            setTagColor(color.hex);
-          }}
-          disableAlpha={true}
-        />
-        <TextField
-          label="Tag name"
-          value={tagName}
-          onChange={(text) => setTagName(text.target.value)}
-          required={true}
-          placeholder="Tag name"
-        />
-        <div className="addTagButtonsContainer">
-          <button
-            className="btn btn__primary add-event__btn"
-            onClick={onSaveTag}
-          >
-            Save
-          </button>
-          <button
-            className="btn btn__secondary add-event__btn"
-            onClick={props.onCancel}
-          >
-            Cancel
-          </button>
+      <form onSubmit={onSaveTag} onReset={props.onCancel}>
+        <div className="addTagPageContainer">
+          <Colorful
+            color={tagColor}
+            onChange={(color) => {
+              setTagColor(color.hex);
+            }}
+            disableAlpha={true}
+          />
+          <TextField
+            label="Tag name"
+            value={tagName}
+            onChange={(text) => setTagName(text.target.value)}
+            required={true}
+            placeholder="Tag name"
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+                borderColor: "var(--primary-color)",
+              },
+              "& label.Mui-focused": {
+                color: "var(--primary-color)",
+              },
+            }}
+          />
+          {/* <AlertPopup /> */}
+          <div className="addTagButtonsContainer">
+            <button
+              type="submit"
+              className="btn btn__primary add-event__btn"
+              // onClick={onSaveTag}
+            >
+              Save
+            </button>
+            <button
+              type="reset"
+              className="btn btn__secondary add-event__btn"
+              // onClick={props.onCancel}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </GeneralDialog>
   );
 };

@@ -25,7 +25,7 @@ const MyTagsPage = () => {
         setAlert("error", "Something went wrong:( please try again later");
         console.log(err);
       });
-  }, [tagsList, openAddEditPopup]);
+  }, [openAddEditPopup]);
 
   const onTagClick = (tag: ITag) => {
     setTagToUpdate(tag);
@@ -36,13 +36,16 @@ const MyTagsPage = () => {
     TagService.deleteTag(tagId)
       .then((deleted) => {
         if (deleted) {
-          setTagsList(tagsList.filter((tag) => tag.id === tagId));
+          setTagsList(tagsList.filter((tag) => tag.id !== tagId));
         } else {
           setAlert("error", "This tag cannot be deleted");
         }
       })
       .catch((err) => {
-        setAlert("error", "You cannot delete a used tag");
+        setAlert(
+          "error",
+          "You cannot delete a used tag, you should delete first all the tasks and events that use this tag"
+        );
         console.log(err);
       });
   };
@@ -56,7 +59,7 @@ const MyTagsPage = () => {
     <div
       style={{
         margin: "3%",
-        width: "100%"
+        width: "100%",
       }}
     >
       {" "}
